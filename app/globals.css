@@ -1,26 +1,131 @@
 @import "tailwindcss";
 
 :root {
+  /* Default (Dark) Colors */
+  --c-brand-green: #96C11F;
+  --c-brand-dark: #111111;
+  --c-brand-black: #0a0a0a;
+  --c-brand-gray: #888888;
+  --c-brand-gray-light: #b0b0b0;
+  --c-brand-white: #f5f5f5;
+
+  --background: #0a0a0a;
+  --foreground: #f5f5f5;
+}
+
+:root.light {
+  /* Light Mode Overrides */
+  --c-brand-dark: #f0f0f0;
+  /* Light gray mostly */
+  --c-brand-black: #ffffff;
+  /* White background */
+  --c-brand-gray: #666666;
+  --c-brand-gray-light: #444444;
+  /* Darker text for readability */
+  --c-brand-white: #111111;
+  /* Dark text */
+
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #0a0a0a;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@theme {
+  --color-brand-green: var(--c-brand-green);
+  --color-brand-dark: var(--c-brand-dark);
+  --color-brand-black: var(--c-brand-black);
+  --color-brand-gray: var(--c-brand-gray);
+  --color-brand-gray-light: var(--c-brand-gray-light);
+  --color-brand-white: var(--c-brand-white);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body: 'Outfit', sans-serif;
+
+  --animate-scroll-pulse: scrollPulse 2.2s ease-in-out infinite;
+  --animate-marquee: marquee 25s linear infinite;
+
+  @keyframes scrollPulse {
+
+    0%,
+    100% {
+      opacity: 0.3;
+      transform: scaleY(0.4);
+      transform-origin: top;
+    }
+
+    50% {
+      opacity: 1;
+      transform: scaleY(1);
+    }
+  }
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(0);
+    }
+
+    100% {
+      transform: translateX(-50%);
+    }
   }
 }
 
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to sure everything still looks the same.
+*/
+@layer base {
+
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
+
+@utility container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+:root {
+  --background: #0a0a0a;
+  --foreground: #f5f5f5;
+}
+
 body {
-  background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--background);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+}
+
+/* Lenis Smooth Scroll */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
 }
