@@ -43,7 +43,7 @@ export function Philosophy() {
             <div className="container mx-auto px-4 relative z-10">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
                     {/* Header */}
-                    <div className="sticky top-32">
+                    <div className="lg:sticky lg:top-32">
                         <div className="flex items-center gap-4 mb-6">
                             <span className="w-12 h-1 bg-brand-green"></span>
                             <span className="text-brand-gray uppercase tracking-widest text-sm font-bold">Unser Fundament</span>
