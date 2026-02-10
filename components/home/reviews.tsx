@@ -60,6 +60,7 @@ const fallbackReviews = [
 export function Reviews() {
     const [reviews, setReviews] = useState<Review[]>(fallbackReviews);
     const [loading, setLoading] = useState(true);
+    const [expandedReviews, setExpandedReviews] = useState<Set<string>>(new Set());
 
     useEffect(() => {
         async function fetchReviews() {
@@ -81,6 +82,23 @@ export function Reviews() {
 
         fetchReviews();
     }, []);
+
+    const toggleExpanded = (reviewId: string) => {
+        setExpandedReviews(prev => {
+            const newSet = new Set(prev);
+            if (newSet.has(reviewId)) {
+                newSet.delete(reviewId);
+            } else {
+                newSet.add(reviewId);
+            }
+            return newSet;
+        });
+    };
+
+    const truncateText = (text: string, maxLength: number = 200) => {
+        if (text.length <= maxLength) return text;
+        return text.substring(0, maxLength) + '...';
+    };
     return (
         <section className="py-32 overflow-hidden bg-brand-black">
             <div className="container mx-auto px-4 mb-12">
@@ -92,24 +110,39 @@ export function Reviews() {
             <div className="relative w-full">
                 {/* Rolling Marquee of reviews */}
                 <div className="flex gap-6 w-max animate-[marquee_80s_linear_infinite] hover:[animation-play-state:paused] pl-4">
-                    {[...reviews, ...reviews, ...reviews].map((review, i) => ( // Triple the reviews for seamless loop
-                        <div
-                            key={`${review._id}-${i}`}
-                            className="w-[350px] md:w-[450px] flex-shrink-0 p-8 rounded-2xl bg-brand-dark border border-white/5 hover:border-brand-green/30 transition-colors"
-                        >
-                            <div className="flex gap-1 text-brand-green mb-4">
-                                {[...Array(review.rating)].map((_, starIdx) => (
-                                    <Star key={starIdx} className="w-4 h-4 fill-current" />
-                                ))}
+                    {[...reviews, ...reviews, ...reviews].map((review, i) => {
+                        const uniqueKey = `${review._id}-${i}`;
+                        const isExpanded = expandedReviews.has(uniqueKey);
+                        const shouldTruncate = review.text.length > 200;
+                        const displayText = isExpanded || !shouldTruncate ? review.text : truncateText(review.text);
+
+                        return (
+                            <div
+                                key={uniqueKey}
+                                className="w-[350px] md:w-[450px] flex-shrink-0 p-8 rounded-2xl bg-brand-dark border border-white/5 hover:border-brand-green/30 transition-colors"
+                            >
+                                <div className="flex gap-1 text-brand-green mb-4">
+                                    {[...Array(review.rating)].map((_, starIdx) => (
+                                        <Star key={starIdx} className="w-4 h-4 fill-current" />
+                                    ))}
+                                </div>
+                                <p className="text-brand-gray-light font-light leading-relaxed mb-4 italic">
+                                    "{displayText}"
+                                </p>
+                                {shouldTruncate && (
+                                    <button
+                                        onClick={() => toggleExpanded(uniqueKey)}
+                                        className="text-brand-green text-sm font-bold hover:text-brand-white transition-colors mb-4"
+                                    >
+                                        {isExpanded ? 'Weniger anzeigen' : 'Mehr lesen'}
+                                    </button>
+                                )}
+                                <div className="font-bold text-sm tracking-wider uppercase text-brand-white">
+                                    {review.authorName}
+                                </div>
                             </div>
-                            <p className="text-brand-gray-light font-light leading-relaxed mb-6 italic">
-                                "{review.text}"
-                            </p>
-                            <div className="font-bold text-sm tracking-wider uppercase text-brand-white">
-                                {review.authorName}
-                            </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             </div>
         </section>
