@@ -3,15 +3,14 @@ import { Footer } from "@/components/layout/footer";
 import { PageHeader } from "@/components/layout/page-header";
 import { ParallaxStrip } from "@/components/ui/parallax-strip";
 import { TrainerSpotlight } from "@/components/home/trainer-spotlight";
-import { Activity, Apple, Brain, Check, Dumbbell, HeartPulse, Moon } from "lucide-react";
+import { Activity, Apple, Brain, Check, Clock, Dumbbell, HeartPulse, Moon } from "lucide-react";
 
-// Mock Trainer Data (matches original somewhat, but using placeholders where specific image/bio missing for random selection)
-// In a real app this would come from a CMS or database. Using Bernhard for "Gym" spotlight.
+// Mock Trainer Data
 const gymTrainer = {
     name: "Bernhard",
     role: "Gründer & Owner",
     image: "https://images.unsplash.com/photo-1507398941214-572c25f4b1dc?q=80&w=2573&auto=format&fit=crop",
-    bio: "Gründer und Herzstück von GYM & BOX. Bernhard ist nicht nur zertifizierter Ernährungscoach und Personal Trainer, sondern unterrichtet auch als Dozent an einer deutschen Hochschule.",
+    bio: "Nach 14 Jahren Polizeidienst mit weltweiten Aufgaben und als Mitglied einer österreichischen Einsatzeinheit verließ Bernhard Beidl den Staatsdienst, um als Trainer, Coach und Dozent zu arbeiten.",
     specialties: ["Ernährungscoaching", "Personal Training", "Studioleitung"]
 };
 
@@ -22,14 +21,14 @@ export default function GymPage() {
             <main className="flex-grow">
                 <PageHeader
                     title="DAS GYM"
-                    subtitle="Die Gesundheit ist unser wertvollstes Gut."
+                    subtitle="Die Gesundheit ist unser wertvollstes Gut — ohne Gesundheit ist alles nichts."
                     image="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2670&auto=format&fit=crop"
                     logo="/images/Bernhard_2022_SW_300ppi.png"
                 />
 
                 <ParallaxStrip text="KRAFT · AUSDAUER · GESUNDHEIT · PERFORMANCE · " />
 
-                {/* PHILOSOPHY INTRO */}
+                {/* PHILOSOPHY INTRO - Unsere Überzeugung */}
                 <section className="py-12 md:py-24 container mx-auto px-4">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                         <div>
@@ -38,11 +37,14 @@ export default function GymPage() {
                                 <span className="text-brand-gray uppercase tracking-widest text-sm font-bold">Unsere Überzeugung</span>
                             </div>
                             <h2 className="font-display text-4xl md:text-5xl lg:text-6xl mb-8">
-                                In Gesundheit investieren,<br />
-                                <span className="text-brand-green">nicht in Krankheit</span>
+                                Für ein ganzheitlich<br />
+                                <span className="text-brand-green">tolles Leben</span>
                             </h2>
                             <p className="text-brand-gray-light text-lg leading-relaxed mb-6">
-                                Der Spruch ist sicher einigen bekannt. Jetzt in die Gesundheit anstatt später in die Krankheit zu investieren ist der richtige Weg. Dies funktioniert nur ganzheitlich — und um das richtig umzusetzen, sind wir Trainer und Coaches da.
+                                Investiere jetzt in die Gesundheit anstatt später viel Geld zur Krankheitsbekämpfung auszugeben. Dies funktioniert nur ganzheitlich — und um das richtig umzusetzen, sind wir Trainer und Coaches mit individuellen Lösungen für Dich da.
+                            </p>
+                            <p className="text-brand-gray-light text-lg leading-relaxed mb-8">
+                                Die vier wichtige Punkte sind dafür essentiell: Training – Ernährung – Regeneration – Reflexion. All das beinhaltet unser „Athlet des Lebens" Konzept. Nähere Infos über dein persönliches Paket, um dein Leben bestmöglich zu gestalten, bekommst du von unserem Team im Studio.
                             </p>
 
                             <ul className="space-y-4 mt-8">
@@ -91,14 +93,17 @@ export default function GymPage() {
                                     Mehr als nur ein <span className="text-brand-green">Fitnessstudio</span>
                                 </h2>
                                 <p className="text-brand-gray-light text-lg leading-relaxed mb-6">
-                                    Das Herzstück sind unsere Coaches, Trainer und Therapeuten. Ausgebildet an mehr als 7 verschiedenen Instituten sind wir alle gemeinsam nie am Ruhen, was Aus- und Fortbildungen betrifft.
+                                    Das Herzstück sind unsere Coaches, Trainer und Therapeuten. Ausgebildet an mehr als 7 verschiedenen Instituten sowie an der Deutschen Hochschule für Prävention und Gesundheitsmanagement sind wir alle gemeinsam nie am Ruhen, was Aus- und Fortbildungen betrifft.
                                 </p>
                                 <p className="text-brand-gray-light text-lg leading-relaxed mb-6">
-                                    Bei uns findest du von Personaltrainern über Sportphysiotherapeuten, Ernährungs- und Mentalcoach bis hin zu zertifizierten Blackroll- und Rocktapetrainern alles — unter einem Dach.
+                                    Bei uns findest du von Personaltrainern über Sportphysiotherapeuten, Ernährungs- und Mentaltrainer sowie Masseure alles, was das Gesundheits- und Leistungssportlerherz begehrt — unter einem Dach.
+                                </p>
+                                <p className="text-brand-gray-light text-lg leading-relaxed mb-6">
+                                    Die Zusammenarbeit mit Ärzten ist uns ebenfalls ein großes Anliegen. So können wir als Zielgruppe das Thema „Mensch" bedienen — ob Kinder, Spitzensportler, Rehapatienten oder Gesundheitssportler.
                                 </p>
 
                                 <div className="flex flex-wrap gap-2">
-                                    {["Personal Trainer", "Sportphysiotherapie", "Ernährungscoaching", "Mentalcoaching", "Blackroll & Rocktape", "EMS Training"].map(tag => (
+                                    {["Personal Trainer", "Sportphysiotherapie", "Ernährungscoaching", "Mentaltraining", "Masseure", "Reha-Training"].map(tag => (
                                         <span key={tag} className="px-4 py-2 bg-brand-black rounded-full border border-white/10 text-sm">{tag}</span>
                                     ))}
                                 </div>
@@ -115,29 +120,64 @@ export default function GymPage() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {[
-                            { title: "Premium Equipment", text: "Hochwertige Geräte, Free Weights und Maschinen auf über 500 m² Indoor- und Outdoorfläche. Equipment von Eleiko, Gym80, Hammer Strength, Cross Axes Tech und Precor.", icon: Dumbbell },
-                            { title: "Familiäre Atmosphäre", text: "Bei uns kennt man sich. Von 9 bis 99, vom Anfänger bis zum Leistungssportler.", icon: Users },
-                            { title: "Ernährungscoaching", text: "Ernährung ist unser erster Grundpfeiler. Langfristige Umstellung statt kurzfristiger Diäten.", icon: Apple },
-                            { title: "Personal Training", text: "Zertifizierte Trainer mit individueller Expertise. Neuer Plan nach je 12 Einheiten.", icon: HeartPulse },
-                            { title: "Täglich Geöffnet", text: "Von 06:30 bis 22:00 Uhr — flexible Trainingszeiten für jeden Lebensstil.", icon: Moon }, // Using Moon as generic 'time' icon fallback
-                            { title: "Ganzheitlicher Ansatz", text: "Training, Ernährung, Regeneration und Reflexion — die 4 Säulen für nachhaltigen Erfolg.", icon: Activity },
+                            {
+                                title: "Premium Equipment",
+                                text: "Hochwertige Geräte von Firmen wie Eleiko, Gym80, Hammer Strength, Cross Axes Tech, Precor unv. auf über 500 m² Fläche bieten für jeden das Passende. Unser Equipmentpark wird laufend erneuert und erweitert um Abwechslung zu schaffen.",
+                                icon: Dumbbell
+                            },
+                            {
+                                title: "Familiäre Atmosphäre",
+                                text: "Wir sind ein Familienunternehmen. Bei uns kennt man sich. Von 1 bis aktuell 92, vom Anfänger bis zum Leistungssportler — alle trainieren gemeinsam.",
+                                icon: Users
+                            },
+                            {
+                                title: "Ernährungstraining",
+                                text: "Langfristige Umstellung statt kurzfristiger Diäten. Kein Verzicht, dafür das nötige Hintergrundwissen zu vermitteln ist unser Anspruch. Langfristige Ernährungsumstellung statt kurzfristiger Diäten — begleitet von professioneller Begleitung.",
+                                icon: Apple
+                            },
+                            {
+                                title: "Personal Training",
+                                text: "Unsere zertifizierte Trainer und Coaches mit individueller Expertise erleichtern auf Wunsch mittels neuen Trainingsplänen, Rechecks und Personaltrainings das Dranbleiben.",
+                                icon: HeartPulse
+                            },
+                            {
+                                title: "Täglich Geöffnet",
+                                text: "Wir haben täglich von 06:30 bis 22:00 Uhr — flexible Trainingszeiten für jeden Lebensstil.",
+                                icon: Clock
+                            },
+                            {
+                                title: "Ganzheitlicher Ansatz",
+                                text: "Training, Ernährung, Regeneration und Reflexion — die 4 Säulen für nachhaltigen Erfolg. Jede einzelne Einheit wird je nach Schwerpunkt von einem ausgebildeten Personaltrainer geleitet.",
+                                icon: Activity
+                            },
                         ].map((feature) => (
                             <div key={feature.title} className="p-8 rounded-2xl bg-brand-dark border border-white/5 hover:border-brand-green/30 transition-colors group">
                                 <feature.icon className="w-10 h-10 text-brand-green mb-6 group-hover:scale-110 transition-transform" />
                                 <h3 className="font-display text-2xl mb-4">{feature.title}</h3>
-                                <p className="text-brand-gray-light">{feature.text}</p>
+                                <p className="text-brand-gray-light leading-relaxed">{feature.text}</p>
                             </div>
                         ))}
                     </div>
                 </section>
 
-                {/* ALL IN ONE */}
+                {/* ALL IN ONE - GYM oder BOX? Beides. */}
                 <section className="py-12 md:py-24 bg-brand-dark relative overflow-hidden">
                     <div className="container mx-auto px-4 relative z-10">
                         <div className="max-w-4xl mx-auto text-center">
+                            <div className="flex items-center justify-center gap-4 mb-6">
+                                <span className="w-12 h-1 bg-brand-green"></span>
+                                <span className="text-brand-gray uppercase tracking-widest text-sm font-bold">All in One</span>
+                                <span className="w-12 h-1 bg-brand-green"></span>
+                            </div>
                             <h2 className="font-display text-4xl md:text-6xl mb-8">GYM oder BOX? <br /><span className="text-brand-green">Beides.</span></h2>
+                            <p className="text-xl text-brand-gray-light mb-6 leading-relaxed">
+                                Nachdem wir 2016 zusätzlich zu unserem GYM die „CrossFit Lakefront Box" aus dem Boden gestampft haben, können wir auch die Menschen die gerne in der Gruppe trainieren bestmöglich bedienen. Mehr Erfolge zu erzielen und nicht bloß eine „Gruppenbespaßung" anzubieten ist unser Standard.
+                            </p>
+                            <p className="text-xl text-brand-gray-light mb-6 leading-relaxed">
+                                Das Training in der Gruppe ist für viele Menschen eine große Hilfe, um motiviert am Ball zu bleiben. Vor allem im Zeitalter der Digitalisierung ist die persönliche Bindung zwischen den Mitgliedern und den Trainern ein enorm wichtiger Faktor.
+                            </p>
                             <p className="text-xl text-brand-gray-light mb-12 leading-relaxed">
-                                Unser Anspruch war es, das Beste aus beiden Möglichkeiten zu schaffen — dies legte den Grundstein für das „All in One" Konzept und deshalb entstand zum GYM unsere „THE BOX".
+                                Unser Anspruch war es, das Beste aus beiden Möglichkeiten zu schaffen — dies legte den Grundstein für das „All in One" Konzept und deshalb entstand zum GYM unsere „CrossFit Lakefront Box".
                             </p>
 
                             <div className="inline-block p-1 rounded-full bg-brand-black border border-white/10">

@@ -5,26 +5,26 @@ import { motion } from "framer-motion";
 
 const pillars = [
     {
-        title: "Bewegung",
-        text: "Funktionelles Training, Kraftaufbau und Mobilität als Basis für einen gesunden Körper.",
+        title: "Training",
+        text: "Individuell angepasstes Training mit zertifizierten Personal Trainern — von Kraft, Ausdauer über Mobilität, jeder Mensch hat andere Voraussetzungen, deshalb erstellen wir individuelle Pläne.",
         icon: Dumbbell,
         num: "01"
     },
     {
         title: "Ernährung",
-        text: "Keine Diäten, sondern nachhaltige Umstellung. Treibstoff für deine Leistung.",
+        text: "Langfristige Ernährungsumstellung statt kurzfristiger Diäten — begleitet von professioneller Begleitung. Wir setzen auf nachhaltige Veränderung deiner Essgewohnheiten.",
         icon: Apple,
         num: "02"
     },
     {
         title: "Regeneration",
-        text: "Schlaf, aktive Erholung und Stressmanagement für optimale Anpassungsprozesse.",
+        text: "Dein Körper wächst in der Ruhephase — wir optimieren sie denn auch diese Phase trägt maßgeblich zum Erfolg bei. Genau deshalb ist auch die Regeneration ein wichtiger Baustein den wir behandeln.",
         icon: Moon,
         num: "03"
     },
     {
         title: "Reflexion",
-        text: "Mindset und mentale Stärke. Ziele definieren und Hindernisse überwinden.",
+        text: "Mentaltraining und Selbstreflexion für nachhaltigen Erfolg — im Training und im Leben. Resilienz und mentale Stärke sind der Schlüssel zu dauerhaftem Erfolg.",
         icon: Brain,
         num: "04"
     }
@@ -46,13 +46,13 @@ export function Philosophy() {
                     <div className="lg:sticky lg:top-32">
                         <div className="flex items-center gap-4 mb-6">
                             <span className="w-12 h-1 bg-brand-green"></span>
-                            <span className="text-brand-gray uppercase tracking-widest text-sm font-bold">Unser Fundament</span>
+                            <span className="text-brand-gray uppercase tracking-widest text-sm font-bold">Unsere Philosophie</span>
                         </div>
                         <h2 className="font-display text-4xl md:text-5xl lg:text-7xl mb-8">
-                            Die 4 Säulen für<br /><span className="text-brand-green">deinen Erfolg</span>
+                            Vier Säulen.<br /><span className="text-brand-green">Ein Ziel.</span>
                         </h2>
                         <p className="text-xl text-brand-gray-light font-light leading-relaxed max-w-md mb-12">
-                            Ein ganzheitlicher Ansatz, der weit über das reine Training hinausgeht. Wir betrachten den Menschen als Einheit.
+                            Wir glauben, dass Fitness mehr ist als nur Training. Unser ganzheitlicher Ansatz vereint vier Säulen zu einem nachhaltigen Lebensstil.
                         </p>
                         <a href="#philosophy-detail" className="hidden lg:inline-flex items-center gap-2 text-brand-white font-bold hover:text-brand-green transition-colors">
                             Mehr Details erfahren <div className="w-8 h-px bg-current"></div>

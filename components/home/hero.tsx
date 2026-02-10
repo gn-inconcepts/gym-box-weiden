@@ -52,7 +52,7 @@ export function Hero() {
                             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
                             className="block text-brand-white"
                         >
-                            ATHLET
+                            DEINE GESUNDHEIT.
                         </motion.span>
                     </span>
                     <span className="block overflow-hidden text-brand-green">
@@ -62,7 +62,7 @@ export function Hero() {
                             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
                             className="block"
                         >
-                            DES LEBENS
+                            DEIN LEBEN.
                         </motion.span>
                     </span>
                 </h1>
@@ -73,7 +73,7 @@ export function Hero() {
                     transition={{ duration: 0.8, delay: 0.6 }}
                     className="text-lg md:text-xl text-brand-gray-light font-light max-w-2xl mx-auto leading-relaxed mb-10"
                 >
-                    Dein Gym und CrossFit Box in Weiden am See. Über 500 m² für Training, Ernährung, Regeneration und Reflexion.
+                    Über 500 m² für die Themen Bewegung, Ernährung, Regeneration und Reflexion und Gemeinschaft — Gym & CrossFit Box unter einem Dach.
                 </motion.p>
 
                 <motion.div
