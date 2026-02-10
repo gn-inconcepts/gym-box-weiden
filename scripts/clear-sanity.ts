@@ -37,15 +37,19 @@ async function clearSanity() {
 
         console.log(`Found ${ids.length} documents to delete.\n`);
 
-        // Delete all documents
-        const transaction = client.transaction();
-        ids.forEach((id: string) => {
-            transaction.delete(id);
-        });
+        // Delete documents one by one (not bulk transaction)
+        let deletedCount = 0;
+        for (const id of ids) {
+            try {
+                await client.delete(id);
+                deletedCount++;
+                console.log(`  ✅ Deleted document ${deletedCount}/${ids.length}: ${id}`);
+            } catch (error) {
+                console.error(`  ❌ Failed to delete ${id}:`, error);
+            }
+        }
 
-        await transaction.commit();
-
-        console.log(`✅ Successfully deleted ${ids.length} documents!\n`);
+        console.log(`\n✅ Successfully deleted ${deletedCount} out of ${ids.length} documents!\n`);
         console.log('🎉 Sanity is now empty and ready for fresh content.\n');
 
     } catch (error) {
