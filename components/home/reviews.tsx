@@ -91,7 +91,7 @@ export function Reviews() {
 
             <div className="relative w-full">
                 {/* Rolling Marquee of reviews */}
-                <div className="flex gap-6 w-max animate-[marquee_40s_linear_infinite] hover:[animation-play-state:paused] pl-4">
+                <div className="flex gap-6 w-max animate-[marquee_80s_linear_infinite] hover:[animation-play-state:paused] pl-4">
                     {[...reviews, ...reviews, ...reviews].map((review, i) => ( // Triple the reviews for seamless loop
                         <div
                             key={`${review._id}-${i}`}

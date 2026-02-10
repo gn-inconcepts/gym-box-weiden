@@ -81,6 +81,12 @@ export async function POST(request: NextRequest) {
 
         // Sync reviews to Sanity
         for (const review of results) {
+            // Skip reviews without text or with low ratings
+            if (!review.text || review.text.trim().length < 10 || review.stars < 4) {
+                console.log(`  ⏭️  Skipping review from ${review.name} (no text or rating < 4)`);
+                continue;
+            }
+
             // Create unique ID for the review
             const reviewId = review.reviewId || `${review.name}-${review.publishedAtDate}`;
 

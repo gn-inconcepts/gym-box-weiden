@@ -11,9 +11,9 @@ const sanityClient = createClient({
 
 export async function GET(request: NextRequest) {
     try {
-        // Fetch featured reviews from Sanity, ordered by date
+        // Fetch reviews with text, 4-5 stars, and featured
         const reviews = await sanityClient.fetch(
-            `*[_type == "review" && featured == true] | order(date desc)[0...20]`
+            `*[_type == "review" && featured == true && rating >= 4 && length(text) > 10] | order(date desc)[0...20]`
         );
 
         return NextResponse.json(
