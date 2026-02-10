@@ -41,53 +41,54 @@ export function Philosophy() {
             </div>
 
             <div className="container mx-auto px-4 relative z-10">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-                    {/* Header */}
-                    <div className="lg:sticky lg:top-32">
-                        <div className="flex items-center gap-4 mb-6">
-                            <span className="w-12 h-1 bg-brand-green"></span>
-                            <span className="text-brand-gray uppercase tracking-widest text-sm font-bold">Unsere Philosophie</span>
-                        </div>
-                        <h2 className="font-display text-4xl md:text-5xl lg:text-7xl mb-8">
-                            Vier Säulen.<br /><span className="text-brand-green">Ein Ziel.</span>
-                        </h2>
-                        <p className="text-xl text-brand-gray-light font-light leading-relaxed max-w-md mb-12">
-                            Wir glauben, dass Fitness mehr ist als nur Training. Unser ganzheitlicher Ansatz vereint vier Säulen zu einem nachhaltigen Lebensstil.
-                        </p>
-                        <a href="#philosophy-detail" className="hidden lg:inline-flex items-center gap-2 text-brand-white font-bold hover:text-brand-green transition-colors">
-                            Mehr Details erfahren <div className="w-8 h-px bg-current"></div>
-                        </a>
+                {/* Header */}
+                <div className="text-center mb-16">
+                    <div className="inline-flex items-center gap-4 mb-6">
+                        <span className="w-12 h-1 bg-brand-green"></span>
+                        <span className="text-brand-gray uppercase tracking-widest text-sm font-bold">Unsere Philosophie</span>
+                        <span className="w-12 h-1 bg-brand-green"></span>
                     </div>
+                    <h2 className="font-display text-4xl md:text-5xl lg:text-7xl mb-8">
+                        Vier Säulen. <span className="text-brand-green">Ein Ziel.</span>
+                    </h2>
+                    <p className="text-xl text-brand-gray-light font-light leading-relaxed max-w-3xl mx-auto">
+                        Wir glauben, dass Fitness mehr ist als nur Training. Unser ganzheitlicher Ansatz vereint vier Säulen zu einem nachhaltigen Lebensstil.
+                    </p>
+                </div>
 
-                    {/* Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {pillars.map((pillar, i) => (
-                            <motion.div
-                                key={pillar.title}
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: i * 0.1 }}
-                                className="group bg-brand-black border border-white/5 p-8 md:p-12 rounded-3xl hover:border-brand-green/30 transition-all duration-500 relative overflow-hidden"
-                            >
-                                <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
-                                    <span className="font-display text-6xl font-bold">{pillar.num}</span>
-                                </div>
+                {/* Horizontal Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {pillars.map((pillar, i) => (
+                        <motion.div
+                            key={pillar.title}
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: i * 0.1 }}
+                            className="group bg-brand-black border border-white/5 p-8 rounded-2xl hover:border-brand-green/50 hover:bg-brand-green/5 transition-all duration-500 relative overflow-hidden"
+                        >
+                            {/* Number Badge */}
+                            <div className="absolute -top-4 -right-4 w-20 h-20 rounded-full bg-brand-green/10 flex items-center justify-center group-hover:bg-brand-green/20 transition-colors">
+                                <span className="font-display text-2xl font-bold text-brand-green">{pillar.num}</span>
+                            </div>
 
-                                <div className="w-16 h-16 rounded-2xl bg-brand-dark flex items-center justify-center text-brand-green mb-8 group-hover:scale-110 group-hover:bg-brand-green group-hover:text-brand-black transition-all duration-500">
-                                    <pillar.icon className="w-8 h-8" />
-                                </div>
+                            {/* Icon */}
+                            <div className="w-14 h-14 rounded-xl bg-brand-dark border border-white/5 flex items-center justify-center text-brand-green mb-6 group-hover:scale-110 group-hover:bg-brand-green group-hover:text-brand-black group-hover:border-brand-green transition-all duration-500">
+                                <pillar.icon className="w-7 h-7" />
+                            </div>
 
-                                <h3 className="font-display text-3xl mb-4 group-hover:text-brand-green transition-colors">{pillar.title}</h3>
-                                <p className="text-brand-gray-light leading-relaxed group-hover:text-brand-white transition-colors">
-                                    {pillar.text}
-                                </p>
+                            {/* Content */}
+                            <h3 className="font-display text-2xl mb-4 group-hover:text-brand-green transition-colors">
+                                {pillar.title}
+                            </h3>
+                            <p className="text-brand-gray-light text-sm leading-relaxed group-hover:text-brand-white transition-colors">
+                                {pillar.text}
+                            </p>
 
-                                {/* Decoration */}
-                                <div className="absolute bottom-0 right-0 w-32 h-32 bg-brand-green/5 rounded-full blur-3xl group-hover:bg-brand-green/10 transition-colors" />
-                            </motion.div>
-                        ))}
-                    </div>
+                            {/* Hover Glow */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-brand-green/0 via-brand-green/0 to-brand-green/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
+                        </motion.div>
+                    ))}
                 </div>
             </div>
         </section>
