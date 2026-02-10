@@ -1,24 +1,16 @@
-"use client";
-
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { PageHeader } from "@/components/layout/page-header";
 import { Eye, Shield, Users } from "lucide-react";
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { TeamGrid } from "@/components/team/team-grid";
+import { client } from "@/sanity/lib/client";
+import { trainersQuery } from "@/sanity/lib/queries";
+import { Trainer } from "@/types/sanity";
 
-interface Trainer {
-    name: string;
-    role: string;
-    image: string;
-    bio: string[];
-    specs: string;
-    tags: string[];
-    category: "all" | "gym" | "box";
-}
-
-const trainers: Trainer[] = [
+// Fallback data if CMS is empty or not configured
+const fallbackTrainers: Trainer[] = [
     {
+        _id: "1",
         name: "Bernhard",
         role: "Gründer & Owner",
         image: "https://images.unsplash.com/photo-1507398941214-572c25f4b1dc?q=80&w=2573&auto=format&fit=crop",
@@ -31,6 +23,7 @@ const trainers: Trainer[] = [
         category: "gym"
     },
     {
+        _id: "2",
         name: "Melanie",
         role: "Health Coach",
         image: "https://images.unsplash.com/photo-1610419993591-140b9914434d?q=80&w=2670&auto=format&fit=crop",
@@ -43,6 +36,7 @@ const trainers: Trainer[] = [
         category: "gym"
     },
     {
+        _id: "3",
         name: "Daniel",
         role: "Athletic Trainer",
         image: "https://images.unsplash.com/photo-1568218152033-b248bd8b1220?q=80&w=2522&auto=format&fit=crop",
@@ -55,6 +49,7 @@ const trainers: Trainer[] = [
         category: "box"
     },
     {
+        _id: "4",
         name: "Mario",
         role: "Strength Coach",
         image: "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=2670&auto=format&fit=crop",
@@ -68,12 +63,18 @@ const trainers: Trainer[] = [
     },
 ];
 
-export default function TeamPage() {
-    const [filter, setFilter] = useState<"all" | "gym" | "box">("all");
+export const revalidate = 60; // Revalidate every 60 seconds
 
-    const filteredTrainers = filter === "all"
-        ? trainers
-        : trainers.filter(t => t.category === filter || t.category === "all");
+export default async function TeamPage() {
+    let trainers: Trainer[] = [];
+
+    try {
+        if (process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
+            trainers = await client.fetch(trainersQuery);
+        }
+    } catch (error) {
+        console.error("Failed to fetch trainers from Sanity:", error);
+    }
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -110,69 +111,10 @@ export default function TeamPage() {
                 </section>
 
                 {/* TRAINERS GRID */}
-                <section className="py-12 md:py-24 bg-brand-dark min-h-screen">
-                    <div className="container mx-auto px-4">
-
-                        {/* Filter */}
-                        <div className="flex justify-center mb-16 gap-4">
-                            {["all", "gym", "box"].map((f) => (
-                                <button
-                                    key={f}
-                                    onClick={() => setFilter(f as any)}
-                                    className={`px-8 py-3 rounded-full text-sm font-bold uppercase tracking-wider transition-all duration-300 ${filter === f ? 'bg-brand-green text-brand-black shadow-[0_0_20px_rgba(150,193,31,0.4)]' : 'bg-brand-black border border-brand-white/10 text-brand-gray hover:text-brand-white'}`}
-                                >
-                                    {f === "all" ? "Alle Coaches" : f === "gym" ? "Gym Team" : "Box Team"}
-                                </button>
-                            ))}
-                        </div>
-
-                        <div className="grid grid-cols-1 gap-12">
-                            <AnimatePresence mode="popLayout">
-                                {filteredTrainers.map((trainer, i) => (
-                                    <motion.div
-                                        key={trainer.name}
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, scale: 0.9 }}
-                                        transition={{ duration: 0.5 }}
-                                        className={`flex flex-col lg:flex-row gap-12 items-center ${i % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}
-                                    >
-                                        <div className="w-full lg:w-1/3 aspect-[3/4] relative rounded-2xl overflow-hidden shadow-2xl group border border-brand-white/5">
-                                            <img
-                                                src={trainer.image}
-                                                alt={trainer.name}
-                                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter grayscale group-hover:grayscale-0"
-                                            />
-                                        </div>
-                                        <div className="w-full lg:w-2/3">
-                                            <div className="inline-block px-3 py-1 bg-brand-green/10 text-brand-green text-sm font-bold rounded-full mb-4">
-                                                {trainer.role}
-                                            </div>
-                                            <h2 className="font-display text-5xl mb-2 text-brand-white">{trainer.name}</h2>
-                                            <p className="text-brand-white font-medium mb-6 opacity-80">{trainer.specs}</p>
-
-                                            <div className="space-y-4 mb-8">
-                                                {trainer.bio.map((para, idx) => (
-                                                    <p key={idx} className="text-brand-gray-light text-lg leading-relaxed">{para}</p>
-                                                ))}
-                                            </div>
-
-                                            <div className="flex flex-wrap gap-2">
-                                                {trainer.tags.map(tag => (
-                                                    <span key={tag} className="px-3 py-1 bg-brand-black border border-white/10 rounded-lg text-sm text-brand-gray">{tag}</span>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </motion.div>
-                                ))}
-                            </AnimatePresence>
-                        </div>
-                    </div>
-                </section>
+                <TeamGrid trainers={trainers} fallbackTrainers={fallbackTrainers} />
 
                 {/* WHY PERSONAL TRAINER */}
                 <section className="py-12 md:py-24 container mx-auto px-4">
-                    {/* ... existing why section ... */}
                     <div className="text-center max-w-3xl mx-auto mb-16">
                         <h2 className="font-display text-4xl md:text-5xl mb-6">Warum ein <span className="text-brand-green">Personaltrainer?</span></h2>
                         <p className="text-lg text-brand-gray-light leading-relaxed">

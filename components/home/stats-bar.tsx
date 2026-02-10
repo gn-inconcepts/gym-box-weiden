@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 
 const stats = [
-    { value: "1000", unit: "m²", label: "Trainingsfläche" },
+    { value: "500", unit: "m²", label: "Trainingsfläche" },
     { value: "2016", unit: "", label: "Gegründet" },
     { value: "14", unit: "+", label: "Leistungen" },
     { value: "7", unit: "+", label: "Zertifizierungen" },

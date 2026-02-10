@@ -13,15 +13,15 @@ const services = [
     },
     {
         icon: Trophy,
-        title: "FMS Test",
-        text: "FMS Test „Functional Movement Screen\" und physiotherapeutische Beratung unterstützen dich bei der optimalen Ausführung deiner Übungen.",
-        label: "FMS TEST"
+        title: "Personal Training",
+        text: "Alle unsere Trainer sind zertifizierte und ausgebildete Trainer. Jeder von uns hat seine Spezialisierung und seine persönlichen Stärken. Wir unterstützen dich bei deinem Erfolg.",
+        label: "TRAINING"
     },
     {
         icon: Users,
-        title: "Personaltraining",
-        text: "Alle unsere Trainer sind zertifizierte und ausgebildete Trainer. Jeder von uns hat seine Spezialisierung und seine persönlichen Stärken. Wir unterstützen dich bei deinem Erfolg.",
-        label: "TRAINING"
+        title: "Ganzheitlicher Ansatz",
+        text: "Training, Ernährung, Regeneration und Reflexion — die 4 Säulen für nachhaltigen Erfolg und langfristige Gesundheit.",
+        label: "PHILOSOPHIE"
     }
 ];
 

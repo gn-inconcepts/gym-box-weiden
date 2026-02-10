@@ -1,8 +1,8 @@
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { PageHeader } from "@/components/layout/page-header";
+import { ContactForm } from "@/components/contact/contact-form";
 import { Mail, MapPin, Phone, Clock, Instagram, Facebook } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 export default function ContactPage() {
     return (
@@ -19,7 +19,7 @@ export default function ContactPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-24">
                         {[
                             { title: "Erstberatung", text: "Kostenlos und unverbindlich unser Gym und die Box kennenlernen." },
-                            { title: "Gesundheitscheck", text: "Körperanalyse, Herzfrequenzbestimmung oder FMS Test buchen." },
+                            { title: "Gesundheitscheck", text: "Körperanalyse und Herzfrequenzbestimmung für optimale Trainingsplanung." },
                             { title: "Personal Training", text: "Individuelles Coaching mit einem unserer zertifizierten Trainer." },
                             { title: "Ernährungsberatung", text: "Langfristige Ernährungsumstellung mit professionellem Coaching." }
                         ].map(opt => (
@@ -38,50 +38,7 @@ export default function ContactPage() {
                             </div>
                             <h2 className="font-display text-4xl mb-8">Deine <span className="text-brand-green">Anfrage</span></h2>
 
-                            <form className="space-y-6 bg-brand-dark p-8 md:p-12 rounded-3xl border border-white/5">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-bold uppercase tracking-wider text-brand-gray">Name *</label>
-                                        <input type="text" className="w-full bg-brand-black border border-white/10 rounded-lg p-4 focus:border-brand-green focus:outline-none transition-colors" placeholder="Dein Name" required />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-bold uppercase tracking-wider text-brand-gray">E-Mail *</label>
-                                        <input type="email" className="w-full bg-brand-black border border-white/10 rounded-lg p-4 focus:border-brand-green focus:outline-none transition-colors" placeholder="deine@email.com" required />
-                                    </div>
-                                </div>
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-bold uppercase tracking-wider text-brand-gray">Telefon</label>
-                                        <input type="tel" className="w-full bg-brand-black border border-white/10 rounded-lg p-4 focus:border-brand-green focus:outline-none transition-colors" placeholder="+43 ..." />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-bold uppercase tracking-wider text-brand-gray">Interesse an</label>
-                                        <select className="w-full bg-brand-black border border-white/10 rounded-lg p-4 focus:border-brand-green focus:outline-none transition-colors appearance-none">
-                                            <option value="">Bitte wählen...</option>
-                                            <option value="erstberatung">Kostenlose Erstberatung</option>
-                                            <option value="gym">Das Gym — Mitgliedschaft</option>
-                                            <option value="box">The Box — CrossFit</option>
-                                            <option value="personal">Personal Training</option>
-                                            <option value="analyse">Körperanalyse / Gesundheitscheck</option>
-                                            <option value="ernaehrung">Ernährungscoaching</option>
-                                            <option value="physio">Physiotherapie</option>
-                                            <option value="firmen">Firmen-Fitness</option>
-                                            <option value="kinder">Kindertraining</option>
-                                            <option value="sonstiges">Sonstiges</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div className="space-y-2">
-                                    <label className="text-sm font-bold uppercase tracking-wider text-brand-gray">Nachricht</label>
-                                    <textarea rows={5} className="w-full bg-brand-black border border-white/10 rounded-lg p-4 focus:border-brand-green focus:outline-none transition-colors" placeholder="Wie können wir dir helfen?"></textarea>
-                                </div>
-
-                                <Button className="w-full md:w-auto px-12 py-6 text-lg">
-                                    Absenden
-                                </Button>
-                            </form>
+                            <ContactForm />
                         </div>
 
                         <div className="space-y-8">

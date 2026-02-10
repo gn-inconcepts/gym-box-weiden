@@ -11,11 +11,11 @@ export function Footer() {
                         <div className="font-display text-2xl tracking-wider">
                             GYM <span className="text-brand-green">&</span> BOX
                             <span className="block text-xs tracking-[0.2em] text-brand-green opacity-80 mt-1">
-                                ATHLET DES LEBENS
+                                GESUNDHEIT IST ALLES
                             </span>
                         </div>
                         <p className="text-brand-gray-light text-sm leading-relaxed max-w-xs">
-                            Über 1.000m² für Kraft, Ausdauer und Gemeinschaft — Gym & CrossFit Box
+                            Über 500 m² für Kraft, Ausdauer und Gemeinschaft — Gym & CrossFit Box
                             unter einem Dach in Weiden am See.
                         </p>
                         <div className="flex items-center gap-6 pt-4 grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-500">
@@ -93,7 +93,7 @@ export function Footer() {
                         <Link href="/impressum" className="hover:text-brand-white transition-colors">Impressum</Link>
                         <Link href="/datenschutz" className="hover:text-brand-white transition-colors">Datenschutz</Link>
                     </div>
-                    <p>&copy; {new Date().getFullYear()} GYM & BOX — Athlet des Lebens. Alle Rechte vorbehalten.</p>
+                    <p>&copy; {new Date().getFullYear()} GYM & BOX. Alle Rechte vorbehalten.</p>
                 </div>
             </div>
         </footer>

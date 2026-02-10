@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ChevronDown } from "lucide-react";
+import { OptimizedVideo } from "@/components/ui/optimized-video";
 
 export function Hero() {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -15,17 +16,16 @@ export function Hero() {
             <div className="absolute inset-0 z-0">
                 <div className="absolute inset-0 bg-brand-black/60 z-10" /> {/* Overlay for readability */}
                 <div className="absolute inset-0 bg-gradient-to-b from-brand-black/30 via-transparent to-brand-black z-10" />
-                <video
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    className="w-full h-full object-cover"
-                    poster="/images/hero-poster.jpg" // Fallback
-                >
-                    {/* Dynamic Fitness Video */}
-                    <source src="https://videos.pexels.com/video-files/855828/855828-hd_1920_1080_30fps.mp4" type="video/mp4" />
-                </video>
+                <OptimizedVideo
+                    src="https://videos.pexels.com/video-files/855828/855828-hd_1920_1080_30fps.mp4"
+                    poster="/images/hero-poster.jpg"
+                    autoPlay={true}
+                    loop={true}
+                    muted={true}
+                    playsInline={true}
+                    lazy={false}
+                    className="absolute inset-0"
+                />
             </div>
 
             {/* Content */}
@@ -73,7 +73,7 @@ export function Hero() {
                     transition={{ duration: 0.8, delay: 0.6 }}
                     className="text-lg md:text-xl text-brand-gray-light font-light max-w-2xl mx-auto leading-relaxed mb-10"
                 >
-                    Dein Gym und CrossFit Box in Weiden am See. Über 1.000m² für Training, Ernährung, Regeneration und Reflexion.
+                    Dein Gym und CrossFit Box in Weiden am See. Über 500 m² für Training, Ernährung, Regeneration und Reflexion.
                 </motion.p>
 
                 <motion.div
@@ -83,7 +83,7 @@ export function Hero() {
                     className="flex flex-col sm:flex-row items-center justify-center gap-4"
                 >
                     <a href="/kontakt" className="px-8 py-4 bg-brand-green text-brand-black font-bold rounded-full hover:bg-brand-white transition-colors">
-                        Jetz Probetraining vereinbaren
+                        Jetzt Probetraining vereinbaren
                     </a>
                     <a href="#services" className="px-8 py-4 border border-brand-white/20 text-brand-white font-bold rounded-full hover:bg-brand-white hover:text-brand-black transition-colors">
                         Mehr erfahren

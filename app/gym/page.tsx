@@ -115,12 +115,12 @@ export default function GymPage() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {[
-                            { title: "Premium Equipment", text: "Hochwertige Geräte, Free Weights und Maschinen auf über 1.000m² Indoor- und Outdoorfläche.", icon: Dumbbell },
+                            { title: "Premium Equipment", text: "Hochwertige Geräte, Free Weights und Maschinen auf über 500 m² Indoor- und Outdoorfläche. Equipment von Eleiko, Gym80, Hammer Strength, Cross Axes Tech und Precor.", icon: Dumbbell },
                             { title: "Familiäre Atmosphäre", text: "Bei uns kennt man sich. Von 9 bis 99, vom Anfänger bis zum Leistungssportler.", icon: Users },
-                            { title: "FMS Testing", text: "Functional Movement Screen und physiotherapeutische Beratung für optimale Übungsausführung.", icon: Activity },
                             { title: "Ernährungscoaching", text: "Ernährung ist unser erster Grundpfeiler. Langfristige Umstellung statt kurzfristiger Diäten.", icon: Apple },
                             { title: "Personal Training", text: "Zertifizierte Trainer mit individueller Expertise. Neuer Plan nach je 12 Einheiten.", icon: HeartPulse },
                             { title: "Täglich Geöffnet", text: "Von 06:30 bis 22:00 Uhr — flexible Trainingszeiten für jeden Lebensstil.", icon: Moon }, // Using Moon as generic 'time' icon fallback
+                            { title: "Ganzheitlicher Ansatz", text: "Training, Ernährung, Regeneration und Reflexion — die 4 Säulen für nachhaltigen Erfolg.", icon: Activity },
                         ].map((feature) => (
                             <div key={feature.title} className="p-8 rounded-2xl bg-brand-dark border border-white/5 hover:border-brand-green/30 transition-colors group">
                                 <feature.icon className="w-10 h-10 text-brand-green mb-6 group-hover:scale-110 transition-transform" />

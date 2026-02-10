@@ -2,10 +2,44 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { PageHeader } from "@/components/layout/page-header";
 import { ServiceFilter } from "@/components/services/service-filter";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { client } from "@/sanity/lib/client";
+import { servicesQuery } from "@/sanity/lib/queries";
+import { Service } from "@/types/sanity";
 
-export default function ServicesPage() {
+// Fallback data
+const fallbackServices: Service[] = [
+    { _id: "1", name: 'Körperanalyse', description: 'Körperzusammensetzungsanalyse mittels Abmessungen, BIA und Software. Grundlage für jede Trainingsplanung.', priceMember: '€20', priceNonMember: '€30', category: 'analyse', icon: 'activity' },
+    { _id: "2", name: 'Trainingsplanung', description: '12-Wochen personalisierter Trainingsplan mit Orientierung, Ausgangscheck und Chipkarte.', priceMember: '€57', priceNonMember: '€147', category: 'training', icon: 'dumbbell' },
+    { _id: "3", name: 'Herzfrequenzbestimmung', description: 'Fitness Vitaltest durch Vitalmonitor. EKG-Analyse zur Bestimmung deiner Trainingsherzfrequenz inkl. 8-Wochen Ausdauertrainingsplanung.', priceMember: '€40', priceNonMember: '€70', category: 'analyse', icon: 'heartPulse' },
+    { _id: "4", name: 'Ernährungscoaching', description: 'Einstündige Beratung zu Kalorienverbrauch und Ernährungszusammensetzung. Langfristige Umstellung statt Crash-Diät.', priceMember: '€75', priceNonMember: '€149', category: 'coaching', icon: 'apple' },
+    { _id: "5", name: 'KCAL-Bedarfsrechnung', description: 'Medizingeräte-Ausleihe (mind. 4 Tage tragen) zur exakten Kalorienbedarfsermittlung inkl. Software-Analyse.', priceMember: '€75', priceNonMember: '€120', category: 'analyse', icon: 'activity' },
+    { _id: "6", name: 'Resilienz Coaching', description: 'Resilienz-Coaching zur Verbesserung der Widerstandsfähigkeit inkl. Hilfestellung zur Zielerreichung.', priceMember: '€75', priceNonMember: '€149', category: 'coaching', icon: 'brain' },
+    { _id: "7", name: 'Physiotherapie', description: 'Empfohlen bei Schmerzen und Verletzungen. Kommunikation zwischen Physiotherapeut und sportlichem Reha-Trainer.', priceMember: '€75', priceNonMember: '€75', category: 'therapie', icon: 'user' },
+    { _id: "8", name: 'Personal Training', description: 'Individuelles Coaching mit zertifizierten Trainern. Neuer Plan nach je 12 Einheiten.', priceMember: '€40 / Einheit', priceNonMember: '€90 / Einheit', category: 'training', icon: 'dumbbell' },
+    { _id: "9", name: 'Kindertraining', description: 'Maßgeschneidertes, lustiges und abwechslungsreiches Programm für Kinder von 7–10 Jahren.', priceMember: '€100 / 10er Block', priceNonMember: '€100 / 10er Block', category: 'training', icon: 'users' },
+    { _id: "10", name: 'Hautfaltenmessung', description: 'Körperfettanteil-Bestimmung mittels Harpenden-Caliper inkl. Lifestyle-Tipps.', priceMember: '€25', priceNonMember: '€50', category: 'analyse', icon: 'search' },
+    { _id: "11", name: 'Schwangerschaftstraining', description: 'Spezialisierte Trainingsplanung während der Schwangerschaft. Trainerin mit dedizierter Ausbildung.', priceMember: '€50', priceNonMember: '€70', category: 'therapie', icon: 'user' },
+    { _id: "12", name: 'Taping', description: 'Therapeutisches Taping durch ROCKDOCS-Spezialisten in Koordination mit Physiotherapeut.', priceMember: '€19,90', priceNonMember: 'nach Verbrauch', category: 'therapie', icon: 'activity' },
+    { _id: "13", name: 'Firmen-Fitness', description: 'Gesunde Mitarbeiter*innen sind zufriedene und produktive Mitarbeiter*innen. Kostenloses Beratungsgespräch.', priceMember: 'Auf Anfrage', priceNonMember: 'Auf Anfrage', category: 'coaching', icon: 'users' },
+];
+
+export const revalidate = 60;
+
+export default async function ServicesPage() {
+    let services: Service[] = [];
+
+    try {
+        if (process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
+            services = await client.fetch(servicesQuery);
+        }
+    } catch (error) {
+        console.error("Failed to fetch services:", error);
+    }
+
+    const displayedServices = services.length > 0 ? services : fallbackServices;
+
     return (
         <div className="flex flex-col min-h-screen">
             <Header />
@@ -33,7 +67,7 @@ export default function ServicesPage() {
                 <section className="pb-24 container mx-auto px-4">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         {[
-                            { num: "01", title: "Analyse & Diagnostik", text: "Körperanalyse, FMS Test, Herzfrequenzbestimmung und Hautfaltenmessung — datenbasierte Grundlage für deinen Trainingsplan." },
+                            { num: "01", title: "Analyse & Diagnostik", text: "Körperanalyse, Herzfrequenzbestimmung und Hautfaltenmessung — datenbasierte Grundlage für deinen Trainingsplan." },
                             { num: "02", title: "Coaching & Beratung", text: "Ernährungs-, Resilienz- und Firmen-Fitness-Coaching. Ganzheitliche Betreuung für nachhaltigen Erfolg." },
                             { num: "03", title: "Training & Therapie", text: "Personal Training, Kindertraining, Schwangerschaftsfitness und Physiotherapie — für jede Lebensphase." },
                         ].map((item, i) => (
@@ -53,7 +87,7 @@ export default function ServicesPage() {
                         <div className="text-center mb-12">
                             <h2 className="font-display text-3xl md:text-4xl">Alle Services im <span className="text-brand-green">Detail</span></h2>
                         </div>
-                        <ServiceFilter />
+                        <ServiceFilter services={displayedServices} />
                     </div>
                 </section>
 

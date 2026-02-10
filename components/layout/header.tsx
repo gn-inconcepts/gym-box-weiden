@@ -72,7 +72,7 @@ export function Header() {
                     </Link>
 
                     {/* Desktop Nav */}
-                    <nav className="hidden md:flex items-center gap-1">
+                    <nav className="hidden md:flex items-center gap-1" aria-label="Hauptnavigation">
                         {navLinks.map((link) => (
                             <Link
                                 key={link.href}
@@ -105,6 +105,8 @@ export function Header() {
                             scrolled ? "text-brand-white" : "text-white"
                         )}
                         onClick={() => setMobileMenuOpen(true)}
+                        aria-label="Menü öffnen"
+                        aria-expanded={mobileMenuOpen}
                     >
                         <Menu className="w-6 h-6" />
                     </button>
@@ -117,18 +119,22 @@ export function Header() {
                     "fixed inset-0 z-[60] bg-brand-black/95 backdrop-blur-xl transition-all duration-300 flex flex-col items-center justify-center",
                     mobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
                 )}
+                role="dialog"
+                aria-modal="true"
+                aria-label="Mobile Navigation"
             >
                 <div className="absolute top-6 right-6 flex items-center gap-4">
                     <ThemeToggle />
                     <button
                         className="p-2 text-brand-white/50 hover:text-brand-white transition-colors"
                         onClick={() => setMobileMenuOpen(false)}
+                        aria-label="Menü schließen"
                     >
                         <X className="w-8 h-8" />
                     </button>
                 </div>
 
-                <nav className="flex flex-col items-center gap-6">
+                <nav className="flex flex-col items-center gap-6" aria-label="Hauptnavigation">
                     {navLinks.map((link, i) => (
                         <Link
                             key={link.href}
