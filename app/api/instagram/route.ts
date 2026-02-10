@@ -21,12 +21,9 @@ export async function GET(request: NextRequest) {
             );
         }
 
-        // Fetch Instagram posts from Sanity filtered by category with image URLs
+        // Fetch Instagram posts from Sanity filtered by category
         const posts = await sanityClient.fetch(
-            `*[_type == "instagramPost" && category == $category] | order(timestamp desc)[0...12] {
-                ...,
-                "cachedImageUrl": cachedImage.asset->url
-            }`,
+            `*[_type == "instagramPost" && category == $category] | order(timestamp desc)[0...12]`,
             { category }
         );
 
