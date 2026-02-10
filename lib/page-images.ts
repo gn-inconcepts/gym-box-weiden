@@ -1,5 +1,5 @@
 import { client } from '@/sanity/lib/client';
-import { imageUrlBuilder } from '@/sanity/lib/image';
+import { urlFor } from '@/sanity/lib/image';
 
 // Fallback images for each page
 const FALLBACK_IMAGES: Record<string, string> = {
@@ -26,8 +26,7 @@ export async function getPageImage(pageKey: string): Promise<PageImage> {
         );
 
         if (result?.image) {
-            const imageUrl = imageUrlBuilder(client)
-                .image(result.image)
+            const imageUrl = urlFor(result.image)
                 .width(2670)
                 .quality(80)
                 .format('webp')
