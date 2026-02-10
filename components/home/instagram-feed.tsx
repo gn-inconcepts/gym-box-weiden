@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Instagram } from "lucide-react";
-import Image from "next/image";
 
 interface InstagramPost {
     _id: string;
@@ -12,9 +11,20 @@ interface InstagramPost {
     caption?: string;
     permalink: string;
     timestamp: string;
+    category: 'gym' | 'box';
 }
 
-export function InstagramFeed() {
+interface InstagramFeedProps {
+    category?: 'gym' | 'box';
+    username?: string;
+    instagramUrl?: string;
+}
+
+export function InstagramFeed({
+    category = 'gym',
+    username = 'bernhardtrainiert',
+    instagramUrl = 'https://www.instagram.com/bernhardtrainiert/'
+}: InstagramFeedProps) {
     const [posts, setPosts] = useState<InstagramPost[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
@@ -22,8 +32,8 @@ export function InstagramFeed() {
     useEffect(() => {
         async function fetchPosts() {
             try {
-                // Fetch from Sanity CMS (cached posts)
-                const response = await fetch('/api/instagram');
+                // Fetch from Sanity CMS (cached posts filtered by category)
+                const response = await fetch(`/api/instagram?category=${category}`);
                 if (!response.ok) throw new Error('Failed to fetch');
 
                 const data = await response.json();
@@ -37,16 +47,16 @@ export function InstagramFeed() {
         }
 
         fetchPosts();
-    }, []);
+    }, [category]);
 
     // Fallback posts if API fails or no Instagram configured
     const fallbackPosts = [
         { url: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=600&auto=format&fit=crop", caption: "Training Session" },
-        { url: "https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?q=80&w=600&auto=format&fit=crop", caption: "Gym Workout" },
-        { url: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=600&auto=format&fit=crop", caption: "CrossFit Box" },
+        { url: "https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?q=80&w=600&auto=format&fit=crop", caption: category === 'box' ? 'CrossFit Workout' : 'Gym Workout' },
+        { url: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=600&auto=format&fit=crop", caption: category === 'box' ? 'Box Training' : 'Strength Training' },
         { url: "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=600&auto=format&fit=crop", caption: "Group Training" },
-        { url: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=600&auto=format&fit=crop", caption: "Strength Training" },
-        { url: "https://images.unsplash.com/photo-1517438476312-10d79c077509?q=80&w=600&auto=format&fit=crop", caption: "Fitness Community" }
+        { url: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=600&auto=format&fit=crop", caption: "Fitness Training" },
+        { url: "https://images.unsplash.com/photo-1517438476312-10d79c077509?q=80&w=600&auto=format&fit=crop", caption: "Community" }
     ];
 
     const displayPosts = posts.length > 0 ? posts : (error || !loading ? fallbackPosts.map((p, i) => ({
@@ -54,8 +64,9 @@ export function InstagramFeed() {
         postId: `fallback-${i}`,
         imageUrl: p.url,
         caption: p.caption,
-        permalink: 'https://www.instagram.com/bernhardtrainiert/',
-        timestamp: new Date().toISOString()
+        permalink: instagramUrl,
+        timestamp: new Date().toISOString(),
+        category: category
     })) : []);
 
     return (
@@ -64,7 +75,7 @@ export function InstagramFeed() {
                 <div className="text-center mb-12">
                     <div className="inline-flex items-center gap-2 px-4 py-2 bg-brand-green/10 text-brand-green rounded-full mb-4">
                         <Instagram className="w-4 h-4" />
-                        <span className="text-sm font-bold">@bernhardtrainiert</span>
+                        <span className="text-sm font-bold">@{username}</span>
                     </div>
                     <h2 className="font-display text-4xl md:text-5xl mb-4">
                         Folge uns auf <span className="text-brand-green">Instagram</span>
@@ -114,7 +125,7 @@ export function InstagramFeed() {
 
                 <div className="text-center mt-12">
                     <a
-                        href="https://www.instagram.com/bernhardtrainiert/"
+                        href={instagramUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 px-8 py-3 border border-brand-white/20 rounded-full text-brand-white hover:bg-brand-green hover:text-brand-black hover:border-brand-green transition-all duration-300"

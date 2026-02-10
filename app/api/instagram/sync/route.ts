@@ -3,6 +3,7 @@ import { createClient } from '@sanity/client';
 
 const APIFY_API_TOKEN = process.env.APIFY_API_TOKEN;
 const INSTAGRAM_USERNAME = process.env.INSTAGRAM_USERNAME || 'bernhardtrainiert';
+const INSTAGRAM_USERNAME_BOX = process.env.INSTAGRAM_USERNAME_BOX || 'crossfit_lakefront';
 const CRON_SECRET = process.env.CRON_SECRET;
 
 // Create Sanity client
@@ -13,6 +14,78 @@ const sanityClient = createClient({
     token: process.env.SANITY_API_TOKEN,
     useCdn: false,
 });
+
+async function syncInstagramAccount(username: string, category: 'gym' | 'box') {
+    console.log(`🔄 Syncing Instagram for ${category}: @${username}`);
+
+    // Use Apify Instagram Profile Scraper
+    const response = await fetch(`https://api.apify.com/v2/acts/apify~instagram-profile-scraper/run-sync-get-dataset-items?token=${APIFY_API_TOKEN}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            usernames: [username],
+            resultsLimit: 12, // Get latest 12 posts
+        }),
+    });
+
+    if (!response.ok) {
+        throw new Error(`Apify API error for @${username}: ${response.status} ${response.statusText}`);
+    }
+
+    const results = await response.json();
+
+    if (!results || results.length === 0) {
+        console.log(`⚠️  No Instagram posts found for @${username}`);
+        return { synced: 0, total: 0 };
+    }
+
+    // Get the profile data (first item contains posts)
+    const profile = results[0];
+    const posts = profile?.latestPosts || [];
+
+    console.log(`📸 Found ${posts.length} posts for @${username}`);
+
+    // Get existing posts from Sanity to avoid duplicates
+    const existingPosts = await sanityClient.fetch(
+        `*[_type == "instagramPost" && category == $category]{postId}`,
+        { category }
+    );
+    const existingPostIds = new Set(existingPosts.map((p: any) => p.postId));
+
+    let syncedCount = 0;
+
+    // Sync posts to Sanity
+    for (const post of posts.slice(0, 12)) {
+        // Only sync if not already in Sanity
+        if (!existingPostIds.has(post.id)) {
+            try {
+                await sanityClient.create({
+                    _type: 'instagramPost',
+                    postId: post.id,
+                    imageUrl: post.displayUrl || post.thumbnailSrc,
+                    caption: post.caption || '',
+                    permalink: post.url || `https://www.instagram.com/p/${post.shortCode}/`,
+                    timestamp: post.timestamp ? new Date(post.timestamp).toISOString() : new Date().toISOString(),
+                    mediaType: post.type || 'image',
+                    syncedAt: new Date().toISOString(),
+                    category: category,
+                });
+                syncedCount++;
+                console.log(`  ✅ Synced post: ${post.id} [${category}]`);
+            } catch (error) {
+                console.error(`  ❌ Failed to sync post ${post.id}:`, error);
+            }
+        } else {
+            console.log(`  ⏭️  Post ${post.id} already exists, skipping`);
+        }
+    }
+
+    console.log(`✅ ${category} sync complete: ${syncedCount} new posts`);
+
+    return { synced: syncedCount, total: posts.length };
+}
 
 export async function POST(request: NextRequest) {
     try {
@@ -32,82 +105,27 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        console.log('🔄 Starting Instagram sync for:', INSTAGRAM_USERNAME);
+        console.log('🚀 Starting Instagram sync for both accounts...');
 
-        // Use Apify Instagram Profile Scraper
-        const response = await fetch(`https://api.apify.com/v2/acts/apify~instagram-profile-scraper/run-sync-get-dataset-items?token=${APIFY_API_TOKEN}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                usernames: [INSTAGRAM_USERNAME],
-                resultsLimit: 12, // Get latest 12 posts
-            }),
-        });
+        // Sync both accounts
+        const gymResults = await syncInstagramAccount(INSTAGRAM_USERNAME, 'gym');
+        const boxResults = await syncInstagramAccount(INSTAGRAM_USERNAME_BOX, 'box');
 
-        if (!response.ok) {
-            throw new Error(`Apify API error: ${response.status} ${response.statusText}`);
-        }
+        const totalSynced = gymResults.synced + boxResults.synced;
+        const totalPosts = gymResults.total + boxResults.total;
 
-        const results = await response.json();
-
-        if (!results || results.length === 0) {
-            console.log('⚠️  No Instagram posts found');
-            return NextResponse.json(
-                { message: 'No posts found', synced: 0 },
-                { status: 200 }
-            );
-        }
-
-        // Get the profile data (first item contains posts)
-        const profile = results[0];
-        const posts = profile?.latestPosts || [];
-
-        console.log(`📸 Found ${posts.length} Instagram posts`);
-
-        // Get existing posts from Sanity to avoid duplicates
-        const existingPosts = await sanityClient.fetch(
-            `*[_type == "instagramPost"]{postId}`
-        );
-        const existingPostIds = new Set(existingPosts.map((p: any) => p.postId));
-
-        let syncedCount = 0;
-
-        // Sync posts to Sanity
-        for (const post of posts.slice(0, 12)) {
-            // Only sync if not already in Sanity
-            if (!existingPostIds.has(post.id)) {
-                try {
-                    await sanityClient.create({
-                        _type: 'instagramPost',
-                        postId: post.id,
-                        imageUrl: post.displayUrl || post.thumbnailSrc,
-                        caption: post.caption || '',
-                        permalink: post.url || `https://www.instagram.com/p/${post.shortCode}/`,
-                        timestamp: post.timestamp ? new Date(post.timestamp).toISOString() : new Date().toISOString(),
-                        mediaType: post.type || 'image',
-                        syncedAt: new Date().toISOString(),
-                        likesCount: post.likesCount || 0,
-                        commentsCount: post.commentsCount || 0,
-                    });
-                    syncedCount++;
-                    console.log(`  ✅ Synced post: ${post.id}`);
-                } catch (error) {
-                    console.error(`  ❌ Failed to sync post ${post.id}:`, error);
-                }
-            } else {
-                console.log(`  ⏭️  Post ${post.id} already exists, skipping`);
-            }
-        }
-
-        console.log(`✅ Instagram sync complete: ${syncedCount} new posts synced`);
+        console.log(`\n🎉 All Instagram syncs complete!`);
+        console.log(`   Gym: ${gymResults.synced}/${gymResults.total} synced`);
+        console.log(`   Box: ${boxResults.synced}/${boxResults.total} synced`);
+        console.log(`   Total: ${totalSynced}/${totalPosts} synced\n`);
 
         return NextResponse.json(
             {
-                message: 'Instagram sync successful',
-                synced: syncedCount,
-                total: posts.length,
+                message: 'Instagram sync successful for both accounts',
+                gym: { synced: gymResults.synced, total: gymResults.total },
+                box: { synced: boxResults.synced, total: boxResults.total },
+                totalSynced,
+                totalPosts,
             },
             { status: 200 }
         );
@@ -126,7 +144,10 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(
         {
             message: 'Instagram sync endpoint. Use POST with Authorization header.',
-            username: INSTAGRAM_USERNAME,
+            accounts: {
+                gym: INSTAGRAM_USERNAME,
+                box: INSTAGRAM_USERNAME_BOX,
+            },
             configured: !!APIFY_API_TOKEN,
         },
         { status: 200 }

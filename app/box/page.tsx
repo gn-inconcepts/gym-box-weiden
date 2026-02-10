@@ -5,6 +5,7 @@ import { ParallaxStrip } from "@/components/ui/parallax-strip";
 import { TrainerSpotlight } from "@/components/home/trainer-spotlight";
 import { ClassAccordion } from "@/components/box/class-accordion";
 import { DisciplinesLevels } from "@/components/box/disciplines-levels";
+import { InstagramFeed } from "@/components/home/instagram-feed";
 import { Dumbbell, Users, Activity, Layers } from "lucide-react";
 
 // Mock Trainer Data for Daniel
@@ -146,6 +147,12 @@ export default function BoxPage() {
                 </section>
 
                 <TrainerSpotlight trainer={boxTrainer} />
+
+                <InstagramFeed
+                    category="box"
+                    username="crossfit_lakefront"
+                    instagramUrl="https://www.instagram.com/crossfit_lakefront/"
+                />
             </main>
             <Footer />
         </div>

@@ -59,6 +59,19 @@ export default defineType({
             type: 'datetime',
             description: 'When this post was last synced from Instagram',
         }),
+        defineField({
+            name: 'category',
+            title: 'Category',
+            type: 'string',
+            options: {
+                list: [
+                    { title: 'Gym (bernhardtrainiert)', value: 'gym' },
+                    { title: 'Box (crossfit_lakefront)', value: 'box' },
+                ],
+            },
+            validation: (rule) => rule.required(),
+            description: 'Which Instagram account this post is from',
+        }),
     ],
     preview: {
         select: {
