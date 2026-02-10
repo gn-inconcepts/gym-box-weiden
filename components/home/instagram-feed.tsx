@@ -8,6 +8,7 @@ interface InstagramPost {
     _id: string;
     postId: string;
     imageUrl: string;
+    cachedImageUrl?: string;
     caption?: string;
     permalink: string;
     timestamp: string;
@@ -106,9 +107,10 @@ export function InstagramFeed({
                                 className="group relative aspect-square overflow-hidden rounded-lg bg-brand-dark"
                             >
                                 <img
-                                    src={post.imageUrl}
+                                    src={post.cachedImageUrl || post.imageUrl}
                                     alt={post.caption || 'Instagram post'}
                                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                                    referrerPolicy="no-referrer"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-brand-black/80 via-brand-black/0 to-brand-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
                                     <p className="text-sm text-white line-clamp-2">

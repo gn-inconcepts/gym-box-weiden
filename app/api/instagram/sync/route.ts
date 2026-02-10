@@ -15,6 +15,31 @@ const sanityClient = createClient({
     useCdn: false,
 });
 
+async function uploadImageToSanity(imageUrl: string, filename: string): Promise<any> {
+    try {
+        // Fetch image from Instagram CDN
+        const imageResponse = await fetch(imageUrl);
+        if (!imageResponse.ok) {
+            console.warn(`  ⚠️  Failed to fetch image: ${imageResponse.status}`);
+            return null;
+        }
+
+        const imageBuffer = await imageResponse.arrayBuffer();
+        const buffer = Buffer.from(imageBuffer);
+
+        // Upload to Sanity
+        const asset = await sanityClient.assets.upload('image', buffer, {
+            filename: filename,
+            contentType: imageResponse.headers.get('content-type') || 'image/jpeg',
+        });
+
+        return asset;
+    } catch (error) {
+        console.error(`  ❌ Failed to upload image to Sanity:`, error);
+        return null;
+    }
+}
+
 async function syncInstagramAccount(username: string, category: 'gym' | 'box') {
     console.log(`🔄 Syncing Instagram for ${category}: @${username}`);
 
@@ -61,17 +86,40 @@ async function syncInstagramAccount(username: string, category: 'gym' | 'box') {
         // Only sync if not already in Sanity
         if (!existingPostIds.has(post.id)) {
             try {
-                await sanityClient.create({
+                const imageUrl = post.displayUrl || post.thumbnailSrc;
+
+                // Download and upload image to Sanity
+                console.log(`  📥 Downloading image for post ${post.id}...`);
+                const cachedImage = await uploadImageToSanity(
+                    imageUrl,
+                    `instagram-${category}-${post.id}.jpg`
+                );
+
+                const docData: any = {
                     _type: 'instagramPost',
                     postId: post.id,
-                    imageUrl: post.displayUrl || post.thumbnailSrc,
+                    imageUrl: imageUrl,
                     caption: post.caption || '',
                     permalink: post.url || `https://www.instagram.com/p/${post.shortCode}/`,
                     timestamp: post.timestamp ? new Date(post.timestamp).toISOString() : new Date().toISOString(),
                     mediaType: post.type || 'image',
                     syncedAt: new Date().toISOString(),
                     category: category,
-                });
+                };
+
+                // Add cached image reference if upload succeeded
+                if (cachedImage) {
+                    docData.cachedImage = {
+                        _type: 'image',
+                        asset: {
+                            _type: 'reference',
+                            _ref: cachedImage._id,
+                        },
+                    };
+                    console.log(`  ✅ Image cached in Sanity`);
+                }
+
+                await sanityClient.create(docData);
                 syncedCount++;
                 console.log(`  ✅ Synced post: ${post.id} [${category}]`);
             } catch (error) {
