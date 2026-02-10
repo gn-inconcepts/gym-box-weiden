@@ -6,6 +6,7 @@ import { TeamGrid } from "@/components/team/team-grid";
 import { client } from "@/sanity/lib/client";
 import { trainersQuery } from "@/sanity/lib/queries";
 import { Trainer } from "@/types/sanity";
+import { getPageImage } from "@/lib/page-images";
 
 // Fallback data if CMS is empty or not configured
 const fallbackTrainers: Trainer[] = [
@@ -67,6 +68,7 @@ export const revalidate = 60; // Revalidate every 60 seconds
 
 export default async function TeamPage() {
     let trainers: Trainer[] = [];
+    let headerImage = await getPageImage('team-header');
 
     try {
         if (process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
@@ -102,8 +104,8 @@ export default async function TeamPage() {
                         </div>
                         <div className="relative aspect-video rounded-2xl overflow-hidden border border-white/5 bg-brand-dark">
                             <img
-                                src="https://images.unsplash.com/photo-1574680096141-1cddd32e04ca?q=80&w=2670&auto=format&fit=crop"
-                                alt="Team"
+                                src={headerImage.url}
+                                alt={headerImage.altText || "Team"}
                                 className="w-full h-full object-cover opacity-60"
                             />
                         </div>

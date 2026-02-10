@@ -6,72 +6,48 @@ export default defineType({
     type: 'document',
     fields: [
         defineField({
-            name: 'pageId',
-            title: 'Page ID',
+            name: 'pageKey',
+            title: 'Page Key',
             type: 'string',
-            description: 'Unique identifier for the page (e.g., "home", "gym", "box", "team")',
             validation: (rule) => rule.required(),
-        }),
-        defineField({
-            name: 'heroTitle',
-            title: 'Hero Title',
-            type: 'string',
-        }),
-        defineField({
-            name: 'heroSubtitle',
-            title: 'Hero Subtitle',
-            type: 'text',
-        }),
-        defineField({
-            name: 'heroVideo',
-            title: 'Hero Video',
-            type: 'file',
+            description: 'Unique identifier for the page (e.g., "team-header", "gym-hero")',
             options: {
-                accept: 'video/*',
+                list: [
+                    { title: 'Team Header Image', value: 'team-header' },
+                    { title: 'Gym Hero Image', value: 'gym-hero' },
+                    { title: 'Box Hero Image', value: 'box-hero' },
+                    { title: 'Contact Hero Image', value: 'contact-hero' },
+                    { title: 'Services Hero Image', value: 'services-hero' },
+                    { title: 'Pricing Hero Image', value: 'pricing-hero' },
+                ],
             },
         }),
         defineField({
-            name: 'heroImage',
-            title: 'Hero Image (fallback if no video)',
+            name: 'image',
+            title: 'Image',
             type: 'image',
             options: {
                 hotspot: true,
             },
+            validation: (rule) => rule.required(),
         }),
         defineField({
-            name: 'heroCTA',
-            title: 'Hero Call-to-Action',
-            type: 'object',
-            fields: [
-                { name: 'text', type: 'string', title: 'Button Text' },
-                { name: 'link', type: 'string', title: 'Button Link' },
-            ],
-        }),
-        defineField({
-            name: 'sections',
-            title: 'Page Sections',
-            type: 'array',
-            of: [
-                {
-                    type: 'object',
-                    fields: [
-                        { name: 'title', type: 'string', title: 'Section Title' },
-                        { name: 'subtitle', type: 'string', title: 'Section Subtitle' },
-                        {
-                            name: 'content',
-                            type: 'array',
-                            title: 'Content',
-                            of: [{ type: 'block' }],
-                        },
-                        {
-                            name: 'image',
-                            type: 'image',
-                            title: 'Section Image',
-                            options: { hotspot: true },
-                        },
-                    ],
-                },
-            ],
+            name: 'altText',
+            title: 'Alt Text',
+            type: 'string',
+            description: 'Describe the image for accessibility',
         }),
     ],
+    preview: {
+        select: {
+            title: 'pageKey',
+            media: 'image',
+        },
+        prepare({ title, media }) {
+            return {
+                title: title || 'Page Content',
+                media,
+            }
+        },
+    },
 })
