@@ -18,7 +18,6 @@ export function Hero() {
                 <div className="absolute inset-0 bg-gradient-to-b from-brand-black/30 via-transparent to-brand-black z-10" />
                 <OptimizedVideo
                     src="https://videos.pexels.com/video-files/855828/855828-hd_1920_1080_30fps.mp4"
-                    poster="/images/hero-poster.jpg"
                     autoPlay={true}
                     loop={true}
                     muted={true}
