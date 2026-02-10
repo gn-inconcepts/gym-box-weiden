@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 
 interface OptimizedVideoProps {
     src: string;
+    srcWebm?: string; // Optional WebM source for better Firefox support
     poster?: string;
     className?: string;
     autoPlay?: boolean;
@@ -17,6 +18,7 @@ interface OptimizedVideoProps {
 
 export function OptimizedVideo({
     src,
+    srcWebm,
     poster,
     className,
     autoPlay = false,
@@ -75,7 +77,14 @@ export function OptimizedVideo({
                 onLoadedData={() => setIsLoaded(true)}
                 preload={lazy ? "none" : "metadata"}
             >
-                {shouldLoad && <source src={src} type="video/mp4" />}
+                {shouldLoad && (
+                    <>
+                        {/* WebM for Firefox and Chrome (better compression) */}
+                        {srcWebm && <source src={srcWebm} type="video/webm" />}
+                        {/* MP4 as fallback for Safari and other browsers */}
+                        <source src={src} type="video/mp4" />
+                    </>
+                )}
                 Your browser does not support the video tag.
             </video>
 
