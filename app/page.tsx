@@ -7,7 +7,7 @@ import { PhilosophyDetail } from "@/components/home/philosophy-detail";
 import { ServicesShowcase } from "@/components/home/services-showcase";
 import { StatsBar } from "@/components/home/stats-bar";
 import { Reviews } from "@/components/home/reviews";
-import { SocialWall } from "@/components/home/social-wall";
+import { InstagramFeed } from "@/components/home/instagram-feed";
 import { VideoWalkthrough } from "@/components/home/video-walkthrough";
 
 export default function Home() {
@@ -23,7 +23,11 @@ export default function Home() {
         <PhilosophyDetail />
         <ServicesShowcase />
         <Reviews />
-        <SocialWall />
+        <InstagramFeed
+          category="gym"
+          username="bernhardtrainiert"
+          instagramUrl="https://www.instagram.com/bernhardtrainiert/"
+        />
 
         {/* CTA Section */}
         <section className="py-12 md:py-24 bg-brand-black relative overflow-hidden">

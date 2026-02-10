@@ -37,7 +37,7 @@ export function InstagramFeed({
                 if (!response.ok) throw new Error('Failed to fetch');
 
                 const data = await response.json();
-                setPosts(data.posts?.slice(0, 6) || []); // Show only 6 posts
+                setPosts(data.posts?.slice(0, 12) || []); // Show 12 posts (2 rows × 6 cols)
             } catch (err) {
                 console.error('Failed to load Instagram posts:', err);
                 setError(true);
@@ -86,13 +86,13 @@ export function InstagramFeed({
                 </div>
 
                 {loading ? (
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                        {[...Array(6)].map((_, i) => (
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                        {[...Array(12)].map((_, i) => (
                             <div key={i} className="aspect-square bg-brand-dark animate-pulse rounded-lg" />
                         ))}
                     </div>
                 ) : (
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                         {displayPosts.map((post, i) => (
                             <motion.a
                                 key={post._id}
