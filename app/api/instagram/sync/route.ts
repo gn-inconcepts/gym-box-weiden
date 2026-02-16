@@ -14,6 +14,37 @@ const sanityClient = createClient({
     useCdn: false,
 });
 
+// Download an image and upload it to Sanity as an asset
+async function cacheImageInSanity(imageUrl: string, filename: string): Promise<{ _type: 'image'; asset: { _type: 'reference'; _ref: string } } | null> {
+    try {
+        const response = await fetch(imageUrl, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+            },
+        });
+        if (!response.ok) {
+            console.error(`  Failed to download image: ${response.status}`);
+            return null;
+        }
+        const buffer = Buffer.from(await response.arrayBuffer());
+        const contentType = response.headers.get('content-type') || 'image/jpeg';
+        const ext = contentType.includes('png') ? 'png' : contentType.includes('webp') ? 'webp' : 'jpg';
+
+        const asset = await sanityClient.assets.upload('image', buffer, {
+            filename: `${filename}.${ext}`,
+            contentType,
+        });
+
+        return {
+            _type: 'image',
+            asset: { _type: 'reference', _ref: asset._id },
+        };
+    } catch (error) {
+        console.error(`  Failed to cache image in Sanity:`, error);
+        return null;
+    }
+}
+
 async function syncInstagramAccount(username: string, category: 'gym' | 'box') {
     console.log(`🔄 Syncing Instagram for ${category}: @${username}`);
 
@@ -37,7 +68,7 @@ async function syncInstagramAccount(username: string, category: 'gym' | 'box') {
 
     if (!results || results.length === 0) {
         console.log(`⚠️  No Instagram posts found for @${username}`);
-        return { synced: 0, total: 0 };
+        return { synced: 0, total: 0, refreshed: 0 };
     }
 
     // Get the profile data (first item contains posts)
@@ -46,24 +77,30 @@ async function syncInstagramAccount(username: string, category: 'gym' | 'box') {
 
     console.log(`📸 Found ${posts.length} posts for @${username}`);
 
-    // Get existing posts from Sanity to avoid duplicates
-    const existingPosts = await sanityClient.fetch(
-        `*[_type == "instagramPost" && category == $category]{postId}`,
+    // Get existing posts from Sanity (include cachedImage status)
+    const existingPosts: Array<{ _id: string; postId: string; hasCachedImage: boolean }> = await sanityClient.fetch(
+        `*[_type == "instagramPost" && category == $category]{_id, postId, "hasCachedImage": defined(cachedImage.asset)}`,
         { category }
     );
-    const existingPostIds = new Set(existingPosts.map((p: any) => p.postId));
+    const existingPostMap = new Map(existingPosts.map((p) => [p.postId, p]));
 
     let syncedCount = 0;
+    let refreshedCount = 0;
 
     // Sync posts to Sanity
     for (const post of posts.slice(0, 12)) {
-        // Only sync if not already in Sanity
-        if (!existingPostIds.has(post.id)) {
+        const cdnUrl = post.displayUrl || post.thumbnailSrc;
+        const existing = existingPostMap.get(post.id);
+
+        if (!existing) {
+            // New post — create with cached image
             try {
+                const cachedImage = cdnUrl ? await cacheImageInSanity(cdnUrl, `ig-${category}-${post.id}`) : null;
                 await sanityClient.create({
                     _type: 'instagramPost',
                     postId: post.id,
-                    imageUrl: post.displayUrl || post.thumbnailSrc,
+                    imageUrl: cdnUrl,
+                    ...(cachedImage && { cachedImage }),
                     caption: post.caption || '',
                     permalink: post.url || `https://www.instagram.com/p/${post.shortCode}/`,
                     timestamp: post.timestamp ? new Date(post.timestamp).toISOString() : new Date().toISOString(),
@@ -72,18 +109,34 @@ async function syncInstagramAccount(username: string, category: 'gym' | 'box') {
                     category: category,
                 });
                 syncedCount++;
-                console.log(`  ✅ Synced post: ${post.id} [${category}]`);
+                console.log(`  ✅ Synced post: ${post.id} [${category}]${cachedImage ? ' (image cached)' : ''}`);
             } catch (error) {
                 console.error(`  ❌ Failed to sync post ${post.id}:`, error);
             }
+        } else if (!existing.hasCachedImage && cdnUrl) {
+            // Existing post without cached image — download and cache it
+            try {
+                const cachedImage = await cacheImageInSanity(cdnUrl, `ig-${category}-${post.id}`);
+                if (cachedImage) {
+                    await sanityClient.patch(existing._id).set({
+                        cachedImage,
+                        imageUrl: cdnUrl,
+                        syncedAt: new Date().toISOString(),
+                    }).commit();
+                    refreshedCount++;
+                    console.log(`  🔄 Cached image for existing post: ${post.id}`);
+                }
+            } catch (error) {
+                console.error(`  ❌ Failed to cache image for ${post.id}:`, error);
+            }
         } else {
-            console.log(`  ⏭️  Post ${post.id} already exists, skipping`);
+            console.log(`  ⏭️  Post ${post.id} already exists with cached image, skipping`);
         }
     }
 
-    console.log(`✅ ${category} sync complete: ${syncedCount} new posts`);
+    console.log(`✅ ${category} sync complete: ${syncedCount} new, ${refreshedCount} refreshed`);
 
-    return { synced: syncedCount, total: posts.length };
+    return { synced: syncedCount, total: posts.length, refreshed: refreshedCount };
 }
 
 export async function POST(request: NextRequest) {
@@ -118,19 +171,21 @@ export async function POST(request: NextRequest) {
         const boxResults = await syncInstagramAccount(INSTAGRAM_USERNAME_BOX, 'box');
 
         const totalSynced = gymResults.synced + boxResults.synced;
+        const totalRefreshed = gymResults.refreshed + boxResults.refreshed;
         const totalPosts = gymResults.total + boxResults.total;
 
         console.log(`\n🎉 All Instagram syncs complete!`);
-        console.log(`   Gym: ${gymResults.synced}/${gymResults.total} synced`);
-        console.log(`   Box: ${boxResults.synced}/${boxResults.total} synced`);
-        console.log(`   Total: ${totalSynced}/${totalPosts} synced\n`);
+        console.log(`   Gym: ${gymResults.synced} new, ${gymResults.refreshed} refreshed / ${gymResults.total} total`);
+        console.log(`   Box: ${boxResults.synced} new, ${boxResults.refreshed} refreshed / ${boxResults.total} total`);
+        console.log(`   Total: ${totalSynced} new, ${totalRefreshed} refreshed / ${totalPosts} total\n`);
 
         return NextResponse.json(
             {
                 message: 'Instagram sync successful for both accounts',
-                gym: { synced: gymResults.synced, total: gymResults.total },
-                box: { synced: boxResults.synced, total: boxResults.total },
+                gym: { synced: gymResults.synced, refreshed: gymResults.refreshed, total: gymResults.total },
+                box: { synced: boxResults.synced, refreshed: boxResults.refreshed, total: boxResults.total },
                 totalSynced,
+                totalRefreshed,
                 totalPosts,
             },
             { status: 200 }

@@ -22,8 +22,17 @@ export async function GET(request: NextRequest) {
         }
 
         // Fetch Instagram posts from Sanity filtered by category
+        // Prefer cachedImage (permanent Sanity asset) over imageUrl (expires)
         const posts = await sanityClient.fetch(
-            `*[_type == "instagramPost" && category == $category] | order(timestamp desc)[0...12]`,
+            `*[_type == "instagramPost" && category == $category] | order(timestamp desc)[0...12]{
+                _id,
+                postId,
+                "imageUrl": coalesce(cachedImage.asset->url, imageUrl),
+                caption,
+                permalink,
+                timestamp,
+                category
+            }`,
             { category }
         );
 
