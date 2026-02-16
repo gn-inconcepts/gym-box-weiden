@@ -102,7 +102,7 @@ export function InstagramFeed({
                                 className="stagger-child group relative aspect-square overflow-hidden rounded-lg bg-brand-dark"
                             >
                                 <img
-                                    src={`/api/instagram-image?url=${encodeURIComponent(post.imageUrl)}`}
+                                    src={post.postId.startsWith('fallback-') ? post.imageUrl : `/api/instagram-image?url=${encodeURIComponent(post.imageUrl)}`}
                                     alt={post.caption || 'Instagram post'}
                                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                                 />

@@ -15,7 +15,12 @@ export async function GET(request: NextRequest) {
         // Validate it's an Instagram/Facebook CDN URL using proper URL parsing
         try {
             const url = new URL(imageUrl);
-            if (!url.hostname.endsWith('.cdninstagram.com') && !url.hostname.endsWith('.fbcdn.net')) {
+            const hostname = url.hostname;
+            const allowedDomains = ['cdninstagram.com', 'fbcdn.net', 'instagram.com'];
+            const isAllowed = allowedDomains.some(domain =>
+                hostname === domain || hostname.endsWith('.' + domain)
+            );
+            if (!isAllowed) {
                 return NextResponse.json({ error: 'Invalid image URL' }, { status: 400 });
             }
         } catch {
