@@ -3,7 +3,6 @@
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-import { motion } from "framer-motion";
 
 export function BrandCards() {
     const [hovered, setHovered] = useState<"gym" | "box" | null>(null);

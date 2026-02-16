@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import Image from "next/image";
+import { useRef, useEffect, useState } from "react";
 
 interface PageHeaderProps {
     title: string;
@@ -12,53 +12,66 @@ interface PageHeaderProps {
 
 export function PageHeader({ title, subtitle, image, logo }: PageHeaderProps) {
     const containerRef = useRef<HTMLDivElement>(null);
-    const { scrollY } = useScroll();
-    const y = useTransform(scrollY, [0, 500], [0, 200]);
+    const [offsetY, setOffsetY] = useState(0);
+
+    useEffect(() => {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        const handleScroll = () => {
+            const y = Math.min(window.scrollY * 0.4, 200);
+            setOffsetY(y);
+        };
+
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
 
     return (
         <section ref={containerRef} className="relative h-[60vh] min-h-[500px] flex items-center justify-center overflow-hidden bg-brand-dark">
             {/* Background Image Parallax */}
-            <motion.div style={{ y }} className="absolute inset-0 z-0">
+            <div
+                style={{ transform: `translateY(${offsetY}px)` }}
+                className="absolute inset-0 z-0 will-change-transform"
+            >
                 <div className="absolute inset-0 bg-black/60 z-10" />
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-black/40 z-10" />
-                <img
+                <Image
                     src={image}
                     alt={title}
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
+                    sizes="100vw"
+                    priority
                 />
-            </motion.div>
+            </div>
 
             {/* Content */}
             <div className="relative z-20 text-center px-4 max-w-4xl mx-auto mt-20">
                 {logo && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8 }}
-                        className="mb-8 flex justify-center"
-                    >
-                        <img src={logo} alt={title} className="h-16 md:h-20 w-auto drop-shadow-lg" />
-                    </motion.div>
+                    <div className="mb-8 flex justify-center animate-[heroFadeUp_0.8s_ease-out_forwards]">
+                        <Image
+                            src={logo}
+                            alt={title}
+                            width={200}
+                            height={80}
+                            className="h-16 md:h-20 w-auto drop-shadow-lg"
+                            priority
+                        />
+                    </div>
                 )}
 
-                <motion.h1
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, ease: "easeOut" }}
-                    className="font-display text-5xl md:text-7xl lg:text-8xl tracking-tight mb-6 drop-shadow-xl text-white"
+                <h1
+                    className="font-display text-5xl md:text-7xl lg:text-8xl tracking-tight mb-6 drop-shadow-xl text-white animate-[heroFadeUp_0.8s_ease-out_forwards]"
                 >
                     {title}
-                </motion.h1>
+                </h1>
 
                 {subtitle && (
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-                        className="text-lg md:text-xl text-gray-200 font-light max-w-2xl mx-auto"
+                    <p
+                        className="text-lg md:text-xl text-gray-200 font-light max-w-2xl mx-auto animate-[heroFadeUp_0.8s_0.2s_ease-out_both]"
                     >
                         {subtitle}
-                    </motion.p>
+                    </p>
                 )}
             </div>
         </section>

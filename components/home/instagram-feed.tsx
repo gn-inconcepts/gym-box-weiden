@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import { Instagram } from "lucide-react";
+import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
 
 interface InstagramPost {
     _id: string;
@@ -37,7 +37,7 @@ export function InstagramFeed({
                 if (!response.ok) throw new Error('Failed to fetch');
 
                 const data = await response.json();
-                setPosts(data.posts?.slice(0, 12) || []); // Show 12 posts (2 rows × 6 cols)
+                setPosts(data.posts?.slice(0, 12) || []); // Show 12 posts (2 rows x 6 cols)
             } catch (err) {
                 console.error('Failed to load Instagram posts:', err);
                 setError(true);
@@ -92,18 +92,14 @@ export function InstagramFeed({
                         ))}
                     </div>
                 ) : (
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                        {displayPosts.map((post, i) => (
-                            <motion.a
+                    <AnimateOnScroll animation="stagger-children-scale" className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                        {displayPosts.map((post) => (
+                            <a
                                 key={post._id}
                                 href={post.permalink}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: i * 0.1 }}
-                                className="group relative aspect-square overflow-hidden rounded-lg bg-brand-dark"
+                                className="stagger-child group relative aspect-square overflow-hidden rounded-lg bg-brand-dark"
                             >
                                 <img
                                     src={`/api/instagram-image?url=${encodeURIComponent(post.imageUrl)}`}
@@ -118,9 +114,9 @@ export function InstagramFeed({
                                 <div className="absolute top-3 right-3 bg-brand-black/50 backdrop-blur-sm rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                     <Instagram className="w-4 h-4 text-white" />
                                 </div>
-                            </motion.a>
+                            </a>
                         ))}
-                    </div>
+                    </AnimateOnScroll>
                 )}
 
                 <div className="text-center mt-12">

@@ -2,7 +2,6 @@
 
 import { Star } from "lucide-react";
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 
 interface Review {
     _id: string;
@@ -110,7 +109,7 @@ export function Reviews() {
             <div className="relative w-full">
                 {/* Rolling Marquee of reviews */}
                 <div className="flex gap-6 w-max animate-[marquee_80s_linear_infinite] hover:[animation-play-state:paused] pl-4">
-                    {[...reviews, ...reviews, ...reviews].map((review, i) => {
+                    {[...reviews, ...reviews].map((review, i) => {
                         const uniqueKey = `${review._id}-${i}`;
                         const isExpanded = expandedReviews.has(uniqueKey);
                         const shouldTruncate = review.text.length > 200;
@@ -127,7 +126,7 @@ export function Reviews() {
                                     ))}
                                 </div>
                                 <p className="text-brand-gray-light font-light leading-relaxed mb-4 italic">
-                                    "{displayText}"
+                                    &ldquo;{displayText}&rdquo;
                                 </p>
                                 {shouldTruncate && (
                                     <button

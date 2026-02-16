@@ -1,7 +1,5 @@
-"use client";
-
-import { motion } from "framer-motion";
 import { ClipboardCheck, Activity, GraduationCap } from "lucide-react";
+import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
 
 const details = [
     {
@@ -43,15 +41,11 @@ export function PhilosophyDetail() {
                         </p>
                     </div>
 
-                    <div className="space-y-8">
-                        {details.map((item, i) => (
-                            <motion.div
+                    <AnimateOnScroll animation="stagger-children" className="space-y-8">
+                        {details.map((item) => (
+                            <div
                                 key={item.title}
-                                initial={{ opacity: 0, x: 20 }}
-                                whileInView={{ opacity: 1, x: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: i * 0.1 }}
-                                className="flex gap-6 group"
+                                className="stagger-child flex gap-6 group"
                             >
                                 <div className="w-14 h-14 rounded-xl bg-brand-dark border border-white/5 flex items-center justify-center text-brand-green shrink-0 group-hover:scale-110 transition-transform duration-300">
                                     <item.icon className="w-7 h-7" />
@@ -60,9 +54,9 @@ export function PhilosophyDetail() {
                                     <h3 className="font-display text-2xl mb-2 group-hover:text-brand-green transition-colors">{item.title}</h3>
                                     <p className="text-brand-gray-light leading-relaxed">{item.text}</p>
                                 </div>
-                            </motion.div>
+                            </div>
                         ))}
-                    </div>
+                    </AnimateOnScroll>
                 </div>
             </div>
         </section>

@@ -1,8 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Play } from "lucide-react";
 import { useState } from "react";
+import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
 
 export function VideoWalkthrough() {
     const [isPlaying, setIsPlaying] = useState(false);
@@ -10,11 +10,8 @@ export function VideoWalkthrough() {
     return (
         <section className="py-0 relative z-30 -mt-20 px-4">
             <div className="container mx-auto">
-                <motion.div
-                    initial={{ y: 100, opacity: 0 }}
-                    whileInView={{ y: 0, opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8 }}
+                <AnimateOnScroll
+                    animation="animate-on-scroll"
                     className="relative aspect-video max-w-5xl mx-auto rounded-3xl overflow-hidden shadow-2xl border border-white/10 bg-brand-dark group"
                 >
                     {!isPlaying ? (
@@ -48,7 +45,7 @@ export function VideoWalkthrough() {
                             autoPlay
                         />
                     )}
-                </motion.div>
+                </AnimateOnScroll>
             </div>
         </section>
     );

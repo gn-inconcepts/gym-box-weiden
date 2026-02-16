@@ -1,8 +1,6 @@
-"use client";
-
 import { ArrowRight, Salad, Trophy, Users } from "lucide-react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
 
 const services = [
     {
@@ -33,15 +31,11 @@ export function ServicesShowcase() {
                     <h2 className="font-display text-4xl md:text-5xl mb-6">Wir unterstützen dich mit unserem Wissen bei deinen Zielen</h2>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-                    {services.map((service, i) => (
-                        <motion.div
+                <AnimateOnScroll animation="stagger-children" className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                    {services.map((service) => (
+                        <div
                             key={service.title}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: i * 0.1 }}
-                            className="group p-8 rounded-2xl bg-brand-black border border-brand-white/5 hover:border-brand-green/30 transition-all duration-300"
+                            className="stagger-child group p-8 rounded-2xl bg-brand-black border border-brand-white/5 hover:border-brand-green/30 transition-all duration-300"
                         >
                             <div className="text-xs font-bold tracking-widest text-brand-gray mb-6 uppercase flex items-center gap-2">
                                 <span className="w-2 h-2 rounded-full bg-brand-green"></span>
@@ -56,9 +50,9 @@ export function ServicesShowcase() {
                             <div className="w-12 h-12 rounded-full bg-brand-dark flex items-center justify-center text-brand-green group-hover:bg-brand-green group-hover:text-brand-black transition-all duration-300">
                                 <service.icon className="w-6 h-6" />
                             </div>
-                        </motion.div>
+                        </div>
                     ))}
-                </div>
+                </AnimateOnScroll>
 
                 <div className="text-center">
                     <Link

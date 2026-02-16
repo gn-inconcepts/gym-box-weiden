@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import { Trainer } from "@/types/sanity";
 import { urlFor } from "@/sanity/lib/image";
+
+type FilterCategory = "all" | "gym" | "box";
 
 interface TeamGridProps {
     trainers: Trainer[];
@@ -11,7 +13,7 @@ interface TeamGridProps {
 }
 
 export function TeamGrid({ trainers, fallbackTrainers }: TeamGridProps) {
-    const [filter, setFilter] = useState<"all" | "gym" | "box">("all");
+    const [filter, setFilter] = useState<FilterCategory>("all");
 
     // Use CMS data if available, otherwise fallback
     const displayTrainers = trainers.length > 0 ? trainers : fallbackTrainers;
@@ -21,9 +23,10 @@ export function TeamGrid({ trainers, fallbackTrainers }: TeamGridProps) {
         : displayTrainers.filter(t => t.category === filter || t.category === "all");
 
     // Helper to get image URL (handles both Sanity image objects and string URLs from fallback)
-    const getImageUrl = (image: any) => {
+    const getImageUrl = (image: Trainer["image"]): string => {
         if (typeof image === 'string') return image;
-        return image ? urlFor(image).width(800).height(1067).url() : '';
+        const result = image ? urlFor(image) : null;
+        return result ? result.width(800).height(1067).url() : '';
     };
 
     return (
@@ -32,10 +35,12 @@ export function TeamGrid({ trainers, fallbackTrainers }: TeamGridProps) {
 
                 {/* Filter */}
                 <div className="flex justify-center mb-16 gap-4">
-                    {["all", "gym", "box"].map((f) => (
+                    {(["all", "gym", "box"] as const).map((f) => (
                         <button
                             key={f}
-                            onClick={() => setFilter(f as any)}
+                            onClick={() => setFilter(f)}
+                            aria-label={`Filter: ${f === "all" ? "Alle Coaches" : f === "gym" ? "Gym Team" : "Box Team"}`}
+                            aria-pressed={filter === f}
                             className={`px-8 py-3 rounded-full text-sm font-bold uppercase tracking-wider transition-all duration-300 ${filter === f ? 'bg-brand-green text-brand-black shadow-[0_0_20px_rgba(150,193,31,0.4)]' : 'bg-brand-black border border-brand-white/10 text-brand-gray hover:text-brand-white'}`}
                         >
                             {f === "all" ? "Alle Coaches" : f === "gym" ? "Gym Team" : "Box Team"}
@@ -44,22 +49,27 @@ export function TeamGrid({ trainers, fallbackTrainers }: TeamGridProps) {
                 </div>
 
                 <div className="grid grid-cols-1 gap-12">
-                    <AnimatePresence mode="popLayout">
-                        {filteredTrainers.map((trainer, i) => (
-                            <motion.div
+                    {filteredTrainers.map((trainer, i) => {
+                        const imageUrl = getImageUrl(trainer.image);
+                        return (
+                            <div
                                 key={trainer._id || trainer.name}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, scale: 0.9 }}
-                                transition={{ duration: 0.5 }}
-                                className={`flex flex-col lg:flex-row gap-12 items-center ${i % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}
+                                className={`flex flex-col lg:flex-row gap-12 items-center animate-[fadeInScale_0.4s_ease-out_forwards] ${i % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}
                             >
                                 <div className="w-full lg:w-1/3 aspect-[3/4] relative rounded-2xl overflow-hidden shadow-2xl group border border-brand-white/5">
-                                    <img
-                                        src={getImageUrl(trainer.image)}
-                                        alt={trainer.name}
-                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter grayscale group-hover:grayscale-0"
-                                    />
+                                    {imageUrl ? (
+                                        <Image
+                                            src={imageUrl}
+                                            alt={trainer.name}
+                                            fill
+                                            sizes="(max-width: 1024px) 100vw, 33vw"
+                                            className="object-cover transition-transform duration-700 group-hover:scale-105 filter grayscale group-hover:grayscale-0"
+                                        />
+                                    ) : (
+                                        <div className="w-full h-full bg-brand-black flex items-center justify-center text-brand-gray">
+                                            Kein Bild
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="w-full lg:w-2/3">
                                     <div className="inline-block px-3 py-1 bg-brand-green/10 text-brand-green text-sm font-bold rounded-full mb-4">
@@ -90,9 +100,9 @@ export function TeamGrid({ trainers, fallbackTrainers }: TeamGridProps) {
                                         ))}
                                     </div>
                                 </div>
-                            </motion.div>
-                        ))}
-                    </AnimatePresence>
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
         </section>

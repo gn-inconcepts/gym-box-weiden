@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import { Star, Quote } from "lucide-react";
 import { client } from "@/sanity/lib/client";
 import { getVisibleReviews, sortReviewsByDate } from "@/lib/reviews";
+import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
 
 interface Review {
     _id: string;
@@ -108,15 +108,11 @@ export function GoogleReviews() {
                         ))}
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        {displayReviews.map((review, i) => (
-                            <motion.div
+                    <AnimateOnScroll animation="stagger-children" className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        {displayReviews.map((review) => (
+                            <div
                                 key={review._id}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: i * 0.1 }}
-                                className="bg-brand-black p-8 rounded-2xl border border-brand-white/5 relative group hover:border-brand-green/30 transition-colors"
+                                className="stagger-child bg-brand-black p-8 rounded-2xl border border-brand-white/5 relative group hover:border-brand-green/30 transition-colors"
                             >
                                 <Quote className="absolute top-6 right-6 w-12 h-12 text-brand-green/10 group-hover:text-brand-green/20 transition-colors" />
 
@@ -134,7 +130,7 @@ export function GoogleReviews() {
                                 </div>
 
                                 <p className="text-brand-gray-light leading-relaxed mb-6 relative z-10">
-                                    "{review.text}"
+                                    &ldquo;{review.text}&rdquo;
                                 </p>
 
                                 <div className="flex items-center gap-3">
@@ -148,9 +144,9 @@ export function GoogleReviews() {
                                         </p>
                                     </div>
                                 </div>
-                            </motion.div>
+                            </div>
                         ))}
-                    </div>
+                    </AnimateOnScroll>
                 )}
 
                 <div className="text-center mt-12">

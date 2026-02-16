@@ -1,7 +1,5 @@
-"use client";
-
 import { Apple, Brain, Dumbbell, Moon } from "lucide-react";
-import { motion } from "framer-motion";
+import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
 
 const pillars = [
     {
@@ -57,15 +55,11 @@ export function Philosophy() {
                 </div>
 
                 {/* Horizontal Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {pillars.map((pillar, i) => (
-                        <motion.div
+                <AnimateOnScroll animation="stagger-children" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {pillars.map((pillar) => (
+                        <div
                             key={pillar.title}
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: i * 0.1 }}
-                            className="group bg-brand-black border border-white/5 p-8 rounded-2xl hover:border-brand-green/50 hover:bg-brand-green/5 transition-all duration-500 relative overflow-hidden"
+                            className="stagger-child group bg-brand-black border border-white/5 p-8 rounded-2xl hover:border-brand-green/50 hover:bg-brand-green/5 transition-all duration-500 relative overflow-hidden"
                         >
                             {/* Number Badge */}
                             <div className="absolute -top-4 -right-4 w-20 h-20 rounded-full bg-brand-green/10 flex items-center justify-center group-hover:bg-brand-green/20 transition-colors">
@@ -87,9 +81,9 @@ export function Philosophy() {
 
                             {/* Hover Glow */}
                             <div className="absolute inset-0 bg-gradient-to-br from-brand-green/0 via-brand-green/0 to-brand-green/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
-                        </motion.div>
+                        </div>
                     ))}
-                </div>
+                </AnimateOnScroll>
             </div>
         </section>
     );

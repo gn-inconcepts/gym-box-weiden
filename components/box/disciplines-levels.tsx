@@ -1,8 +1,38 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef, useEffect } from "react";
 
 export function DisciplinesLevels() {
+    const progressRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const el = progressRef.current;
+        if (!el) return;
+
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    // Activate all progress bars
+                    const bars = el.querySelectorAll<HTMLDivElement>('.progress-bar-fill');
+                    bars.forEach((bar) => {
+                        const targetWidth = bar.getAttribute('data-width') || '0';
+                        if (prefersReducedMotion) {
+                            bar.style.transition = 'none';
+                        }
+                        bar.style.width = targetWidth;
+                    });
+                    observer.unobserve(el);
+                }
+            },
+            { threshold: 0.2 }
+        );
+
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, []);
+
     return (
         <section className="py-12 md:py-24 container mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
@@ -47,7 +77,7 @@ export function DisciplinesLevels() {
                         Wir trennen bewusst verschiedene Leistungsniveaus. Qualität leidet unter ständigem Wettkampf — individuelle Ziele variieren. Aufklärung ist wichtig, Pauschalaussagen sind fehl am Platz.
                     </p>
 
-                    <div className="space-y-6">
+                    <div ref={progressRef} className="space-y-6">
                         {[
                             { name: "Gesundheit", desc: "Einsteiger & Gesundheitsbewusste", width: "33%" },
                             { name: "Ambitioniert", desc: "Engagierte Hobbysportler", width: "66%" },
@@ -59,12 +89,9 @@ export function DisciplinesLevels() {
                                     <span className="text-sm text-brand-gray">{level.desc}</span>
                                 </div>
                                 <div className="h-2 bg-brand-dark rounded-full overflow-hidden">
-                                    <motion.div
-                                        initial={{ width: 0 }}
-                                        whileInView={{ width: level.width }}
-                                        viewport={{ once: true }}
-                                        transition={{ duration: 1, delay: 0.2 }}
-                                        className="h-full bg-brand-green"
+                                    <div
+                                        className="h-full bg-brand-green progress-bar-fill"
+                                        data-width={level.width}
                                     />
                                 </div>
                             </div>

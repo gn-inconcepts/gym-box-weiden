@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Dumbbell, Flame, Activity } from "lucide-react";
 
 const items = [
@@ -54,32 +53,25 @@ export function ClassAccordion() {
                         </div>
                     </button>
 
-                    <AnimatePresence>
-                        {openIndex === i && (
-                            <motion.div
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: "auto", opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
-                                transition={{ duration: 0.3 }}
-                            >
-                                <div className="px-6 pb-8 pt-2">
-                                    <div className="p-6 rounded-xl bg-brand-dark/50 border border-brand-white/5">
-                                        <p className="text-brand-gray-light leading-relaxed mb-6">{item.content}</p>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                                            <div className="flex flex-col">
-                                                <span className="text-brand-gray text-xs uppercase tracking-wider font-bold mb-1">Dauer</span>
-                                                <span className="font-medium text-brand-white">{item.duration}</span>
-                                            </div>
-                                            <div className="flex flex-col">
-                                                <span className="text-brand-gray text-xs uppercase tracking-wider font-bold mb-1">Fokus</span>
-                                                <span className="font-medium text-brand-white">{item.focus}</span>
-                                            </div>
+                    <div className={`accordion-content ${openIndex === i ? 'open' : ''}`}>
+                        <div>
+                            <div className="px-6 pb-8 pt-2">
+                                <div className="p-6 rounded-xl bg-brand-dark/50 border border-brand-white/5">
+                                    <p className="text-brand-gray-light leading-relaxed mb-6">{item.content}</p>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                                        <div className="flex flex-col">
+                                            <span className="text-brand-gray text-xs uppercase tracking-wider font-bold mb-1">Dauer</span>
+                                            <span className="font-medium text-brand-white">{item.duration}</span>
+                                        </div>
+                                        <div className="flex flex-col">
+                                            <span className="text-brand-gray text-xs uppercase tracking-wider font-bold mb-1">Fokus</span>
+                                            <span className="font-medium text-brand-white">{item.focus}</span>
                                         </div>
                                     </div>
                                 </div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             ))}
         </div>
