@@ -8,6 +8,7 @@ import siteSettings from './schemaTypes/site-settings'
 import review from './schemaTypes/review'
 import instagramPost from './schemaTypes/instagram-post'
 import mediaAsset from './schemaTypes/media-asset'
+import legalPage from './schemaTypes/legal-page'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
     types: [
@@ -20,5 +21,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
         review,
         instagramPost,
         mediaAsset,
+        legalPage,
     ],
 }

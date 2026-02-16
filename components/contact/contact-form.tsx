@@ -63,22 +63,25 @@ export function ContactForm() {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-6 bg-brand-dark p-8 md:p-12 rounded-3xl border border-white/5">
-            {/* Success Message */}
-            {status === "success" && (
-                <div className="p-4 bg-brand-green/20 border border-brand-green rounded-lg text-brand-green">
-                    ✓ Vielen Dank! Deine Nachricht wurde erfolgreich gesendet. Wir melden uns bald bei dir.
-                </div>
-            )}
+        <form onSubmit={handleSubmit} className="space-y-6 bg-brand-dark p-8 md:p-12 rounded-3xl border border-white/5" noValidate>
+            {/* Status Messages — aria-live region for screen readers */}
+            <div aria-live="polite" aria-atomic="true">
+                {/* Success Message */}
+                {status === "success" && (
+                    <div className="p-4 bg-brand-green/20 border border-brand-green rounded-lg text-brand-green" role="status">
+                        Vielen Dank! Deine Nachricht wurde erfolgreich gesendet. Wir melden uns bald bei dir.
+                    </div>
+                )}
 
-            {/* Error Message */}
-            {status === "error" && (
-                <div className="p-4 bg-red-500/20 border border-red-500 rounded-lg text-red-400">
-                    ✗ {errorMessage}
-                </div>
-            )}
+                {/* Error Message */}
+                {status === "error" && (
+                    <div className="p-4 bg-red-500/20 border border-red-500 rounded-lg text-red-400" role="alert" id="form-error">
+                        {errorMessage}
+                    </div>
+                )}
+            </div>
 
-            {/* Honeypot field (hidden) */}
+            {/* Honeypot field (hidden from users and assistive technology) */}
             <input
                 type="text"
                 name="honeypot"
@@ -87,6 +90,7 @@ export function ContactForm() {
                 className="hidden"
                 tabIndex={-1}
                 autoComplete="off"
+                aria-hidden="true"
             />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -103,6 +107,7 @@ export function ContactForm() {
                         className="w-full bg-brand-black border border-white/10 rounded-lg p-4 focus:border-brand-green focus:outline-none transition-colors"
                         placeholder="Dein Name"
                         required
+                        aria-required="true"
                         disabled={status === "loading"}
                     />
                 </div>
@@ -119,6 +124,7 @@ export function ContactForm() {
                         className="w-full bg-brand-black border border-white/10 rounded-lg p-4 focus:border-brand-green focus:outline-none transition-colors"
                         placeholder="deine@email.com"
                         required
+                        aria-required="true"
                         disabled={status === "loading"}
                     />
                 </div>
@@ -180,6 +186,7 @@ export function ContactForm() {
                     className="w-full bg-brand-black border border-white/10 rounded-lg p-4 focus:border-brand-green focus:outline-none transition-colors"
                     placeholder="Wie können wir dir helfen?"
                     required
+                    aria-required="true"
                     disabled={status === "loading"}
                 ></textarea>
             </div>
@@ -188,6 +195,8 @@ export function ContactForm() {
                 type="submit"
                 className="w-full md:w-auto px-12 py-6 text-lg"
                 disabled={status === "loading"}
+                aria-disabled={status === "loading"}
+                aria-describedby={status === "error" ? "form-error" : undefined}
             >
                 {status === "loading" ? "Wird gesendet..." : "Absenden"}
             </Button>
