@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import Image from "next/image";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
+import { usePathname } from "next/navigation";
 
 const navLinks = [
     { href: "/", label: "Home" },
@@ -17,37 +18,90 @@ const navLinks = [
     { href: "/kontakt", label: "Kontakt" },
 ];
 
-import { usePathname } from "next/navigation";
-
-// ... imports
-
 export function Header() {
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const pathname = usePathname();
+    const sentinelRef = useRef<HTMLDivElement>(null);
+    const mobileMenuRef = useRef<HTMLDivElement>(null);
 
     const isGym = pathname === "/gym";
     const isBox = pathname === "/box";
 
+    // IntersectionObserver for scroll detection instead of scroll event listener
     useEffect(() => {
-        const handleScroll = () => {
-            setScrolled(window.scrollY > 50);
-        };
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
+        const sentinel = sentinelRef.current;
+        if (!sentinel) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                setScrolled(!entry.isIntersecting);
+            },
+            { threshold: 1.0 }
+        );
+
+        observer.observe(sentinel);
+        return () => observer.disconnect();
     }, []);
 
-    // Lock body scroll when mobile menu is open
+    // Lock body scroll when mobile menu is open, with cleanup
     useEffect(() => {
         if (mobileMenuOpen) {
             document.body.style.overflow = "hidden";
         } else {
             document.body.style.overflow = "";
         }
+        return () => {
+            document.body.style.overflow = "";
+        };
     }, [mobileMenuOpen]);
+
+    // Close mobile menu on route change
+    useEffect(() => {
+        setMobileMenuOpen(false);
+    }, [pathname]);
+
+    // Focus trap for mobile menu
+    const handleKeyDown = useCallback(
+        (e: React.KeyboardEvent) => {
+            if (!mobileMenuOpen) return;
+
+            if (e.key === "Escape") {
+                setMobileMenuOpen(false);
+                return;
+            }
+
+            if (e.key !== "Tab") return;
+
+            const menu = mobileMenuRef.current;
+            if (!menu) return;
+
+            const focusableElements = menu.querySelectorAll<HTMLElement>(
+                'a[href], button, [tabindex]:not([tabindex="-1"])'
+            );
+            const firstEl = focusableElements[0];
+            const lastEl = focusableElements[focusableElements.length - 1];
+
+            if (e.shiftKey) {
+                if (document.activeElement === firstEl) {
+                    e.preventDefault();
+                    lastEl.focus();
+                }
+            } else {
+                if (document.activeElement === lastEl) {
+                    e.preventDefault();
+                    firstEl.focus();
+                }
+            }
+        },
+        [mobileMenuOpen]
+    );
 
     return (
         <>
+            {/* Sentinel element for IntersectionObserver — sits at the very top of the page */}
+            <div ref={sentinelRef} className="absolute top-0 left-0 w-full h-[50px] pointer-events-none" aria-hidden="true" />
+
             <header
                 className={cn(
                     "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out px-4 md:px-8",
@@ -59,9 +113,23 @@ export function Header() {
                 <div className="max-w-7xl mx-auto flex items-center justify-between">
                     <Link href="/" className="flex items-center gap-2 group">
                         {isGym ? (
-                            <img src="/images/Bernhard_2022_SW_300ppi.png" alt="Bernhard Trainiert" className="h-8 md:h-10 w-auto invert dark:invert-0" />
+                            <Image
+                                src="/images/Bernhard_2022_SW_300ppi.png"
+                                alt="Bernhard Trainiert"
+                                width={160}
+                                height={40}
+                                className="h-8 md:h-10 w-auto invert dark:invert-0"
+                                priority
+                            />
                         ) : isBox ? (
-                            <img src="/images/CF-LF_2022_SW_300ppi.png" alt="CrossFit Lakefront" className="h-8 md:h-10 w-auto invert dark:invert-0" />
+                            <Image
+                                src="/images/CF-LF_2022_SW_300ppi.png"
+                                alt="CrossFit Lakefront"
+                                width={160}
+                                height={40}
+                                className="h-8 md:h-10 w-auto invert dark:invert-0"
+                                priority
+                            />
                         ) : (
                             <div className="font-display text-2xl md:text-3xl tracking-wider flex items-center gap-1 text-brand-white">
                                 <span>GYM</span>
@@ -115,6 +183,7 @@ export function Header() {
 
             {/* Mobile Menu Overlay */}
             <div
+                ref={mobileMenuRef}
                 className={cn(
                     "fixed inset-0 z-[60] bg-brand-black/95 backdrop-blur-xl transition-all duration-300 flex flex-col items-center justify-center",
                     mobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
@@ -122,6 +191,7 @@ export function Header() {
                 role="dialog"
                 aria-modal="true"
                 aria-label="Mobile Navigation"
+                onKeyDown={handleKeyDown}
             >
                 <div className="absolute top-6 right-6 flex items-center gap-4">
                     <ThemeToggle />

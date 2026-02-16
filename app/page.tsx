@@ -1,3 +1,5 @@
+export const revalidate = 300; // 5 minutes
+
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { Hero } from "@/components/home/hero";

@@ -26,17 +26,20 @@ export async function getPageImage(pageKey: string): Promise<PageImage> {
         );
 
         if (result?.image) {
-            const imageUrl = urlFor(result.image)
-                .width(2670)
-                .quality(80)
-                .format('webp')
-                .url();
+            const imageBuilder = urlFor(result.image);
+            if (imageBuilder) {
+                const imageUrl = imageBuilder
+                    .width(2670)
+                    .quality(80)
+                    .format('webp')
+                    .url();
 
-            return {
-                url: imageUrl,
-                altText: result.altText || '',
-                isFromSanity: true,
-            };
+                return {
+                    url: imageUrl,
+                    altText: result.altText || '',
+                    isFromSanity: true,
+                };
+            }
         }
     } catch (error) {
         console.error(`Failed to fetch page image for ${pageKey}:`, error);
