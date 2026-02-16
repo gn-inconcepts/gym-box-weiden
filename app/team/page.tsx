@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { PageHeader } from "@/components/layout/page-header";
@@ -7,6 +8,18 @@ import { client } from "@/sanity/lib/client";
 import { trainersQuery } from "@/sanity/lib/queries";
 import { Trainer } from "@/types/sanity";
 import { getPageImage } from "@/lib/page-images";
+
+export const metadata: Metadata = {
+    title: 'Unser Team | GYM & BOX',
+    description: 'Lerne unser Team aus zertifizierten Trainern, Coaches und Therapeuten kennen. Ausgebildet an über 7 Instituten, mit Expertise in Personal Training, Ernährung, Physiotherapie und CrossFit.',
+    openGraph: {
+        title: 'Unser Team | GYM & BOX',
+        description: 'Zertifizierte Trainer, Coaches und Therapeuten in Weiden am See. Expertise in Personal Training, Ernährung und CrossFit.',
+    },
+    alternates: {
+        canonical: '/team',
+    },
+};
 
 // Fallback data if CMS is empty or not configured
 const fallbackTrainers: Trainer[] = [

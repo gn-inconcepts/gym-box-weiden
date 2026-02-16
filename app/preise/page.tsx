@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { PageHeader } from "@/components/layout/page-header";
@@ -6,6 +7,18 @@ import Link from "next/link";
 import { client } from "@/sanity/lib/client";
 import { pricingsQuery } from "@/sanity/lib/queries";
 import { Pricing } from "@/types/sanity";
+
+export const metadata: Metadata = {
+    title: 'Preise & Mitgliedschaften | GYM & BOX',
+    description: 'Faire und transparente Preise für Gym und CrossFit Box in Weiden am See. Flexible Mitgliedschaften ab 35 Euro pro Monat. Investiere in deine Gesundheit.',
+    openGraph: {
+        title: 'Preise & Mitgliedschaften | GYM & BOX',
+        description: 'Flexible Mitgliedschaften für Gym und CrossFit Box in Weiden am See. Faire Preise, volle Transparenz.',
+    },
+    alternates: {
+        canonical: '/preise',
+    },
+};
 
 // Fallback data
 const fallbackPricings: Pricing[] = [
@@ -184,7 +197,7 @@ export default async function PricingPage() {
                             <Info className="w-6 h-6" />
                         </div>
                         <div>
-                            <h3 className="font-display text-xl mb-2">Startpaket Small & Inklusivleistungen</h3>
+                            <h2 className="font-display text-xl mb-2">Startpaket Small & Inklusivleistungen</h2>
                             <p className="text-brand-gray-light leading-relaxed">
                                 Startpaket Small einmalig €57. <br />
                                 Inkludiert sind: Körperzusammensetzungsanalyse mit Software-Auswertung, persönliche Zugangskarte und eine Personal Training Session mit Trainingsplanung und Orientierung.

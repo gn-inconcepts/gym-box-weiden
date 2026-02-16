@@ -70,5 +70,14 @@ export default defineType({
             of: [{ type: 'string' }],
             description: 'List of equipment brands (e.g., Eleiko, Gym80)',
         }),
+        defineField({
+            name: 'ogImage',
+            title: 'Open Graph Image (Social Media Preview)',
+            type: 'image',
+            description: 'Wird als Vorschaubild beim Teilen auf Social Media verwendet. Empfohlene Größe: 1200x630px.',
+            options: {
+                hotspot: true,
+            },
+        }),
     ],
 })

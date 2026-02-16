@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { PageHeader } from "@/components/layout/page-header";
@@ -7,6 +8,18 @@ import { ClassAccordion } from "@/components/box/class-accordion";
 import { DisciplinesLevels } from "@/components/box/disciplines-levels";
 import { InstagramFeed } from "@/components/home/instagram-feed";
 import { Dumbbell, Users, Activity, Layers } from "lucide-react";
+
+export const metadata: Metadata = {
+    title: 'The Box — CrossFit Lakefront | GYM & BOX',
+    description: 'CrossFit Lakefront in Weiden am See. Funktionelles Kleingruppentraining mit max. 10 Teilnehmern, professionelles Coaching und starke Community. Weak Ends Here.',
+    openGraph: {
+        title: 'The Box — CrossFit Lakefront | GYM & BOX',
+        description: 'CrossFit Lakefront in Weiden am See. Funktionelles Kleingruppentraining, professionelles Coaching und starke Community.',
+    },
+    alternates: {
+        canonical: '/box',
+    },
+};
 
 // Mock Trainer Data for Daniel
 const boxTrainer = {

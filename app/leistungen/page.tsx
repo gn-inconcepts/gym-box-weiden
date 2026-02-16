@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { PageHeader } from "@/components/layout/page-header";
@@ -7,6 +8,18 @@ import Link from "next/link";
 import { client } from "@/sanity/lib/client";
 import { servicesQuery } from "@/sanity/lib/queries";
 import { Service } from "@/types/sanity";
+
+export const metadata: Metadata = {
+    title: 'Leistungen | GYM & BOX',
+    description: 'Unsere Services: Personal Training, Ernährungscoaching, Körperanalyse, Physiotherapie, Kindertraining und mehr. Über 15 spezialisierte Leistungen in Weiden am See.',
+    openGraph: {
+        title: 'Leistungen | GYM & BOX',
+        description: 'Über 15 spezialisierte Fitness- und Gesundheitsservices in Weiden am See. Von Körperanalyse bis Firmen-Fitness.',
+    },
+    alternates: {
+        canonical: '/leistungen',
+    },
+};
 
 // Fallback data
 const fallbackServices: Service[] = [
@@ -98,7 +111,7 @@ export default async function ServicesPage() {
                         <div className="absolute bottom-0 left-0 w-64 h-64 bg-brand-green/10 rounded-full blur-[100px] pointer-events-none"></div>
 
                         <div className="relative z-10 max-w-3xl mx-auto">
-                            <h3 className="font-display text-4xl md:text-5xl mb-6">Mitglieder-Vorteil</h3>
+                            <h2 className="font-display text-4xl md:text-5xl mb-6">Mitglieder-Vorteil</h2>
                             <p className="text-xl text-brand-gray-light mb-10 leading-relaxed">
                                 Als Mitglied profitierst du von stark reduzierten Preisen bei allen Services. Viele Leistungen sind bis zu 50% günstiger — ein weiterer Grund, Teil unserer Community zu werden.
                             </p>

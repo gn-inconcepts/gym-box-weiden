@@ -1,9 +1,22 @@
+import type { Metadata } from 'next';
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { PageHeader } from "@/components/layout/page-header";
 import { ParallaxStrip } from "@/components/ui/parallax-strip";
 import { TrainerSpotlight } from "@/components/home/trainer-spotlight";
 import { Activity, Apple, Brain, Check, Clock, Dumbbell, HeartPulse, Moon } from "lucide-react";
+
+export const metadata: Metadata = {
+    title: 'Das Gym | GYM & BOX',
+    description: 'Professionelles Fitnessstudio in Weiden am See. Modernste Geräte von Eleiko, Gym80 und Hammer Strength, persönliches Training und eine motivierende Atmosphäre auf über 500 m².',
+    openGraph: {
+        title: 'Das Gym | GYM & BOX',
+        description: 'Professionelles Fitnessstudio in Weiden am See. Modernste Geräte, persönliches Training und ganzheitliches Gesundheitskonzept.',
+    },
+    alternates: {
+        canonical: '/gym',
+    },
+};
 
 // Mock Trainer Data
 const gymTrainer = {

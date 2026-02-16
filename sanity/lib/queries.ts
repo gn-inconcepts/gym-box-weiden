@@ -30,3 +30,11 @@ export const servicesQuery = groq`*[_type == "service"] {
   category,
   icon
 }`;
+
+export const siteSettingsQuery = groq`*[_type == "siteSettings"][0] {
+  ogImage {
+    asset-> {
+      url
+    }
+  }
+}`;

@@ -143,3 +143,93 @@ export function ServiceSchema({
         />
     );
 }
+
+export function GymServiceSchema({
+    services,
+}: {
+    services: { name: string; description: string; price?: string }[];
+}) {
+    const schema = {
+        '@context': 'https://schema.org',
+        '@type': 'HealthAndBeautyBusiness',
+        name: 'GYM & BOX',
+        url: 'https://gymandbox.at/leistungen',
+        description:
+            'Professionelle Fitness-Services in Weiden am See: Personal Training, Ernährungscoaching, Körperanalyse, Physiotherapie und mehr.',
+        address: {
+            '@type': 'PostalAddress',
+            streetAddress: 'Friedhofgasse 45',
+            addressLocality: 'Weiden am See',
+            postalCode: '7121',
+            addressCountry: 'AT',
+        },
+        hasOfferCatalog: {
+            '@type': 'OfferCatalog',
+            name: 'Fitness & Gesundheits-Services',
+            itemListElement: services.map((service) => ({
+                '@type': 'OfferCatalog',
+                name: service.name,
+                description: service.description,
+                ...(service.price && {
+                    itemOffered: {
+                        '@type': 'Service',
+                        name: service.name,
+                        offers: {
+                            '@type': 'Offer',
+                            price: service.price,
+                            priceCurrency: 'EUR',
+                        },
+                    },
+                }),
+            })),
+        },
+    };
+
+    return (
+        <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+    );
+}
+
+export function ReviewAggregateSchema({
+    ratingValue,
+    reviewCount,
+    bestRating = 5,
+    worstRating = 1,
+}: {
+    ratingValue: number;
+    reviewCount: number;
+    bestRating?: number;
+    worstRating?: number;
+}) {
+    const schema = {
+        '@context': 'https://schema.org',
+        '@type': 'LocalBusiness',
+        name: 'GYM & BOX',
+        url: 'https://gymandbox.at',
+        image: 'https://gymandbox.at/og-image.jpg',
+        address: {
+            '@type': 'PostalAddress',
+            streetAddress: 'Friedhofgasse 45',
+            addressLocality: 'Weiden am See',
+            postalCode: '7121',
+            addressCountry: 'AT',
+        },
+        aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue,
+            reviewCount,
+            bestRating,
+            worstRating,
+        },
+    };
+
+    return (
+        <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+    );
+}
