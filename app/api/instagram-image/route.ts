@@ -12,12 +12,14 @@ export async function GET(request: NextRequest) {
             );
         }
 
-        // Validate it's an Instagram CDN URL
-        if (!imageUrl.includes('cdninstagram.com')) {
-            return NextResponse.json(
-                { error: 'Invalid Instagram CDN URL' },
-                { status: 400 }
-            );
+        // Validate it's an Instagram/Facebook CDN URL using proper URL parsing
+        try {
+            const url = new URL(imageUrl);
+            if (!url.hostname.endsWith('.cdninstagram.com') && !url.hostname.endsWith('.fbcdn.net')) {
+                return NextResponse.json({ error: 'Invalid image URL' }, { status: 400 });
+            }
+        } catch {
+            return NextResponse.json({ error: 'Invalid URL format' }, { status: 400 });
         }
 
         // Fetch the image from Instagram CDN server-side

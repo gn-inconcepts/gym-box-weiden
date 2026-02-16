@@ -25,8 +25,33 @@ function checkRateLimit(ip: string): boolean {
     return true;
 }
 
+// Escape HTML special characters to prevent HTML injection
+function escapeHtml(str: string): string {
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#x27;');
+}
+
+// Input length limits
+const MAX_NAME_LENGTH = 100;
+const MAX_EMAIL_LENGTH = 254;
+const MAX_PHONE_LENGTH = 20;
+const MAX_MESSAGE_LENGTH = 5000;
+
 export async function POST(request: NextRequest) {
     try {
+        // Check Content-Type
+        const contentType = request.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            return NextResponse.json(
+                { error: 'Content-Type must be application/json' },
+                { status: 415 }
+            );
+        }
+
         // Check if Resend is configured
         if (!resend) {
             return NextResponse.json(
@@ -36,7 +61,13 @@ export async function POST(request: NextRequest) {
         }
 
         const body = await request.json();
-        const { name, email, phone, interest, message, honeypot } = body;
+        const { interest, honeypot } = body;
+
+        // Trim whitespace from all inputs before validation
+        const name = typeof body.name === 'string' ? body.name.trim() : '';
+        const email = typeof body.email === 'string' ? body.email.trim() : '';
+        const phone = typeof body.phone === 'string' ? body.phone.trim() : '';
+        const message = typeof body.message === 'string' ? body.message.trim() : '';
 
         // Honeypot spam protection (hidden field)
         if (honeypot) {
@@ -63,14 +94,57 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // Email validation
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        // Input length validation
+        if (name.length > MAX_NAME_LENGTH) {
+            return NextResponse.json(
+                { error: `Name darf maximal ${MAX_NAME_LENGTH} Zeichen lang sein.` },
+                { status: 400 }
+            );
+        }
+        if (email.length > MAX_EMAIL_LENGTH) {
+            return NextResponse.json(
+                { error: `E-Mail darf maximal ${MAX_EMAIL_LENGTH} Zeichen lang sein.` },
+                { status: 400 }
+            );
+        }
+        if (phone && phone.length > MAX_PHONE_LENGTH) {
+            return NextResponse.json(
+                { error: `Telefonnummer darf maximal ${MAX_PHONE_LENGTH} Zeichen lang sein.` },
+                { status: 400 }
+            );
+        }
+        if (message.length > MAX_MESSAGE_LENGTH) {
+            return NextResponse.json(
+                { error: `Nachricht darf maximal ${MAX_MESSAGE_LENGTH} Zeichen lang sein.` },
+                { status: 400 }
+            );
+        }
+
+        // Email validation (improved regex)
+        const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\.[a-zA-Z]{2,}$/;
         if (!emailRegex.test(email)) {
             return NextResponse.json(
                 { error: 'Bitte geben Sie eine gültige E-Mail-Adresse ein.' },
                 { status: 400 }
             );
         }
+
+        // Phone number validation (allow digits, spaces, +, -, parentheses only)
+        if (phone) {
+            const phoneRegex = /^[0-9\s+\-()]+$/;
+            if (!phoneRegex.test(phone)) {
+                return NextResponse.json(
+                    { error: 'Telefonnummer darf nur Ziffern, Leerzeichen, +, -, und Klammern enthalten.' },
+                    { status: 400 }
+                );
+            }
+        }
+
+        // Escape all user inputs for HTML email templates
+        const safeName = escapeHtml(name);
+        const safeEmail = escapeHtml(email);
+        const safePhone = escapeHtml(phone);
+        const safeMessage = escapeHtml(message);
 
         // Interest label mapping
         const interestLabels: Record<string, string> = {
@@ -86,7 +160,7 @@ export async function POST(request: NextRequest) {
             sonstiges: 'Sonstiges',
         };
 
-        const interestLabel = interest ? interestLabels[interest] || interest : 'Nicht angegeben';
+        const interestLabel = interest ? interestLabels[interest] || escapeHtml(String(interest)) : 'Nicht angegeben';
 
         // Send email to gym owner
         const ownerEmailHTML = `
@@ -111,16 +185,16 @@ export async function POST(request: NextRequest) {
                     <div class="content">
                         <div class="field">
                             <span class="label">Name:</span>
-                            <span class="value">${name}</span>
+                            <span class="value">${safeName}</span>
                         </div>
                         <div class="field">
                             <span class="label">E-Mail:</span>
-                            <span class="value"><a href="mailto:${email}">${email}</a></span>
+                            <span class="value"><a href="mailto:${safeEmail}">${safeEmail}</a></span>
                         </div>
                         ${phone ? `
                         <div class="field">
                             <span class="label">Telefon:</span>
-                            <span class="value"><a href="tel:${phone}">${phone}</a></span>
+                            <span class="value"><a href="tel:${safePhone}">${safePhone}</a></span>
                         </div>
                         ` : ''}
                         <div class="field">
@@ -130,7 +204,7 @@ export async function POST(request: NextRequest) {
                         <div class="field">
                             <span class="label">Nachricht:</span>
                             <div style="background: white; padding: 15px; border-left: 3px solid #10b981; margin-top: 10px;">
-                                ${message.replace(/\n/g, '<br>')}
+                                ${safeMessage.replace(/\n/g, '<br>')}
                             </div>
                         </div>
                     </div>
@@ -167,7 +241,7 @@ export async function POST(request: NextRequest) {
                         <p>Weiden am See</p>
                     </div>
                     <div class="content">
-                        <p>Hallo ${name},</p>
+                        <p>Hallo ${safeName},</p>
 
                         <p>Vielen Dank für deine Anfrage! Wir haben deine Nachricht erhalten und werden uns so schnell wie möglich bei dir melden.</p>
 

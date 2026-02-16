@@ -3,7 +3,6 @@ import { createClient } from '@sanity/client';
 
 const APIFY_API_TOKEN = process.env.APIFY_API_TOKEN;
 const GOOGLE_MAPS_URL = process.env.GOOGLE_MAPS_URL;
-const CRON_SECRET = process.env.CRON_SECRET;
 
 // Create Sanity client
 const sanityClient = createClient({
@@ -17,8 +16,15 @@ const sanityClient = createClient({
 export async function POST(request: NextRequest) {
     try {
         // Verify cron secret for security
+        const CRON_SECRET = process.env.CRON_SECRET;
+        if (!CRON_SECRET) {
+            return NextResponse.json(
+                { error: 'Server configuration error' },
+                { status: 500 }
+            );
+        }
         const authHeader = request.headers.get('authorization');
-        if (CRON_SECRET && authHeader !== `Bearer ${CRON_SECRET}`) {
+        if (authHeader !== `Bearer ${CRON_SECRET}`) {
             return NextResponse.json(
                 { error: 'Unauthorized' },
                 { status: 401 }
@@ -135,13 +141,8 @@ export async function POST(request: NextRequest) {
     }
 }
 
-// Allow GET for testing
-export async function GET(request: NextRequest) {
-    return NextResponse.json(
-        {
-            message: 'Google Reviews sync endpoint. Use POST with Authorization header.',
-            configured: !!(APIFY_API_TOKEN && GOOGLE_MAPS_URL),
-        },
-        { status: 200 }
-    );
+export async function GET() {
+    return NextResponse.json({
+        message: 'Use POST with proper authorization to trigger sync.'
+    }, { status: 200 });
 }

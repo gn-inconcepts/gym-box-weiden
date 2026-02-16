@@ -91,10 +91,10 @@ export default function ContactPage() {
                             <div className="bg-brand-dark p-8 rounded-2xl border border-white/5">
                                 <h3 className="font-display text-2xl mb-6">Social Media</h3>
                                 <div className="flex gap-4">
-                                    <a href="https://www.instagram.com/bernhardtrainiert/" target="_blank" className="flex items-center gap-2 px-4 py-3 bg-brand-black rounded-lg hover:bg-brand-green hover:text-black transition-colors">
+                                    <a href="https://www.instagram.com/bernhardtrainiert/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-3 bg-brand-black rounded-lg hover:bg-brand-green hover:text-black transition-colors">
                                         <Instagram className="w-5 h-5" /> Instagram
                                     </a>
-                                    <a href="https://www.facebook.com/Bernhardtrainiert/" target="_blank" className="flex items-center gap-2 px-4 py-3 bg-brand-black rounded-lg hover:bg-brand-green hover:text-black transition-colors">
+                                    <a href="https://www.facebook.com/Bernhardtrainiert/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-3 bg-brand-black rounded-lg hover:bg-brand-green hover:text-black transition-colors">
                                         <Facebook className="w-5 h-5" /> Facebook
                                     </a>
                                 </div>

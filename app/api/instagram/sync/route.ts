@@ -4,7 +4,6 @@ import { createClient } from '@sanity/client';
 const APIFY_API_TOKEN = process.env.APIFY_API_TOKEN;
 const INSTAGRAM_USERNAME = process.env.INSTAGRAM_USERNAME || 'bernhardtrainiert';
 const INSTAGRAM_USERNAME_BOX = process.env.INSTAGRAM_USERNAME_BOX || 'crossfit_lakefront';
-const CRON_SECRET = process.env.CRON_SECRET;
 
 // Create Sanity client
 const sanityClient = createClient({
@@ -90,8 +89,15 @@ async function syncInstagramAccount(username: string, category: 'gym' | 'box') {
 export async function POST(request: NextRequest) {
     try {
         // Verify cron secret for security
+        const CRON_SECRET = process.env.CRON_SECRET;
+        if (!CRON_SECRET) {
+            return NextResponse.json(
+                { error: 'Server configuration error' },
+                { status: 500 }
+            );
+        }
         const authHeader = request.headers.get('authorization');
-        if (CRON_SECRET && authHeader !== `Bearer ${CRON_SECRET}`) {
+        if (authHeader !== `Bearer ${CRON_SECRET}`) {
             return NextResponse.json(
                 { error: 'Unauthorized' },
                 { status: 401 }
@@ -139,17 +145,8 @@ export async function POST(request: NextRequest) {
     }
 }
 
-// Allow GET for testing
-export async function GET(request: NextRequest) {
-    return NextResponse.json(
-        {
-            message: 'Instagram sync endpoint. Use POST with Authorization header.',
-            accounts: {
-                gym: INSTAGRAM_USERNAME,
-                box: INSTAGRAM_USERNAME_BOX,
-            },
-            configured: !!APIFY_API_TOKEN,
-        },
-        { status: 200 }
-    );
+export async function GET() {
+    return NextResponse.json({
+        message: 'Use POST with proper authorization to trigger sync.'
+    }, { status: 200 });
 }

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Facebook, Instagram } from "lucide-react";
 
 export function Footer() {
@@ -19,8 +20,8 @@ export function Footer() {
                             unter einem Dach in Weiden am See.
                         </p>
                         <div className="flex items-center gap-6 pt-4 grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-500">
-                            <img src="/images/Bernhard_2022_SW_300ppi.png" alt="Bernhard Trainiert" className="h-12 w-auto" />
-                            <img src="/images/CF-LF_2022_SW_300ppi.png" alt="CrossFit Lakefront" className="h-12 w-auto" />
+                            <Image src="/images/Bernhard_2022_SW_300ppi.png" alt="Bernhard Trainiert" width={120} height={48} className="h-12 w-auto" />
+                            <Image src="/images/CF-LF_2022_SW_300ppi.png" alt="CrossFit Lakefront" width={120} height={48} className="h-12 w-auto" />
                         </div>
                     </div>
 
