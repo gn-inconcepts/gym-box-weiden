@@ -69,4 +69,17 @@ export interface SiteSettings {
             url: string;
         };
     };
+    navigation?: {
+        _key?: string;
+        label: string;
+        href: string;
+    }[];
+    footerTagline?: string;
+    footerDescription?: string;
+    stats?: {
+        _key?: string;
+        value: string;
+        unit?: string;
+        label: string;
+    }[];
 }

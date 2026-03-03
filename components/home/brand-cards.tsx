@@ -4,8 +4,9 @@ import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import type { HomePageData } from "@/types/page-content";
 
-export function BrandCards() {
+export function BrandCards({ cms }: { cms?: HomePageData }) {
     const [hovered, setHovered] = useState<"gym" | "box" | null>(null);
 
     return (
@@ -35,9 +36,9 @@ export function BrandCards() {
 
                         <div className="absolute bottom-0 left-0 p-10 md:p-14 z-20 w-full">
                             <Image src="/images/Bernhard_2022_SW_300ppi.png" alt="Bernhard Trainiert" width={200} height={40} className="h-10 w-auto mb-6 drop-shadow-lg" />
-                            <h2 className="font-display text-5xl md:text-6xl mb-4 group-hover:text-brand-green transition-colors">Das Gym</h2>
+                            <h2 className="font-display text-5xl md:text-6xl mb-4 group-hover:text-brand-green transition-colors">{cms?.gymCardTitle ?? "Das Gym"}</h2>
                             <p className="text-brand-gray-light text-lg mb-8 max-w-sm leading-relaxed opacity-0 lg:opacity-100 lg:group-hover:opacity-100 lg:h-0 lg:group-hover:h-auto lg:overflow-hidden transition-all duration-500">
-                                Krafttraining, Ausdauer und individuelle Betreuung auf höchstem Niveau. Dein Körper ist dein Kapital.
+                                {cms?.gymCardDescription ?? "Krafttraining, Ausdauer und individuelle Betreuung auf höchstem Niveau. Dein Körper ist dein Kapital."}
                             </p>
 
                             <div className="inline-flex items-center gap-2 text-brand-green font-bold uppercase tracking-wider group-hover:gap-4 transition-all">
@@ -69,9 +70,9 @@ export function BrandCards() {
 
                         <div className="absolute bottom-0 left-0 p-10 md:p-14 z-20 w-full">
                             <Image src="/images/CF-LF_2022_SW_300ppi.png" alt="CrossFit Lakefront" width={200} height={40} className="h-10 w-auto mb-6 drop-shadow-lg" />
-                            <h2 className="font-display text-5xl md:text-6xl mb-4 group-hover:text-brand-green transition-colors">The Box</h2>
+                            <h2 className="font-display text-5xl md:text-6xl mb-4 group-hover:text-brand-green transition-colors">{cms?.boxCardTitle ?? "The Box"}</h2>
                             <p className="text-brand-gray-light text-lg mb-8 max-w-sm leading-relaxed opacity-0 lg:opacity-100 lg:group-hover:opacity-100 lg:h-0 lg:group-hover:h-auto lg:overflow-hidden transition-all duration-500">
-                                Community, funktionelles Training und constantly varied high intensity movement. Weak ends here.
+                                {cms?.boxCardDescription ?? "Community, funktionelles Training und constantly varied high intensity movement. Weak ends here."}
                             </p>
 
                             <div className="inline-flex items-center gap-2 text-brand-green font-bold uppercase tracking-wider group-hover:gap-4 transition-all">

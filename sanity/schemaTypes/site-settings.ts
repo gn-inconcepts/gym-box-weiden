@@ -79,5 +79,37 @@ export default defineType({
                 hotspot: true,
             },
         }),
+
+        // ── Navigation ──
+        defineField({
+            name: 'navigation',
+            title: 'Navigation Links',
+            type: 'array',
+            of: [{ type: 'navLink' }],
+            description: 'Main navigation links (header & footer)',
+        }),
+
+        // ── Footer ──
+        defineField({
+            name: 'footerTagline',
+            title: 'Footer Tagline',
+            type: 'string',
+            description: 'Short tagline shown in footer (e.g., "GESUNDHEIT IST ALLES")',
+        }),
+        defineField({
+            name: 'footerDescription',
+            title: 'Footer Description',
+            type: 'text',
+            description: 'Brief description shown in footer',
+        }),
+
+        // ── Stats ──
+        defineField({
+            name: 'stats',
+            title: 'Stats Bar Items',
+            type: 'array',
+            of: [{ type: 'statItem' }],
+            description: 'Statistics displayed on the home page stats bar',
+        }),
     ],
 })

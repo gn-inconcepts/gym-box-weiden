@@ -11,19 +11,37 @@ import { StatsBar } from "@/components/home/stats-bar";
 import { Reviews } from "@/components/home/reviews";
 import { InstagramFeed } from "@/components/home/instagram-feed";
 import { VideoWalkthrough } from "@/components/home/video-walkthrough";
+import { client } from "@/sanity/lib/client";
+import { homePageQuery, expandedSiteSettingsQuery } from "@/sanity/lib/page-queries";
+import { HomePageData } from "@/types/page-content";
+import { SiteSettings } from "@/types/sanity";
 
-export default function Home() {
+export default async function Home() {
+  let cms: HomePageData | null = null;
+  let siteSettings: SiteSettings | null = null;
+
+  try {
+    if (process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
+      [cms, siteSettings] = await Promise.all([
+        client.fetch<HomePageData>(homePageQuery),
+        client.fetch<SiteSettings>(expandedSiteSettingsQuery),
+      ]);
+    }
+  } catch (error) {
+    console.error("Failed to fetch home page data:", error);
+  }
+
   return (
     <div className="flex flex-col min-h-screen">
-      <Header />
+      <Header navLinks={siteSettings?.navigation} />
       <main id="main-content" className="flex-grow">
-        <Hero />
+        <Hero cms={cms ?? undefined} />
         <VideoWalkthrough />
-        <StatsBar />
-        <BrandCards />
-        <Philosophy />
-        <PhilosophyDetail />
-        <ServicesShowcase />
+        <StatsBar stats={siteSettings?.stats} />
+        <BrandCards cms={cms ?? undefined} />
+        <Philosophy cms={cms ?? undefined} />
+        <PhilosophyDetail cms={cms ?? undefined} />
+        <ServicesShowcase cms={cms ?? undefined} />
         <Reviews />
         <InstagramFeed
           category="gym"
@@ -38,21 +56,21 @@ export default function Home() {
             <div className="max-w-4xl mx-auto text-center bg-brand-dark p-12 md:p-20 rounded-3xl border border-brand-white/10 relative overflow-hidden group">
               <div className="absolute inset-0 bg-brand-green/5 group-hover:bg-brand-green/10 transition-colors duration-500" />
 
-              <h2 className="font-display text-4xl md:text-6xl mb-6 relative z-10">BEREIT FÜR DEINEN <span className="text-brand-green">ERFOLG?</span></h2>
+              <h2 className="font-display text-4xl md:text-6xl mb-6 relative z-10">{cms?.ctaHeading ?? "BEREIT FÜR DEINEN"} <span className="text-brand-green">{cms?.ctaHeadingHighlight ?? "ERFOLG?"}</span></h2>
               <p className="text-xl text-brand-gray-light font-light mb-10 max-w-2xl mx-auto relative z-10">
-                Starte jetzt deine Reise zum Athleten des Lebens. Vereinbare ein kostenloses Erstgespräch.
+                {cms?.ctaDescription ?? "Starte jetzt deine Reise zum Athleten des Lebens. Vereinbare ein kostenloses Erstgespräch."}
               </p>
               <a
-                href="/kontakt"
+                href={cms?.ctaButton?.href ?? "/kontakt"}
                 className="relative z-10 inline-block px-10 py-4 bg-brand-green text-brand-black font-bold text-lg rounded-lg hover:bg-brand-green/90 transition-transform hover:scale-105"
               >
-                KOSTENLOSE ERSTBERATUNG
+                {cms?.ctaButton?.text ?? "KOSTENLOSE ERSTBERATUNG"}
               </a>
             </div>
           </div>
         </section>
       </main>
-      <Footer />
+      <Footer siteSettings={siteSettings ?? undefined} />
     </div>
   );
 }

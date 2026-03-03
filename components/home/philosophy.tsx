@@ -1,5 +1,6 @@
 import { Apple, Brain, Dumbbell, Moon } from "lucide-react";
 import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
+import type { HomePageData } from "@/types/page-content";
 
 const pillars = [
     {
@@ -28,7 +29,17 @@ const pillars = [
     }
 ];
 
-export function Philosophy() {
+export function Philosophy({ cms }: { cms?: HomePageData }) {
+    const displayPillars = pillars.map((pillar, i) => {
+        const cmsPillar = cms?.philosophyPillars?.[i];
+        return {
+            ...pillar,
+            title: cmsPillar?.title ?? pillar.title,
+            text: cmsPillar?.description ?? pillar.text,
+            num: cmsPillar?.number ?? pillar.num,
+        };
+    });
+
     return (
         <section className="py-12 md:py-24 bg-brand-dark relative overflow-hidden">
             {/* Background Marquee */}
@@ -43,20 +54,20 @@ export function Philosophy() {
                 <div className="text-center mb-16">
                     <div className="inline-flex items-center gap-4 mb-6">
                         <span className="w-12 h-1 bg-brand-green"></span>
-                        <span className="text-brand-gray uppercase tracking-widest text-sm font-bold">Unsere Philosophie</span>
+                        <span className="text-brand-gray uppercase tracking-widest text-sm font-bold">{cms?.philosophyLabel ?? "Unsere Philosophie"}</span>
                         <span className="w-12 h-1 bg-brand-green"></span>
                     </div>
                     <h2 className="font-display text-4xl md:text-5xl lg:text-7xl mb-8">
-                        Vier Säulen. <span className="text-brand-green">Ein Ziel.</span>
+                        {cms?.philosophyHeading ?? "Vier Säulen."} <span className="text-brand-green">{cms?.philosophyHeadingHighlight ?? "Ein Ziel."}</span>
                     </h2>
                     <p className="text-xl text-brand-gray-light font-light leading-relaxed max-w-3xl mx-auto">
-                        Wir glauben, dass Fitness mehr ist als nur Training. Unser ganzheitlicher Ansatz vereint vier Säulen zu einem nachhaltigen Lebensstil.
+                        {cms?.philosophyDescription ?? "Wir glauben, dass Fitness mehr ist als nur Training. Unser ganzheitlicher Ansatz vereint vier Säulen zu einem nachhaltigen Lebensstil."}
                     </p>
                 </div>
 
                 {/* Horizontal Cards */}
                 <AnimateOnScroll animation="stagger-children" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {pillars.map((pillar) => (
+                    {displayPillars.map((pillar) => (
                         <div
                             key={pillar.title}
                             className="stagger-child group bg-brand-black border border-white/5 p-8 rounded-2xl hover:border-brand-green/50 hover:bg-brand-green/5 transition-all duration-500 relative overflow-hidden"

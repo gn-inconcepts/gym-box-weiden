@@ -1,6 +1,7 @@
 import { ArrowRight, Salad, Trophy, Users } from "lucide-react";
 import Link from "next/link";
 import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
+import type { HomePageData } from "@/types/page-content";
 
 const services = [
     {
@@ -23,16 +24,25 @@ const services = [
     }
 ];
 
-export function ServicesShowcase() {
+export function ServicesShowcase({ cms }: { cms?: HomePageData }) {
+    const displayServices = services.map((service, i) => {
+        const cmsItem = cms?.servicesItems?.[i];
+        return {
+            ...service,
+            title: cmsItem?.title ?? service.title,
+            text: cmsItem?.description ?? service.text,
+        };
+    });
+
     return (
         <section className="py-12 md:py-24 bg-brand-dark relative overflow-hidden">
             <div className="container mx-auto px-4">
                 <div className="text-center max-w-3xl mx-auto mb-16">
-                    <h2 className="font-display text-4xl md:text-5xl mb-6">Wir unterstützen dich mit unserem Wissen bei deinen Zielen</h2>
+                    <h2 className="font-display text-4xl md:text-5xl mb-6">{cms?.servicesHeading ?? "Wir unterstützen dich mit unserem Wissen bei deinen Zielen"}</h2>
                 </div>
 
                 <AnimateOnScroll animation="stagger-children" className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-                    {services.map((service) => (
+                    {displayServices.map((service) => (
                         <div
                             key={service.title}
                             className="stagger-child group p-8 rounded-2xl bg-brand-black border border-brand-white/5 hover:border-brand-green/30 transition-all duration-300"

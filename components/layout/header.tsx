@@ -7,8 +7,9 @@ import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { usePathname } from "next/navigation";
+import type { NavLinkData } from "@/types/page-content";
 
-const navLinks = [
+const defaultNavLinks: NavLinkData[] = [
     { href: "/", label: "Home" },
     { href: "/gym", label: "Das Gym" },
     { href: "/box", label: "The Box" },
@@ -18,7 +19,12 @@ const navLinks = [
     { href: "/kontakt", label: "Kontakt" },
 ];
 
-export function Header() {
+interface HeaderProps {
+    navLinks?: NavLinkData[];
+}
+
+export function Header({ navLinks: cmsNavLinks }: HeaderProps) {
+    const navLinks = cmsNavLinks ?? defaultNavLinks;
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const pathname = usePathname();

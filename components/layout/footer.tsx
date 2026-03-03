@@ -2,7 +2,27 @@ import Link from "next/link";
 import Image from "next/image";
 import { Facebook, Instagram } from "lucide-react";
 
-export function Footer() {
+interface FooterProps {
+    siteSettings?: {
+        contact?: { email?: string; phone?: string; address?: string };
+        social?: { instagram?: string; facebook?: string };
+        footerTagline?: string;
+        footerDescription?: string;
+        openingHours?: { days: string; hours: string }[];
+    };
+}
+
+export function Footer({ siteSettings }: FooterProps) {
+    const address = siteSettings?.contact?.address ?? "Friedhofgasse 45\n7121 Weiden am See";
+    const phone = siteSettings?.contact?.phone ?? "+43 699 1109 5336";
+    const email = siteSettings?.contact?.email ?? "bernhard@personal-fitnesstrainer.at";
+    const facebookUrl = siteSettings?.social?.facebook ?? "https://www.facebook.com/Bernhardtrainiert/";
+    const instagramUrl = siteSettings?.social?.instagram ?? "https://www.instagram.com/bernhardtrainiert/";
+    const tagline = siteSettings?.footerTagline ?? "GESUNDHEIT IST ALLES";
+    const description = siteSettings?.footerDescription ?? "Über 500 m² für Kraft, Ausdauer und Gemeinschaft — Gym & CrossFit Box unter einem Dach in Weiden am See.";
+    const openingHours = siteSettings?.openingHours;
+    const phoneDigits = phone.replace(/[^+\d]/g, "");
+
     return (
         <footer className="bg-brand-black border-t border-white/5 pt-20 pb-10">
             <div className="container mx-auto px-8">
@@ -12,12 +32,11 @@ export function Footer() {
                         <div className="font-display text-2xl tracking-wider">
                             GYM <span className="text-brand-green">&</span> BOX
                             <span className="block text-xs tracking-[0.2em] text-brand-green opacity-80 mt-1">
-                                GESUNDHEIT IST ALLES
+                                {tagline}
                             </span>
                         </div>
                         <p className="text-brand-gray-light text-sm leading-relaxed max-w-xs">
-                            Über 500 m² für Kraft, Ausdauer und Gemeinschaft — Gym & CrossFit Box
-                            unter einem Dach in Weiden am See.
+                            {description}
                         </p>
                         <div className="flex items-center gap-6 pt-4 grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-500">
                             <Image src="/images/Bernhard_2022_SW_300ppi.png" alt="Bernhard Trainiert" width={120} height={48} className="h-12 w-auto" />
@@ -42,13 +61,13 @@ export function Footer() {
                     <div>
                         <h4 className="font-display text-lg mb-6 tracking-wider">Kontakt</h4>
                         <div className="space-y-3 text-sm text-brand-gray-light">
-                            <p>Friedhofgasse 45<br />7121 Weiden am See</p>
+                            <p dangerouslySetInnerHTML={{ __html: address.replace(/\n/g, '<br />') }} />
                             <p className="hover:text-brand-white transition-colors">
-                                <a href="tel:+4369911095336">+43 699 1109 5336</a>
+                                <a href={`tel:${phoneDigits}`}>{phone}</a>
                             </p>
                             <p className="hover:text-brand-white transition-colors">
                                 <a
-                                    href="https://wa.me/4369911095336"
+                                    href={`https://wa.me/${phoneDigits.replace('+', '')}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="flex items-center gap-2 text-brand-green hover:underline"
@@ -57,9 +76,15 @@ export function Footer() {
                                 </a>
                             </p>
                             <p className="hover:text-brand-white transition-colors">
-                                <a href="mailto:bernhard@personal-fitnesstrainer.at">bernhard@personal-fitnesstrainer.at</a>
+                                <a href={`mailto:${email}`}>{email}</a>
                             </p>
-                            <p className="text-brand-gray text-xs mt-4">Täglich 06:30 – 22:00</p>
+                            {openingHours && openingHours.length > 0 ? (
+                                openingHours.map((oh, i) => (
+                                    <p key={i} className="text-brand-gray text-xs mt-4">{oh.days} {oh.hours}</p>
+                                ))
+                            ) : (
+                                <p className="text-brand-gray text-xs mt-4">Täglich 06:30 – 22:00</p>
+                            )}
                         </div>
                     </div>
 
@@ -68,7 +93,7 @@ export function Footer() {
                         <h4 className="font-display text-lg mb-6 tracking-wider">Folge uns</h4>
                         <div className="flex gap-4">
                             <a
-                                href="https://www.facebook.com/Bernhardtrainiert/"
+                                href={facebookUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="w-10 h-10 rounded-full bg-brand-dark border border-brand-white/10 flex items-center justify-center text-brand-gray-light hover:text-brand-green hover:border-brand-green/30 transition-all"
@@ -77,7 +102,7 @@ export function Footer() {
                                 <Facebook className="w-5 h-5" />
                             </a>
                             <a
-                                href="https://www.instagram.com/bernhardtrainiert/"
+                                href={instagramUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="w-10 h-10 rounded-full bg-brand-dark border border-brand-white/10 flex items-center justify-center text-brand-gray-light hover:text-brand-green hover:border-brand-green/30 transition-all"

@@ -1,5 +1,6 @@
 import { ClipboardCheck, Activity, GraduationCap } from "lucide-react";
 import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
+import type { HomePageData } from "@/types/page-content";
 
 const details = [
     {
@@ -19,7 +20,23 @@ const details = [
     }
 ];
 
-export function PhilosophyDetail() {
+const defaultParagraphs = [
+    "Jede einzelne Einheit wird je nach Schwerpunkt von einem ausgebildeten Personaltrainer, unserer Sportphysiotherapeutin oder — was das Kindertraining angeht — von einer Kinderpädagogin geleitet.",
+    "Dieses Konzept gibt uns die Möglichkeit, mehr Menschen deutlich besser zu betreuen und ihren Zielen näher zu bringen.",
+];
+
+export function PhilosophyDetail({ cms }: { cms?: HomePageData }) {
+    const paragraphs = cms?.philosophyDetailParagraphs?.length ? cms.philosophyDetailParagraphs : defaultParagraphs;
+
+    const displayDetails = details.map((item, i) => {
+        const cmsItem = cms?.philosophyDetailItems?.[i];
+        return {
+            ...item,
+            title: cmsItem?.title ?? item.title,
+            text: cmsItem?.description ?? item.text,
+        };
+    });
+
     return (
         <section className="py-12 md:py-24 bg-brand-black relative">
             <div className="container mx-auto px-4">
@@ -27,22 +44,21 @@ export function PhilosophyDetail() {
                     <div>
                         <div className="flex items-center gap-4 mb-6">
                             <span className="w-12 h-1 bg-brand-green"></span>
-                            <span className="text-brand-gray uppercase tracking-widest text-sm font-bold">Unser Ansatz</span>
+                            <span className="text-brand-gray uppercase tracking-widest text-sm font-bold">{cms?.philosophyDetailLabel ?? "Unser Ansatz"}</span>
                         </div>
                         <h2 className="font-display text-4xl md:text-5xl lg:text-6xl mb-8">
-                            Unsere Philosophie,<br />
-                            <span className="text-brand-green">Dein Mehrwert</span>
+                            {cms?.philosophyDetailHeading ?? "Unsere Philosophie,"}<br />
+                            <span className="text-brand-green">{cms?.philosophyDetailHeadingHighlight ?? "Dein Mehrwert"}</span>
                         </h2>
-                        <p className="text-brand-gray-light text-lg leading-relaxed mb-6">
-                            Jede einzelne Einheit wird je nach Schwerpunkt von einem ausgebildeten Personaltrainer, unserer Sportphysiotherapeutin oder — was das Kindertraining angeht — von einer Kinderpädagogin geleitet.
-                        </p>
-                        <p className="text-brand-gray-light text-lg leading-relaxed">
-                            Dieses Konzept gibt uns die Möglichkeit, mehr Menschen deutlich besser zu betreuen und ihren Zielen näher zu bringen.
-                        </p>
+                        {paragraphs.map((text, i) => (
+                            <p key={i} className={`text-brand-gray-light text-lg leading-relaxed${i < paragraphs.length - 1 ? " mb-6" : ""}`}>
+                                {text}
+                            </p>
+                        ))}
                     </div>
 
                     <AnimateOnScroll animation="stagger-children" className="space-y-8">
-                        {details.map((item) => (
+                        {displayDetails.map((item) => (
                             <div
                                 key={item.title}
                                 className="stagger-child flex gap-6 group"

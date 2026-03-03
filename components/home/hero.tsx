@@ -2,8 +2,9 @@
 
 import { useEffect, useRef } from "react";
 import { OptimizedVideo } from "@/components/ui/optimized-video";
+import type { HomePageData } from "@/types/page-content";
 
-export function Hero() {
+export function Hero({ cms }: { cms?: HomePageData }) {
     const contentRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -22,6 +23,11 @@ export function Hero() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    const ctaButtons = cms?.heroCta?.length ? cms.heroCta : [
+        { text: "Jetzt Probetraining vereinbaren", href: "/kontakt", variant: "primary" as const },
+        { text: "Mehr erfahren", href: "#services", variant: "secondary" as const },
+    ];
+
     return (
         <section className="relative h-screen min-h-[800px] flex items-center justify-center overflow-hidden">
             {/* Background Video */}
@@ -29,7 +35,7 @@ export function Hero() {
                 <div className="absolute inset-0 bg-brand-black/60 z-10" /> {/* Overlay for readability */}
                 <div className="absolute inset-0 bg-gradient-to-b from-brand-black/30 via-transparent to-brand-black z-10" />
                 <OptimizedVideo
-                    src="https://videos.pexels.com/video-files/855828/855828-hd_1920_1080_30fps.mp4"
+                    src={cms?.heroVideoUrl ?? "https://videos.pexels.com/video-files/855828/855828-hd_1920_1080_30fps.mp4"}
                     autoPlay={true}
                     loop={true}
                     muted={true}
@@ -46,34 +52,40 @@ export function Hero() {
             >
                 <div className="hero-badge flex items-center justify-center gap-2 mb-8">
                     <span className="px-5 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm text-sm font-medium tracking-wider text-brand-gray-light">
-                        EST. 2014 — WEIDEN AM SEE
+                        {cms?.heroBadge ?? "EST. 2014 — WEIDEN AM SEE"}
                     </span>
                 </div>
 
                 <h1 className="font-display text-6xl md:text-8xl lg:text-9xl leading-[0.9] tracking-tight mb-8">
                     <span className="block overflow-hidden">
                         <span className="hero-line-1 block text-brand-white">
-                            DEINE GESUNDHEIT.
+                            {cms?.heroHeadingLine1 ?? "DEINE GESUNDHEIT."}
                         </span>
                     </span>
                     <span className="block overflow-hidden text-brand-green">
                         <span className="hero-line-2 block">
-                            DEIN LEBEN.
+                            {cms?.heroHeadingLine2 ?? "DEIN LEBEN."}
                         </span>
                     </span>
                 </h1>
 
                 <p className="hero-description text-lg md:text-xl text-brand-gray-light font-light max-w-2xl mx-auto leading-relaxed mb-10">
-                    Über 500 m² für die Themen Bewegung, Ernährung, Regeneration und Reflexion und Gemeinschaft — Gym & CrossFit Box unter einem Dach.
+                    {cms?.heroDescription ?? "Über 500 m² für die Themen Bewegung, Ernährung, Regeneration und Reflexion und Gemeinschaft — Gym & CrossFit Box unter einem Dach."}
                 </p>
 
                 <div className="hero-cta flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <a href="/kontakt" className="px-8 py-4 bg-brand-green text-brand-black font-bold rounded-full hover:bg-brand-white transition-colors">
-                        Jetzt Probetraining vereinbaren
-                    </a>
-                    <a href="#services" className="px-8 py-4 border border-brand-white/20 text-brand-white font-bold rounded-full hover:bg-brand-white hover:text-brand-black transition-colors">
-                        Mehr erfahren
-                    </a>
+                    {ctaButtons.map((cta, i) => (
+                        <a
+                            key={cta.href}
+                            href={cta.href}
+                            className={cta.variant === "primary" || (!cta.variant && i === 0)
+                                ? "px-8 py-4 bg-brand-green text-brand-black font-bold rounded-full hover:bg-brand-white transition-colors"
+                                : "px-8 py-4 border border-brand-white/20 text-brand-white font-bold rounded-full hover:bg-brand-white hover:text-brand-black transition-colors"
+                            }
+                        >
+                            {cta.text}
+                        </a>
+                    ))}
                 </div>
             </div>
 

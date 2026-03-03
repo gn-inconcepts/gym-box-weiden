@@ -6,7 +6,10 @@ import { Check, Info } from "lucide-react";
 import Link from "next/link";
 import { client } from "@/sanity/lib/client";
 import { pricingsQuery } from "@/sanity/lib/queries";
+import { preisePageQuery } from "@/sanity/lib/page-queries";
 import { Pricing } from "@/types/sanity";
+import { PreisePageData } from "@/types/page-content";
+import { urlFor } from "@/sanity/lib/image";
 
 export const metadata: Metadata = {
     title: 'Preise & Mitgliedschaften | GYM & BOX',
@@ -22,14 +25,11 @@ export const metadata: Metadata = {
 
 // Fallback data
 const fallbackPricings: Pricing[] = [
-    // GYM
     { _id: "g1", title: "Weekend", price: 35, interval: "/ Monat", category: "gym", recommended: false, features: ["Wochenend-Zugang", "Alle Geräte & Free Weights", "Umkleiden & Duschen"] },
     { _id: "g2", title: "Abend", price: 45, interval: "/ Monat", category: "gym", recommended: false, features: ["Abend-Zugang täglich", "Alle Geräte & Free Weights", "Umkleiden & Duschen"] },
     { _id: "g3", title: "Business", price: 55, interval: "/ Monat", category: "gym", recommended: false, features: ["Abends ab 19:00", "Wochenende ganztags", "Ideal für Berufstätige"] },
     { _id: "g4", title: "Early Bird", price: 64, interval: "/ Monat", category: "gym", recommended: false, features: ["Ganztags bis 16:30", "Alle Geräte & Free Weights", "Inkl. Körperanalyse"] },
     { _id: "g-main", title: "Vollmitgliedschaft", price: 79, interval: "/ Monat", category: "gym", recommended: true, features: ["Uneingeschränkter Zugang täglich 06:30–22:00", "Inkl. Körperanalyse", "Trainingsplan-Erstellung", "1x Personal Training Session"] },
-
-    // BOX
     { _id: "b1", title: "10er Karte", price: 150, interval: "einmalig", category: "box", recommended: false, features: ["10 Kursbesuche", "Flexibel einsetzbar", "Gym-Mitglieder: €100"] },
     { _id: "b2", title: "Early Bird", price: 59, interval: "/ Monat", category: "box", recommended: false, features: ["Morgenkurse bis 12:30", "Alle Kurse im Zeitfenster", "Inkl. Körperanalyse"] },
     { _id: "b-main", title: "Box Full", price: 79, interval: "/ Monat", category: "box", recommended: true, features: ["Uneingeschränkter Zugang", "Alle Kurse & Sessions", "Inkl. Körperanalyse"] },
@@ -39,10 +39,14 @@ export const revalidate = 60;
 
 export default async function PricingPage() {
     let pricings: Pricing[] = [];
+    let cms: PreisePageData | null = null;
 
     try {
         if (process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
-            pricings = await client.fetch(pricingsQuery);
+            [pricings, cms] = await Promise.all([
+                client.fetch(pricingsQuery),
+                client.fetch<PreisePageData>(preisePageQuery),
+            ]);
         }
     } catch (error) {
         console.error("Failed to fetch pricings:", error);
@@ -56,14 +60,18 @@ export default async function PricingPage() {
     const boxPricings = displayedPricings.filter(p => p.category === "box" && !p.recommended);
     const boxHighlight = displayedPricings.find(p => p.category === "box" && p.recommended);
 
+    const headerImageUrl = cms?.headerImage
+        ? urlFor(cms.headerImage)?.width(2670).quality(80).format('webp').url() ?? "https://images.unsplash.com/photo-1554284126-aa1320d36b82?q=80&w=2670&auto=format&fit=crop"
+        : "https://images.unsplash.com/photo-1554284126-aa1320d36b82?q=80&w=2670&auto=format&fit=crop";
+
     return (
         <div className="flex flex-col min-h-screen">
             <Header />
             <main className="flex-grow">
                 <PageHeader
-                    title="PREISE"
-                    subtitle="Investiere in dich selbst. Faire Preise, volle Transparenz."
-                    image="https://images.unsplash.com/photo-1554284126-aa1320d36b82?q=80&w=2670&auto=format&fit=crop"
+                    title={cms?.headerTitle ?? "PREISE"}
+                    subtitle={cms?.headerSubtitle ?? "Investiere in dich selbst. Faire Preise, volle Transparenz."}
+                    image={headerImageUrl}
                 />
 
                 {/* GYM PRICING */}
@@ -73,8 +81,8 @@ export default async function PricingPage() {
                             <span className="text-white">G</span>
                         </div>
                         <div>
-                            <h2 className="font-display text-4xl">Das <span className="text-brand-green">Gym</span></h2>
-                            <p className="text-brand-gray-light">Krafttraining, Ausdauer und individuelle Betreuung</p>
+                            <h2 className="font-display text-4xl">{cms?.gymHeading ?? "Das"} <span className="text-brand-green">{cms?.gymHeadingHighlight ?? "Gym"}</span></h2>
+                            <p className="text-brand-gray-light">{cms?.gymDescription ?? "Krafttraining, Ausdauer und individuelle Betreuung"}</p>
                         </div>
                     </div>
 
@@ -82,9 +90,7 @@ export default async function PricingPage() {
                         {gymPricings.map(plan => (
                             <div key={plan._id} className="flex flex-col p-8 bg-brand-dark rounded-2xl border border-white/5 hover:border-brand-green/30 transition-colors">
                                 <h3 className="font-display text-2xl mb-2">{plan.title}</h3>
-                                {/* Access info is not in schema separately -> assuming logic or omitted for generic schema. 
-                                    For now using Description/Feature logic or simplified display */}
-                                <p className="text-sm text-brand-gray mb-6 h-10 flex items-center">{/* Placeholder for 'access' if needed, or omit */}</p>
+                                <p className="text-sm text-brand-gray mb-6 h-10 flex items-center"></p>
                                 <div className="mb-6">
                                     <span className="text-3xl font-bold text-white">€{plan.price}</span>
                                     <span className="text-brand-gray text-sm">{plan.interval}</span>
@@ -110,7 +116,7 @@ export default async function PricingPage() {
                             <div className="bg-brand-black rounded-xl p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-8">
                                 <div>
                                     <div className="inline-block px-3 py-1 bg-brand-green text-brand-black text-xs font-bold uppercase tracking-wider rounded-md mb-4">
-                                        Beliebteste Wahl
+                                        {cms?.gymHighlightLabel ?? "Beliebteste Wahl"}
                                     </div>
                                     <h3 className="font-display text-3xl md:text-4xl mb-2">{gymHighlight.title}</h3>
                                     <p className="text-brand-gray-light mb-6 md:mb-0 max-w-xl">
@@ -139,8 +145,8 @@ export default async function PricingPage() {
                                 <span className="text-white">B</span>
                             </div>
                             <div>
-                                <h2 className="font-display text-4xl">The <span className="text-brand-green">Box</span></h2>
-                                <p className="text-brand-gray-light">CrossFit Lakefront — Gruppentraining & Community</p>
+                                <h2 className="font-display text-4xl">{cms?.boxHeading ?? "The"} <span className="text-brand-green">{cms?.boxHeadingHighlight ?? "Box"}</span></h2>
+                                <p className="text-brand-gray-light">{cms?.boxDescription ?? "CrossFit Lakefront — Gruppentraining & Community"}</p>
                             </div>
                         </div>
 
@@ -166,11 +172,10 @@ export default async function PricingPage() {
                             {boxHighlight && (
                                 <div className="p-1 rounded-2xl bg-gradient-to-br from-brand-green to-white relative">
                                     <div className="absolute top-0 right-0 p-3">
-                                        <span className="bg-black text-white text-[10px] font-bold px-2 py-1 rounded-sm uppercase tracking-widest">Best Value</span>
+                                        <span className="bg-black text-white text-[10px] font-bold px-2 py-1 rounded-sm uppercase tracking-widest">{cms?.boxHighlightLabel ?? "Best Value"}</span>
                                     </div>
                                     <div className="h-full p-8 bg-brand-black rounded-xl flex flex-col">
                                         <h3 className="font-display text-2xl mb-2 text-brand-green">{boxHighlight.title}</h3>
-                                        {/* <p className="text-sm text-brand-gray mb-6">Täglich · 06:30–22:00</p> */}
                                         <div className="mb-6 mt-6">
                                             <span className="text-3xl font-bold text-white">€{boxHighlight.price}</span>
                                             <span className="text-brand-gray text-sm"> {boxHighlight.interval}</span>
@@ -197,13 +202,12 @@ export default async function PricingPage() {
                             <Info className="w-6 h-6" />
                         </div>
                         <div>
-                            <h2 className="font-display text-xl mb-2">Startpaket Small & Inklusivleistungen</h2>
-                            <p className="text-brand-gray-light leading-relaxed">
-                                Startpaket Small einmalig €57. <br />
-                                Inkludiert sind: Körperzusammensetzungsanalyse mit Software-Auswertung, persönliche Zugangskarte und eine Personal Training Session mit Trainingsplanung und Orientierung.
+                            <h2 className="font-display text-xl mb-2">{cms?.infoHeading ?? "Startpaket Small & Inklusivleistungen"}</h2>
+                            <p className="text-brand-gray-light leading-relaxed whitespace-pre-line">
+                                {cms?.infoDescription ?? "Startpaket Small einmalig €57. \nInkludiert sind: Körperzusammensetzungsanalyse mit Software-Auswertung, persönliche Zugangskarte und eine Personal Training Session mit Trainingsplanung und Orientierung."}
                             </p>
                             <p className="mt-4 font-bold text-brand-green">
-                                Bei 12-Monats-Vorauszahlung entfällt das Startpaket Small komplett.
+                                {cms?.infoHighlight ?? "Bei 12-Monats-Vorauszahlung entfällt das Startpaket Small komplett."}
                             </p>
                         </div>
                     </div>

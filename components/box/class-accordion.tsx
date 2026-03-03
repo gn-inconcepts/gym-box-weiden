@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { ChevronDown, Dumbbell, Flame, Activity } from "lucide-react";
+import type { ClassPhaseData } from "@/types/page-content";
 
-const items = [
+const defaultItems = [
     {
         num: "01",
         title: "Warm-Up",
@@ -30,7 +31,23 @@ const items = [
     }
 ];
 
-export function ClassAccordion() {
+interface ClassAccordionProps {
+    phases?: ClassPhaseData[];
+}
+
+export function ClassAccordion({ phases }: ClassAccordionProps) {
+    const items = defaultItems.map((item, i) => {
+        const phase = phases && phases.length > 0 ? phases[i] : undefined;
+        if (!phase) return item;
+        return {
+            ...item,
+            num: phase.number ?? item.num,
+            title: phase.title ?? item.title,
+            content: phase.description ?? item.content,
+            duration: phase.duration ?? item.duration,
+            focus: phase.focus ?? item.focus,
+        };
+    });
     const [openIndex, setOpenIndex] = useState<number | null>(0);
 
     return (
