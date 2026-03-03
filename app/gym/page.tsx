@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from "next/image";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { PageHeader } from "@/components/layout/page-header";
@@ -76,10 +77,12 @@ export default function GymPage() {
                         </div>
 
                         <div className="relative aspect-square rounded-2xl overflow-hidden border border-white/5 bg-brand-dark">
-                            <img
+                            <Image
                                 src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=2670&auto=format&fit=crop"
                                 alt="Gym Philosophy"
-                                className="w-full h-full object-cover opacity-60"
+                                fill
+                                sizes="(max-width: 1024px) 100vw, 50vw"
+                                className="object-cover opacity-60"
                             />
                         </div>
                     </div>
@@ -90,10 +93,12 @@ export default function GymPage() {
                     <div className="container mx-auto px-4">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                             <div className="order-2 lg:order-1 relative aspect-[4/5] rounded-2xl overflow-hidden border border-white/5">
-                                <img
+                                <Image
                                     src="https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?q=80&w=2669&auto=format&fit=crop"
                                     alt="Coaches"
-                                    className="w-full h-full object-cover opacity-60"
+                                    fill
+                                    sizes="(max-width: 1024px) 100vw, 50vw"
+                                    className="object-cover opacity-60"
                                 />
                             </div>
 

@@ -7,7 +7,14 @@ import { PortableText } from "next-sanity";
 
 export const metadata: Metadata = {
     title: 'Impressum | GYM & BOX',
-    description: 'Impressum der GYM & BOX Weiden am See.',
+    description: 'Impressum der GYM & BOX Weiden am See. Angaben gemäß § 5 ECG, Kontaktdaten und Haftungsausschluss.',
+    openGraph: {
+        title: 'Impressum | GYM & BOX',
+        description: 'Impressum der GYM & BOX Weiden am See.',
+    },
+    alternates: {
+        canonical: '/impressum',
+    },
     robots: { index: true, follow: true },
 };
 

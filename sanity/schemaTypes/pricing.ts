@@ -61,7 +61,8 @@ export default defineType({
                     { title: 'Gym', value: 'gym' },
                     { title: 'Box', value: 'box' }
                 ]
-            }
+            },
+            validation: (rule) => rule.required(),
         })
     ],
 })

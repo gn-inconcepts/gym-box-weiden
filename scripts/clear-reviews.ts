@@ -12,6 +12,14 @@ const client = createClient({
 });
 
 async function clearReviews() {
+    // Safety check: require --force flag to prevent accidental data loss
+    if (!process.argv.includes('--force')) {
+        console.log('⚠️  This will DELETE ALL reviews from Sanity!\n');
+        console.log('To confirm, run with --force flag:');
+        console.log('  npx tsx scripts/clear-reviews.ts --force\n');
+        process.exit(1);
+    }
+
     try {
         console.log('🗑️  Fetching reviews...');
         

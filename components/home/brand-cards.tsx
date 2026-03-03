@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowRight } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -21,17 +22,19 @@ export function BrandCards() {
                     >
                         <div className="absolute inset-0 z-0">
                             <div className="absolute inset-0 bg-gradient-to-t from-brand-black via-brand-dark/50 to-transparent z-10" />
-                            <img
+                            <Image
                                 src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2670&auto=format&fit=crop"
-                                alt="Gym"
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                alt="Gym Trainingsbereich"
+                                fill
+                                sizes="(max-width: 1024px) 100vw, 50vw"
+                                className="object-cover transition-transform duration-700 group-hover:scale-105"
                             />
                         </div>
 
                         <div className="absolute top-8 right-8 z-20 font-display text-8xl text-brand-white/5 group-hover:text-brand-white/10 transition-colors">01</div>
 
                         <div className="absolute bottom-0 left-0 p-10 md:p-14 z-20 w-full">
-                            <img src="/images/Bernhard_2022_SW_300ppi.png" alt="Bernhard Trainiert" className="h-10 mb-6 drop-shadow-lg" />
+                            <Image src="/images/Bernhard_2022_SW_300ppi.png" alt="Bernhard Trainiert" width={200} height={40} className="h-10 w-auto mb-6 drop-shadow-lg" />
                             <h2 className="font-display text-5xl md:text-6xl mb-4 group-hover:text-brand-green transition-colors">Das Gym</h2>
                             <p className="text-brand-gray-light text-lg mb-8 max-w-sm leading-relaxed opacity-0 lg:opacity-100 lg:group-hover:opacity-100 lg:h-0 lg:group-hover:h-auto lg:overflow-hidden transition-all duration-500">
                                 Krafttraining, Ausdauer und individuelle Betreuung auf höchstem Niveau. Dein Körper ist dein Kapital.
@@ -53,17 +56,19 @@ export function BrandCards() {
                     >
                         <div className="absolute inset-0 z-0">
                             <div className="absolute inset-0 bg-gradient-to-t from-black via-brand-dark/50 to-transparent z-10" />
-                            <img
+                            <Image
                                 src="https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?q=80&w=2669&auto=format&fit=crop"
-                                alt="Box"
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                alt="CrossFit Box Trainingsbereich"
+                                fill
+                                sizes="(max-width: 1024px) 100vw, 50vw"
+                                className="object-cover transition-transform duration-700 group-hover:scale-105"
                             />
                         </div>
 
                         <div className="absolute top-8 right-8 z-20 font-display text-8xl text-white/5 group-hover:text-white/10 transition-colors">02</div>
 
                         <div className="absolute bottom-0 left-0 p-10 md:p-14 z-20 w-full">
-                            <img src="/images/CF-LF_2022_SW_300ppi.png" alt="CrossFit Lakefront" className="h-10 mb-6 drop-shadow-lg" />
+                            <Image src="/images/CF-LF_2022_SW_300ppi.png" alt="CrossFit Lakefront" width={200} height={40} className="h-10 w-auto mb-6 drop-shadow-lg" />
                             <h2 className="font-display text-5xl md:text-6xl mb-4 group-hover:text-brand-green transition-colors">The Box</h2>
                             <p className="text-brand-gray-light text-lg mb-8 max-w-sm leading-relaxed opacity-0 lg:opacity-100 lg:group-hover:opacity-100 lg:h-0 lg:group-hover:h-auto lg:overflow-hidden transition-all duration-500">
                                 Community, funktionelles Training und constantly varied high intensity movement. Weak ends here.

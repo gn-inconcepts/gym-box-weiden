@@ -22,10 +22,12 @@ export function TrainerSpotlight({ trainer }: TrainerSpotlightProps) {
                     {/* Image */}
                     <div className="relative aspect-[3/4] rounded-2xl overflow-hidden group">
                         <div className="absolute inset-0 bg-brand-green/20 mix-blend-overlay z-10 group-hover:opacity-0 transition-opacity duration-500" />
-                        <img
+                        <Image
                             src={trainer.image}
                             alt={trainer.name}
-                            className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-110"
+                            fill
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                            className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-110"
                         />
                     </div>
 

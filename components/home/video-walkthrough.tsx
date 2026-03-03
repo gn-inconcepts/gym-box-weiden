@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Play } from "lucide-react";
 import { useState } from "react";
 import { AnimateOnScroll } from "@/components/ui/animate-on-scroll";
@@ -18,10 +19,12 @@ export function VideoWalkthrough() {
                         <>
                             {/* Thumbnail / Poster */}
                             <div className="absolute inset-0 bg-brand-black/40 z-10 transition-colors group-hover:bg-brand-black/20" />
-                            <img
+                            <Image
                                 src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2670&auto=format&fit=crop"
-                                alt="Gym Tour"
-                                className="absolute inset-0 w-full h-full object-cover"
+                                alt="Gym Tour Vorschaubild"
+                                fill
+                                sizes="(max-width: 1280px) 100vw, 1280px"
+                                className="object-cover"
                             />
 
                             {/* Play Button */}

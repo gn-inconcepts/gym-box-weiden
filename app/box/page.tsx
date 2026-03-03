@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from "next/image";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { PageHeader } from "@/components/layout/page-header";
@@ -48,10 +49,12 @@ export default function BoxPage() {
                 <section className="py-12 md:py-24 container mx-auto px-4">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                         <div className="order-2 lg:order-1 relative aspect-square rounded-2xl overflow-hidden border border-white/5 bg-brand-dark">
-                            <img
+                            <Image
                                 src="https://images.unsplash.com/photo-1517438476312-10d79c077509?q=80&w=2670&auto=format&fit=crop"
                                 alt="The Box Origin"
-                                className="w-full h-full object-cover opacity-60"
+                                fill
+                                sizes="(max-width: 1024px) 100vw, 50vw"
+                                className="object-cover opacity-60"
                             />
                         </div>
 
@@ -98,10 +101,12 @@ export default function BoxPage() {
                             </div>
 
                             <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-white/5">
-                                <img
+                                <Image
                                     src="https://images.unsplash.com/photo-1534367507873-d2d7e24c797f?q=80&w=2670&auto=format&fit=crop"
                                     alt="CrossFit Action"
-                                    className="w-full h-full object-cover opacity-60"
+                                    fill
+                                    sizes="(max-width: 1024px) 100vw, 50vw"
+                                    className="object-cover opacity-60"
                                 />
                             </div>
                         </div>

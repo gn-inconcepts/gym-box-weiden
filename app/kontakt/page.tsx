@@ -1,8 +1,21 @@
+import type { Metadata } from 'next';
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { PageHeader } from "@/components/layout/page-header";
 import { ContactForm } from "@/components/contact/contact-form";
 import { Mail, MapPin, Phone, Clock, Instagram, Facebook } from "lucide-react";
+
+export const metadata: Metadata = {
+    title: 'Kontakt | GYM & BOX',
+    description: 'Kontaktiere GYM & BOX in Weiden am See. Erstberatung, Probetraining oder allgemeine Anfragen — wir sind für dich da. Telefon: +43 699 110 95 336.',
+    openGraph: {
+        title: 'Kontakt | GYM & BOX',
+        description: 'Kontaktiere GYM & BOX in Weiden am See für Erstberatung, Probetraining oder allgemeine Anfragen.',
+    },
+    alternates: {
+        canonical: '/kontakt',
+    },
+};
 
 export default function ContactPage() {
     return (
@@ -62,7 +75,7 @@ export default function ContactPage() {
                                         </div>
                                         <div>
                                             <span className="block text-sm text-brand-gray uppercase font-bold mb-1">Telefon</span>
-                                            <a href="tel:+4369911095336" className="text-white hover:text-brand-green transition-colors">+43 699 1109 5336</a>
+                                            <a href="tel:+4369911095336" className="text-white hover:text-brand-green transition-colors">+43 699 110 95 336</a>
                                         </div>
                                     </li>
 

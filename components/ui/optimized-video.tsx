@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 interface OptimizedVideoProps {
@@ -90,10 +91,12 @@ export function OptimizedVideo({
 
             {/* Loading placeholder */}
             {!isLoaded && poster && (
-                <img
+                <Image
                     src={poster}
                     alt="Video poster"
-                    className="absolute inset-0 w-full h-full object-cover"
+                    fill
+                    sizes="100vw"
+                    className="object-cover"
                 />
             )}
 

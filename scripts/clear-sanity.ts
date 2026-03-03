@@ -23,6 +23,14 @@ const client = createClient({
 });
 
 async function clearSanity() {
+    // Safety check: require --force flag to prevent accidental data loss
+    if (!process.argv.includes('--force')) {
+        console.log('⚠️  This will DELETE ALL documents from Sanity!\n');
+        console.log('To confirm, run with --force flag:');
+        console.log('  npx tsx scripts/clear-sanity.ts --force\n');
+        process.exit(1);
+    }
+
     console.log('🗑️  Starting Sanity cleanup...\n');
 
     try {

@@ -12,6 +12,14 @@ const client = createClient({
 });
 
 async function clearInstagramPosts() {
+    // Safety check: require --force flag to prevent accidental data loss
+    if (!process.argv.includes('--force')) {
+        console.log('⚠️  This will DELETE ALL Instagram posts from Sanity!\n');
+        console.log('To confirm, run with --force flag:');
+        console.log('  npx tsx scripts/clear-instagram-posts.ts --force\n');
+        process.exit(1);
+    }
+
     try {
         console.log('🗑️  Fetching Instagram posts...');
         

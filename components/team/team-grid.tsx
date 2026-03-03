@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { PortableText } from "next-sanity";
 import { Trainer } from "@/types/sanity";
 import { urlFor } from "@/sanity/lib/image";
 
@@ -79,19 +80,17 @@ export function TeamGrid({ trainers, fallbackTrainers }: TeamGridProps) {
                                     <p className="text-brand-white font-medium mb-6 opacity-80">{trainer.specs}</p>
 
                                     <div className="space-y-4 mb-8">
-                                        {/* Handle flexible bio content (Sanity Block or String Array) */}
-                                        {Array.isArray(trainer.bio) && typeof trainer.bio[0] === 'string' ? (
-                                            (trainer.bio as string[]).map((para, idx) => (
-                                                <p key={idx} className="text-brand-gray-light text-lg leading-relaxed">{para}</p>
-                                            ))
-                                        ) : (
-                                            // Simple block text fallback if needed, or render blocks properly
-                                            // For this step, assuming simplified text or fallback
-                                            <p className="text-brand-gray-light text-lg leading-relaxed">
-                                                {/* If it's Portable Text, we'd use <PortableText /> but for now simplified */}
-                                                Expertise in Fitness and Health.
-                                            </p>
-                                        )}
+                                        {Array.isArray(trainer.bio) && trainer.bio.length > 0 ? (
+                                            typeof trainer.bio[0] === 'string' ? (
+                                                (trainer.bio as string[]).map((para, idx) => (
+                                                    <p key={idx} className="text-brand-gray-light text-lg leading-relaxed">{para}</p>
+                                                ))
+                                            ) : (
+                                                <div className="text-brand-gray-light text-lg leading-relaxed [&>p]:mb-4 last:[&>p]:mb-0">
+                                                    <PortableText value={trainer.bio as any} />
+                                                </div>
+                                            )
+                                        ) : null}
                                     </div>
 
                                     <div className="flex flex-wrap gap-2">

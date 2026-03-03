@@ -7,7 +7,14 @@ import { PortableText } from "next-sanity";
 
 export const metadata: Metadata = {
     title: 'Datenschutz | GYM & BOX',
-    description: 'Datenschutzerklärung der GYM & BOX Weiden am See.',
+    description: 'Datenschutzerklärung der GYM & BOX Weiden am See. Informationen zur Datenverarbeitung gemäß DSGVO.',
+    openGraph: {
+        title: 'Datenschutz | GYM & BOX',
+        description: 'Datenschutzerklärung der GYM & BOX Weiden am See.',
+    },
+    alternates: {
+        canonical: '/datenschutz',
+    },
     robots: { index: true, follow: true },
 };
 

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from "next/image";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { PageHeader } from "@/components/layout/page-header";
@@ -116,10 +117,12 @@ export default async function TeamPage() {
                             </p>
                         </div>
                         <div className="relative aspect-video rounded-2xl overflow-hidden border border-white/5 bg-brand-dark">
-                            <img
+                            <Image
                                 src={headerImage.url}
                                 alt={headerImage.altText || "Team"}
-                                className="w-full h-full object-cover opacity-60"
+                                fill
+                                sizes="(max-width: 1024px) 100vw, 50vw"
+                                className="object-cover opacity-60"
                             />
                         </div>
                     </div>

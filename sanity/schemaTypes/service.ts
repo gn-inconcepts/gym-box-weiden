@@ -9,27 +9,27 @@ export default defineType({
             name: 'name',
             title: 'Name',
             type: 'string',
-            validation: (rule: any) => rule.required(),
+            validation: (rule) => rule.required(),
         }),
         defineField({
             name: 'description',
             title: 'Description',
             type: 'text',
-            validation: (rule: any) => rule.required(),
+            validation: (rule) => rule.required(),
         }),
         defineField({
             name: 'priceMember',
             title: 'Price (Member)',
             type: 'string',
             description: 'e.g. "€10" or "Auf Anfrage"',
-            validation: (rule: any) => rule.required(),
+            validation: (rule) => rule.required(),
         }),
         defineField({
             name: 'priceNonMember',
             title: 'Price (Non-Member)',
             type: 'string',
             description: 'e.g. "€30" or "Auf Anfrage"',
-            validation: (rule: any) => rule.required(),
+            validation: (rule) => rule.required(),
         }),
         defineField({
             name: 'category',
@@ -43,7 +43,7 @@ export default defineType({
                     { title: 'Therapie & Spezial', value: 'therapie' },
                 ],
             },
-            validation: (rule: any) => rule.required(),
+            validation: (rule) => rule.required(),
         }),
         defineField({
             name: 'icon',
@@ -55,7 +55,7 @@ export default defineType({
                     'activity', 'apple', 'brain', 'check', 'dumbbell', 'heartPulse', 'search', 'user', 'users', 'star', 'zap', 'trophy', 'timer'
                 ]
             },
-            validation: (rule: any) => rule.required(),
+            validation: (rule) => rule.required(),
         }),
         defineField({
             name: 'order',

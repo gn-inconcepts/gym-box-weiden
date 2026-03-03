@@ -9,7 +9,7 @@ export default defineType({
             name: 'name',
             title: 'Name',
             type: 'string',
-            validation: (rule: any) => rule.required(),
+            validation: (rule) => rule.required(),
         }),
         defineField({
             name: 'role',
@@ -21,7 +21,7 @@ export default defineType({
             name: 'text',
             title: 'Quote Text',
             type: 'text',
-            validation: (rule: any) => rule.required(),
+            validation: (rule) => rule.required(),
         }),
         defineField({
             name: 'image',
@@ -36,7 +36,7 @@ export default defineType({
             title: 'Rating',
             type: 'number',
             initialValue: 5,
-            validation: (rule: any) => rule.min(1).max(5),
+            validation: (rule) => rule.min(1).max(5),
         }),
     ],
 })

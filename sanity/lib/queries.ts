@@ -7,6 +7,9 @@ export const trainersQuery = groq`*[_type == "trainer"] {
   image,
   specs,
   bio,
+  longBio,
+  credentials,
+  highlightQuote,
   tags,
   category
 }`;
@@ -16,19 +19,23 @@ export const pricingsQuery = groq`*[_type == "pricing"] | order(price asc) {
   title,
   price,
   interval,
+  description,
+  access,
   features,
+  highlightFeature,
   recommended,
   category
 }`;
 
-export const servicesQuery = groq`*[_type == "service"] {
+export const servicesQuery = groq`*[_type == "service"] | order(order asc) {
   _id,
   name,
   description,
   priceMember,
   priceNonMember,
   category,
-  icon
+  icon,
+  order
 }`;
 
 export const siteSettingsQuery = groq`*[_type == "siteSettings"][0] {
