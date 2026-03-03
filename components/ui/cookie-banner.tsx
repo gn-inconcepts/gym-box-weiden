@@ -1,10 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 
 export function CookieBanner() {
     const [showBanner, setShowBanner] = useState(false)
+    const pathname = usePathname()
 
     useEffect(() => {
         const consent = localStorage.getItem('cookie-consent')
@@ -23,7 +25,7 @@ export function CookieBanner() {
         setShowBanner(false)
     }
 
-    if (!showBanner) return null
+    if (!showBanner || pathname.startsWith('/studio')) return null
 
     return (
         <div

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 const WhatsAppIcon = () => (
     <svg viewBox="0 0 24 24" className="w-8 h-8 fill-current" xmlns="http://www.w3.org/2000/svg">
@@ -10,6 +11,7 @@ const WhatsAppIcon = () => (
 
 export function WhatsAppButton() {
     const [isVisible, setIsVisible] = useState(false);
+    const pathname = usePathname();
 
     useEffect(() => {
         // Show after a small delay or scroll
@@ -21,7 +23,7 @@ export function WhatsAppButton() {
     const message = encodeURIComponent("Hallo Bernhard! Ich interessiere mich für ein Probetraining.");
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
 
-    if (!isVisible) return null;
+    if (!isVisible || pathname.startsWith("/studio")) return null;
 
     return (
         <a
