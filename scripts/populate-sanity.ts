@@ -438,10 +438,52 @@ async function populateSanity() {
             console.log('✅ All trainers created\n');
         }
 
+        // ── PAGE CONTENT (hero images) ──────────────────────────────────────
+        const pageContentCount = await client.fetch(`count(*[_type == "pageContent"])`);
+        if (pageContentCount > 0) {
+            console.log(`⏭️  Skipping page content — ${pageContentCount} entries already exist\n`);
+        } else {
+            console.log('📄 Creating page content entries...');
+
+            const pageContentEntries = [
+                { pageKey: 'team-header', altText: 'Team Header — Unser Trainerteam', url: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?q=80&w=2670&auto=format&fit=crop' },
+                { pageKey: 'gym-hero', altText: 'Gym Hero — Trainingsbereich', url: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2670&auto=format&fit=crop' },
+                { pageKey: 'box-hero', altText: 'Box Hero — CrossFit Lakefront', url: 'https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?q=80&w=2669&auto=format&fit=crop' },
+                { pageKey: 'contact-hero', altText: 'Kontakt Hero — Training', url: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2670&auto=format&fit=crop' },
+                { pageKey: 'services-hero', altText: 'Leistungen Hero — Fitness', url: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=2670&auto=format&fit=crop' },
+                { pageKey: 'pricing-hero', altText: 'Preise Hero — Mitgliedschaft', url: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=2670&auto=format&fit=crop' },
+            ];
+
+            for (const entry of pageContentEntries) {
+                // Upload the image to Sanity from URL
+                const imageResponse = await fetch(entry.url);
+                const imageBuffer = Buffer.from(await imageResponse.arrayBuffer());
+                const imageAsset = await client.assets.upload('image', imageBuffer, {
+                    filename: `${entry.pageKey}.jpg`,
+                });
+
+                await client.create({
+                    _type: 'pageContent',
+                    pageKey: entry.pageKey,
+                    image: {
+                        _type: 'image',
+                        asset: {
+                            _type: 'reference',
+                            _ref: imageAsset._id,
+                        },
+                    },
+                    altText: entry.altText,
+                });
+                console.log(`  ✅ Created: ${entry.pageKey}`);
+            }
+
+            console.log('✅ All page content created\n');
+        }
+
         console.log('🎉 SUCCESS! All content has been created in Sanity!\n');
         console.log('Next steps:');
         console.log('1. Visit your Sanity Studio to see your content');
-        console.log('2. Upload photos for trainers and page content');
+        console.log('2. Replace placeholder images with your own photos');
         console.log('3. Edit and customize the content as needed\n');
 
     } catch (error) {
