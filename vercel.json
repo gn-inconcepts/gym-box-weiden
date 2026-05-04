@@ -7,11 +7,11 @@
     "crons": [
         {
             "path": "/api/instagram/sync",
-            "schedule": "0 2 * * 1"
+            "schedule": "0 2 * * 1,4"
         },
         {
             "path": "/api/reviews/sync",
-            "schedule": "0 3 * * 1"
+            "schedule": "0 3 * * 1,4"
         }
     ]
 }
