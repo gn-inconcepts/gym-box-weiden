@@ -193,7 +193,7 @@ export function ContactForm() {
 
             <Button
                 type="submit"
-                className="w-full md:w-auto px-12 py-6 text-lg"
+                className="w-full md:w-auto px-12 py-6 text-lg bg-brand-green text-brand-black font-bold rounded-lg hover:bg-white hover:text-brand-black active:bg-white active:text-brand-black transition-colors disabled:opacity-60"
                 disabled={status === "loading"}
                 aria-disabled={status === "loading"}
                 aria-describedby={status === "error" ? "form-error" : undefined}

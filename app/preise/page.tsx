@@ -89,8 +89,7 @@ export default async function PricingPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         {gymPricings.map(plan => (
                             <div key={plan._id} className="flex flex-col p-8 bg-brand-dark rounded-2xl border border-white/5 hover:border-brand-green/30 transition-colors">
-                                <h3 className="font-display text-2xl mb-2">{plan.title}</h3>
-                                <p className="text-sm text-brand-gray mb-6 h-10 flex items-center"></p>
+                                <h3 className="font-display text-2xl mb-3">{plan.title}</h3>
                                 <div className="mb-6">
                                     {plan.pricePrefix && (
                                         <span className="text-brand-gray text-sm mr-1">{plan.pricePrefix}</span>
@@ -161,8 +160,8 @@ export default async function PricingPage() {
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             {boxPricings.map(plan => (
                                 <div key={plan._id} className="p-8 bg-brand-black rounded-2xl border border-white/5 border-l-4 border-l-brand-gray-light/20">
-                                    <h3 className="font-display text-2xl mb-2">{plan.title}</h3>
-                                    <div className="mb-6 mt-6">
+                                    <h3 className="font-display text-2xl mb-3">{plan.title}</h3>
+                                    <div className="mb-6">
                                         {plan.pricePrefix && (
                                             <span className="text-brand-gray text-sm mr-1">{plan.pricePrefix}</span>
                                         )}
@@ -186,8 +185,8 @@ export default async function PricingPage() {
                                         <span className="bg-black text-white text-[10px] font-bold px-2 py-1 rounded-sm uppercase tracking-widest">{cms?.boxHighlightLabel ?? "Best Value"}</span>
                                     </div>
                                     <div className="h-full p-8 bg-brand-black rounded-xl flex flex-col">
-                                        <h3 className="font-display text-2xl mb-2 text-brand-green">{boxHighlight.title}</h3>
-                                        <div className="mb-6 mt-6">
+                                        <h3 className="font-display text-2xl mb-3 text-brand-green">{boxHighlight.title}</h3>
+                                        <div className="mb-6">
                                             {boxHighlight.pricePrefix && (
                                                 <span className="text-brand-gray text-sm mr-1">{boxHighlight.pricePrefix}</span>
                                             )}

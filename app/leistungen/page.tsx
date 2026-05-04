@@ -133,7 +133,7 @@ export default async function ServicesPage() {
 
                         <div className="relative z-10 max-w-3xl mx-auto">
                             <h2 className="font-display text-4xl md:text-5xl mb-6">{cms?.benefitsHeading ?? "Mitglieder-Vorteil"}</h2>
-                            <p className="text-xl text-brand-gray-light mb-10 leading-relaxed">
+                            <p className="text-base md:text-xl text-brand-gray-light mb-10 leading-snug md:leading-relaxed">
                                 {cms?.benefitsDescription ?? "Als Mitglied profitierst du von stark reduzierten Preisen bei allen Services. Viele Leistungen sind bis zu 50% günstiger — ein weiterer Grund, Teil unserer Community zu werden."}
                             </p>
                             <Link href={cms?.benefitsCta?.href ?? "/preise"} className="inline-flex items-center gap-2 px-8 py-4 bg-brand-green text-brand-black font-bold rounded-full hover:bg-white transition-colors">

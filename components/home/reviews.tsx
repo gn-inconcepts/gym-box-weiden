@@ -99,16 +99,19 @@ export function Reviews() {
         return text.substring(0, maxLength) + '...';
     };
     return (
-        <section className="py-32 overflow-hidden bg-brand-black">
+        <section className="py-16 md:py-32 overflow-hidden bg-brand-black">
             <div className="container mx-auto px-4 mb-12">
                 <h2 className="font-display text-4xl md:text-5xl text-center">
                     WAS UNSERE <span className="text-brand-green">ATHLETEN</span> SAGEN
                 </h2>
             </div>
 
-            <div className="relative w-full">
-                {/* Rolling Marquee of reviews */}
-                <div className="flex gap-6 w-max animate-[marquee_80s_linear_infinite] hover:[animation-play-state:paused] pl-4">
+            <div className="relative w-full overflow-hidden">
+                {/* Rolling Marquee of reviews — iOS Safari needs min-w-max + will-change to keep flex children visible during transform */}
+                <div
+                    className="flex gap-4 md:gap-6 min-w-max animate-[marquee_80s_linear_infinite] hover:[animation-play-state:paused] pl-4"
+                    style={{ willChange: 'transform' }}
+                >
                     {[...reviews, ...reviews].map((review, i) => {
                         const uniqueKey = `${review._id}-${i}`;
                         const isExpanded = expandedReviews.has(uniqueKey);
@@ -118,7 +121,7 @@ export function Reviews() {
                         return (
                             <div
                                 key={uniqueKey}
-                                className="w-[350px] md:w-[450px] flex-shrink-0 p-8 rounded-2xl bg-brand-dark border border-white/5 hover:border-brand-green/30 transition-colors"
+                                className="w-[300px] md:w-[450px] flex-shrink-0 p-6 md:p-8 rounded-2xl bg-brand-dark border border-white/5 hover:border-brand-green/30 transition-colors"
                             >
                                 <div className="flex gap-1 text-brand-green mb-4">
                                     {[...Array(review.rating)].map((_, starIdx) => (

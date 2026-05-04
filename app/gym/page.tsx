@@ -223,7 +223,7 @@ export default async function GymPage() {
                                 "Das Training in der Gruppe ist f\u00fcr viele Menschen eine gro\u00dfe Hilfe, um motiviert am Ball zu bleiben. Vor allem im Zeitalter der Digitalisierung ist die pers\u00f6nliche Bindung zwischen den Mitgliedern und den Trainern ein enorm wichtiger Faktor.",
                                 "Unser Anspruch war es, das Beste aus beiden M\u00f6glichkeiten zu schaffen \u2014 dies legte den Grundstein f\u00fcr das \u201EAll in One\u201C Konzept und deshalb entstand zum GYM unsere \u201ECrossFit Lakefront Box\u201C.",
                             ]).map((p, i) => (
-                                <p key={i} className="text-xl text-brand-gray-light mb-6 leading-relaxed">{p}</p>
+                                <p key={i} className="text-base md:text-xl text-brand-gray-light mb-6 leading-relaxed md:leading-relaxed">{p}</p>
                             ))}
 
                             <div className="inline-block p-1 rounded-full bg-brand-black border border-white/10">
