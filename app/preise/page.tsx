@@ -92,6 +92,9 @@ export default async function PricingPage() {
                                 <h3 className="font-display text-2xl mb-2">{plan.title}</h3>
                                 <p className="text-sm text-brand-gray mb-6 h-10 flex items-center"></p>
                                 <div className="mb-6">
+                                    {plan.pricePrefix && (
+                                        <span className="text-brand-gray text-sm mr-1">{plan.pricePrefix}</span>
+                                    )}
                                     <span className="text-3xl font-bold text-white">€{plan.price}</span>
                                     <span className="text-brand-gray text-sm">{plan.interval}</span>
                                 </div>
@@ -120,11 +123,16 @@ export default async function PricingPage() {
                                     </div>
                                     <h3 className="font-display text-3xl md:text-4xl mb-2">{gymHighlight.title}</h3>
                                     <p className="text-brand-gray-light mb-6 md:mb-0 max-w-xl">
-                                        {gymHighlight.features && gymHighlight.features.join(". ")}.
+                                        {gymHighlight.description
+                                            ? gymHighlight.description
+                                            : (gymHighlight.features && gymHighlight.features.join(". ") + ".")}
                                     </p>
                                 </div>
                                 <div className="flex flex-col items-center md:items-end gap-4 shrink-0">
                                     <div className="text-center md:text-right">
+                                        {gymHighlight.pricePrefix && (
+                                            <span className="block text-brand-gray text-sm">{gymHighlight.pricePrefix}</span>
+                                        )}
                                         <span className="block text-4xl md:text-5xl font-bold text-white">€{gymHighlight.price}</span>
                                         <span className="text-brand-gray text-sm">{gymHighlight.interval}</span>
                                     </div>
@@ -155,6 +163,9 @@ export default async function PricingPage() {
                                 <div key={plan._id} className="p-8 bg-brand-black rounded-2xl border border-white/5 border-l-4 border-l-brand-gray-light/20">
                                     <h3 className="font-display text-2xl mb-2">{plan.title}</h3>
                                     <div className="mb-6 mt-6">
+                                        {plan.pricePrefix && (
+                                            <span className="text-brand-gray text-sm mr-1">{plan.pricePrefix}</span>
+                                        )}
                                         <span className="text-3xl font-bold text-white">€{plan.price}</span>
                                         <span className="text-brand-gray text-sm"> {plan.interval}</span>
                                     </div>
@@ -177,9 +188,15 @@ export default async function PricingPage() {
                                     <div className="h-full p-8 bg-brand-black rounded-xl flex flex-col">
                                         <h3 className="font-display text-2xl mb-2 text-brand-green">{boxHighlight.title}</h3>
                                         <div className="mb-6 mt-6">
+                                            {boxHighlight.pricePrefix && (
+                                                <span className="text-brand-gray text-sm mr-1">{boxHighlight.pricePrefix}</span>
+                                            )}
                                             <span className="text-3xl font-bold text-white">€{boxHighlight.price}</span>
                                             <span className="text-brand-gray text-sm"> {boxHighlight.interval}</span>
                                         </div>
+                                        {boxHighlight.description && (
+                                            <p className="text-sm text-brand-gray-light mb-6">{boxHighlight.description}</p>
+                                        )}
                                         <ul className="space-y-3 mb-8 flex-grow">
                                             {boxHighlight.features && boxHighlight.features.map(f => (
                                                 <li key={f} className="flex gap-3 text-sm text-brand-gray-light"><Check className="w-4 h-4 text-brand-green" /> {f}</li>

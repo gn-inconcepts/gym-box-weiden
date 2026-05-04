@@ -27,9 +27,11 @@ export interface Trainer {
 export interface Pricing {
     _id: string;
     title: string;
+    pricePrefix?: string;
     price: number;
     interval: string;
-    features: string[];
+    description?: string;
+    features?: string[];
     recommended: boolean;
     category: "gym" | "box";
 }

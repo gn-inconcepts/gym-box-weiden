@@ -17,12 +17,11 @@ export const trainersQuery = groq`*[_type == "trainer"] {
 export const pricingsQuery = groq`*[_type == "pricing"] | order(price asc) {
   _id,
   title,
+  pricePrefix,
   price,
   interval,
   description,
-  access,
   features,
-  highlightFeature,
   recommended,
   category
 }`;
