@@ -145,12 +145,20 @@ async function syncViaApify(username: string, category: 'gym' | 'box'): Promise<
 
     console.log(`📸 [${category}] Fetching via Apify for @${username}...`);
 
+    // Pin Apify to a US residential proxy so Instagram returns global CDN URLs
+    // (scontent-*.cdninstagram.com) instead of regional *.fna.fbcdn.net cache nodes
+    // which time out from outside their geographic region.
     const response = await fetch(`https://api.apify.com/v2/acts/apify~instagram-profile-scraper/run-sync-get-dataset-items?token=${APIFY_API_TOKEN}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             usernames: [username],
             resultsLimit: 12,
+            proxy: {
+                useApifyProxy: true,
+                apifyProxyGroups: ['RESIDENTIAL'],
+                apifyProxyCountry: 'US',
+            },
         }),
     });
 
