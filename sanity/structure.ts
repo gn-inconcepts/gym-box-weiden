@@ -1,4 +1,5 @@
 import type { StructureResolver } from 'sanity/structure'
+import { orderableDocumentListDeskItem } from '@sanity/orderable-document-list'
 
 // Singleton helper: show a single document editor instead of a list
 const singletonListItem = (S: any, typeName: string, title: string) =>
@@ -11,7 +12,7 @@ const singletonListItem = (S: any, typeName: string, title: string) =>
                 .documentId(typeName)
         )
 
-export const structure: StructureResolver = (S) =>
+export const structure: StructureResolver = (S, context) =>
     S.list()
         .title('Content')
         .items([
@@ -41,7 +42,12 @@ export const structure: StructureResolver = (S) =>
                     S.list()
                         .title('Inhalte')
                         .items([
-                            S.documentTypeListItem('trainer').title('Trainer'),
+                            orderableDocumentListDeskItem({
+                                type: 'trainer',
+                                title: 'Trainer',
+                                S,
+                                context,
+                            }),
                             S.documentTypeListItem('pricing').title('Preise'),
                             S.documentTypeListItem('service').title('Services'),
                             S.documentTypeListItem('testimonial').title('Testimonials'),

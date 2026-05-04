@@ -1,6 +1,6 @@
 import { groq } from "next-sanity";
 
-export const trainersQuery = groq`*[_type == "trainer"] {
+export const trainersQuery = groq`*[_type == "trainer"] | order(orderRank asc, name asc) {
   _id,
   name,
   role,
