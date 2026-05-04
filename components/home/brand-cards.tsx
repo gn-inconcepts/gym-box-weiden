@@ -5,9 +5,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import type { HomePageData } from "@/types/page-content";
+import { urlFor } from "@/sanity/lib/image";
+
+const GYM_FALLBACK = "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2670&auto=format&fit=crop";
+const BOX_FALLBACK = "https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?q=80&w=2669&auto=format&fit=crop";
 
 export function BrandCards({ cms }: { cms?: HomePageData }) {
     const [hovered, setHovered] = useState<"gym" | "box" | null>(null);
+
+    const gymImageUrl = cms?.gymCardImage
+        ? urlFor(cms.gymCardImage)?.width(1600).quality(80).format('webp').url() ?? GYM_FALLBACK
+        : GYM_FALLBACK;
+    const boxImageUrl = cms?.boxCardImage
+        ? urlFor(cms.boxCardImage)?.width(1600).quality(80).format('webp').url() ?? BOX_FALLBACK
+        : BOX_FALLBACK;
 
     return (
         <section className="py-12 md:py-24 md:py-32 bg-brand-black">
@@ -24,7 +35,7 @@ export function BrandCards({ cms }: { cms?: HomePageData }) {
                         <div className="absolute inset-0 z-0">
                             <div className="absolute inset-0 bg-gradient-to-t from-brand-black via-brand-dark/50 to-transparent z-10" />
                             <Image
-                                src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2670&auto=format&fit=crop"
+                                src={gymImageUrl}
                                 alt="Gym Trainingsbereich"
                                 fill
                                 sizes="(max-width: 1024px) 100vw, 50vw"
@@ -58,7 +69,7 @@ export function BrandCards({ cms }: { cms?: HomePageData }) {
                         <div className="absolute inset-0 z-0">
                             <div className="absolute inset-0 bg-gradient-to-t from-black via-brand-dark/50 to-transparent z-10" />
                             <Image
-                                src="https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?q=80&w=2669&auto=format&fit=crop"
+                                src={boxImageUrl}
                                 alt="CrossFit Box Trainingsbereich"
                                 fill
                                 sizes="(max-width: 1024px) 100vw, 50vw"
