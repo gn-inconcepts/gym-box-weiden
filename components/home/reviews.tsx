@@ -1,7 +1,10 @@
 "use client";
 
 import { Star } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useState } from "react";
+import { urlFor } from "@/sanity/lib/image";
+import type { SanityImage } from "@/types/sanity";
 
 interface Review {
     _id: string;
@@ -56,7 +59,7 @@ const fallbackReviews = [
     },
 ];
 
-export function Reviews() {
+export function Reviews({ image }: { image?: SanityImage }) {
     const [reviews, setReviews] = useState<Review[]>(fallbackReviews);
     const [loading, setLoading] = useState(true);
     const [expandedReviews, setExpandedReviews] = useState<Set<string>>(new Set());
@@ -98,11 +101,22 @@ export function Reviews() {
         if (text.length <= maxLength) return text;
         return text.substring(0, maxLength) + '...';
     };
+    const imageUrl = image
+        ? urlFor(image)?.width(1600).quality(80).format('webp').url() ?? null
+        : null;
+
     return (
         <section className="py-16 md:py-32 overflow-hidden bg-brand-black">
+            {imageUrl && (
+                <div className="container mx-auto px-4 mb-12">
+                    <div className="relative aspect-[16/7] max-w-5xl mx-auto rounded-2xl overflow-hidden border border-white/5">
+                        <Image src={imageUrl} alt="Mitglieder" fill sizes="(max-width: 1024px) 100vw, 1024px" className="object-cover" />
+                    </div>
+                </div>
+            )}
             <div className="container mx-auto px-4 mb-12">
                 <h2 className="font-display text-4xl md:text-5xl text-center">
-                    WAS UNSERE <span className="text-brand-green">ATHLETEN</span> SAGEN
+                    WAS UNSERE <span className="text-brand-green">MITGLIEDER</span> SAGEN
                 </h2>
             </div>
 

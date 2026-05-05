@@ -3,7 +3,7 @@ import type { StatItemData } from "@/types/page-content";
 
 const defaultStats: StatItemData[] = [
     { value: "500", unit: "m²", label: "Trainingsfläche" },
-    { value: "2016", unit: "", label: "Gegründet" },
+    { value: "2014", unit: "", label: "Gegründet" },
     { value: "14", unit: "+", label: "Leistungen" },
     { value: "7", unit: "+", label: "Zertifizierungen" },
     { value: "10", unit: "+", label: "Kursangebote" },

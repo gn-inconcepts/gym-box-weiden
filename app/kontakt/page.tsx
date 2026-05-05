@@ -9,6 +9,7 @@ import { kontaktPageQuery, expandedSiteSettingsQuery } from "@/sanity/lib/page-q
 import { KontaktPageData } from "@/types/page-content";
 import { SiteSettings } from "@/types/sanity";
 import { urlFor } from "@/sanity/lib/image";
+import Image from "next/image";
 
 export const revalidate = 300;
 
@@ -50,6 +51,10 @@ export default async function ContactPage() {
         ? urlFor(cms.headerImage)?.width(2670).quality(80).format('webp').url() ?? "https://images.unsplash.com/photo-1596357395217-80de13130e92?q=80&w=2671&auto=format&fit=crop"
         : "https://images.unsplash.com/photo-1596357395217-80de13130e92?q=80&w=2671&auto=format&fit=crop";
 
+    const formImageUrl = cms?.formImage
+        ? urlFor(cms.formImage)?.width(1600).quality(80).format('webp').url() ?? null
+        : null;
+
     const contactOptions = cms?.contactOptions?.length ? cms.contactOptions : defaultContactOptions;
     const address = siteSettings?.contact?.address ?? "Friedhofgasse 45\n7121 Weiden am See";
     const phone = siteSettings?.contact?.phone ?? "+43 699 110 95 336";
@@ -87,6 +92,12 @@ export default async function ContactPage() {
                             <h2 className="font-display text-4xl mb-8">{cms?.formHeading ?? "Deine"} <span className="text-brand-green">{cms?.formHeadingHighlight ?? "Anfrage"}</span></h2>
 
                             <ContactForm />
+
+                            {formImageUrl && (
+                                <div className="relative aspect-[16/7] rounded-2xl overflow-hidden mt-12 border border-white/5">
+                                    <Image src={formImageUrl} alt="Kontakt" fill sizes="(max-width: 1024px) 100vw, 66vw" className="object-cover" />
+                                </div>
+                            )}
                         </div>
 
                         <div className="space-y-8">

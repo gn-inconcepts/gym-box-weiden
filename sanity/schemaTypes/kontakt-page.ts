@@ -70,6 +70,14 @@ export default defineType({
             type: 'string',
             group: 'formSection',
         }),
+        defineField({
+            name: 'formImage',
+            title: 'Bild unter dem Anfrage-Formular',
+            description: 'Optionales Foto, das unter dem Formular angezeigt wird.',
+            type: 'image',
+            options: { hotspot: true },
+            group: 'formSection',
+        }),
     ],
     preview: {
         prepare() {

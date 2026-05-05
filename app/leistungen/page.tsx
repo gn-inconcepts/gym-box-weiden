@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/layout/page-header";
 import { ServiceFilter } from "@/components/services/service-filter";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { client } from "@/sanity/lib/client";
 import { servicesQuery } from "@/sanity/lib/queries";
 import { leistungenPageQuery } from "@/sanity/lib/page-queries";
@@ -70,6 +71,10 @@ export default async function ServicesPage() {
         ? urlFor(cms.headerImage)?.width(2670).quality(80).format('webp').url() ?? "https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?q=80&w=2669&auto=format&fit=crop"
         : "https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?q=80&w=2669&auto=format&fit=crop";
 
+    const benefitsImageUrl = cms?.benefitsImage
+        ? urlFor(cms.benefitsImage)?.width(1600).quality(80).format('webp').url() ?? null
+        : null;
+
     const featuredCategories = cms?.featuredCategories?.length
         ? cms.featuredCategories.map((item, i) => ({
             num: item.number ?? defaultFeaturedCategories[i]?.num ?? String(i + 1).padStart(2, '0'),
@@ -127,6 +132,11 @@ export default async function ServicesPage() {
 
                 {/* MEMBER BENEFITS */}
                 <section className="py-12 md:py-24 container mx-auto px-4">
+                    {benefitsImageUrl && (
+                        <div className="relative aspect-[16/7] max-w-5xl mx-auto rounded-2xl overflow-hidden mb-12 border border-white/5">
+                            <Image src={benefitsImageUrl} alt="Mitglieder-Vorteil" fill sizes="(max-width: 1024px) 100vw, 1024px" className="object-cover" />
+                        </div>
+                    )}
                     <div className="bg-brand-dark border border-white/10 rounded-3xl p-12 md:p-20 text-center relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-64 h-64 bg-brand-green/20 rounded-full blur-[100px] pointer-events-none"></div>
                         <div className="absolute bottom-0 left-0 w-64 h-64 bg-brand-green/10 rounded-full blur-[100px] pointer-events-none"></div>

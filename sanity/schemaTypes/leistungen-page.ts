@@ -69,6 +69,14 @@ export default defineType({
 
         // ── Member Benefits ──
         defineField({
+            name: 'benefitsImage',
+            title: 'Bild über dem Mitglieder-Vorteil',
+            description: 'Optionales Foto, das oberhalb des Mitglieder-Vorteil-Textes angezeigt wird.',
+            type: 'image',
+            options: { hotspot: true },
+            group: 'memberBenefits',
+        }),
+        defineField({
             name: 'benefitsHeading',
             title: 'Heading',
             type: 'string',

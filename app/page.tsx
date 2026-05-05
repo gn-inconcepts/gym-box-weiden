@@ -42,7 +42,7 @@ export default async function Home() {
         <Philosophy cms={cms ?? undefined} />
         <PhilosophyDetail cms={cms ?? undefined} />
         <ServicesShowcase cms={cms ?? undefined} />
-        <Reviews />
+        <Reviews image={cms?.reviewsImage} />
         <InstagramFeed
           category="gym"
           username="bernhardtrainiert"

@@ -95,6 +95,8 @@ export interface HomePageData {
     // Services Showcase
     servicesHeading?: string
     servicesItems?: FeatureCardData[]
+    // Reviews Section
+    reviewsImage?: SanityImage
     // CTA
     ctaHeading?: string
     ctaHeadingHighlight?: string
@@ -159,6 +161,7 @@ export interface BoxPageData {
     valuesItems?: FeatureCardData[]
     // Class Structure
     classLabel?: string
+    classImage?: SanityImage
     classHeading?: string
     classHeadingHighlight?: string
     classPhases?: ClassPhaseData[]
@@ -189,6 +192,7 @@ export interface TeamPageData {
     whyParagraph?: string
     whyFeatures?: FeatureCardData[]
     // Certifications
+    certImage?: SanityImage
     certHeading?: string
     certParagraph?: string
 }
@@ -204,6 +208,7 @@ export interface KontaktPageData {
     formLabel?: string
     formHeading?: string
     formHeadingHighlight?: string
+    formImage?: SanityImage
 }
 
 export interface LeistungenPageData {
@@ -219,6 +224,7 @@ export interface LeistungenPageData {
     // Featured Categories
     featuredCategories?: FeatureCardData[]
     // Member Benefits
+    benefitsImage?: SanityImage
     benefitsHeading?: string
     benefitsDescription?: string
     benefitsCta?: CtaButtonData

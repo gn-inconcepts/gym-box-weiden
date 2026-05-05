@@ -94,6 +94,14 @@ export default defineType({
 
         // ── Certifications ──
         defineField({
+            name: 'certImage',
+            title: 'Bild über "Über 7 Institute"',
+            description: 'Optionales Foto, das oberhalb der Zertifizierungs-Sektion angezeigt wird.',
+            type: 'image',
+            options: { hotspot: true },
+            group: 'certifications',
+        }),
+        defineField({
             name: 'certHeading',
             title: 'Heading',
             type: 'string',

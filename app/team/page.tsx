@@ -89,6 +89,10 @@ export default async function TeamPage() {
         ? urlFor(cms.introImage)?.width(1200).quality(80).format('webp').url() ?? headerImage.url
         : headerImage.url;
 
+    const certImageUrl = cms?.certImage
+        ? urlFor(cms.certImage)?.width(1600).quality(80).format('webp').url() ?? null
+        : null;
+
     // Build why features from CMS or defaults
     const whyFeatures = cms?.whyFeatures?.length
         ? cms.whyFeatures.map((item, i) => ({
@@ -161,6 +165,11 @@ export default async function TeamPage() {
                 {/* CERTIFICATIONS */}
                 <section className="py-12 md:py-24 bg-brand-black">
                     <div className="container mx-auto px-4 text-center">
+                        {certImageUrl && (
+                            <div className="relative aspect-[16/7] max-w-5xl mx-auto rounded-2xl overflow-hidden mb-12 border border-white/5">
+                                <Image src={certImageUrl} alt="Zertifizierungen" fill sizes="(max-width: 1024px) 100vw, 1024px" className="object-cover" />
+                            </div>
+                        )}
                         <div className="max-w-4xl mx-auto border border-white/10 p-12 rounded-3xl relative overflow-hidden">
                             <div className="absolute inset-0 bg-brand-green/5 z-0"></div>
                             <div className="relative z-10">

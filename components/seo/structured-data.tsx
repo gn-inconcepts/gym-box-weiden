@@ -54,7 +54,7 @@ export function OrganizationSchema() {
         logo: 'https://gymandbox.at/logo.png',
         description:
             'GYM & BOX ist dein Gym und CrossFit Box in Weiden am See mit professionellem Personal Training, Ernährungscoaching und ganzheitlichem Gesundheitskonzept.',
-        foundingDate: '2016',
+        foundingDate: '2014',
         founders: [
             {
                 '@type': 'Person',

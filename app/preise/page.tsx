@@ -78,7 +78,7 @@ export default async function PricingPage() {
                 <section className="py-12 md:py-24 container mx-auto px-4">
                     <div className="flex items-center gap-4 mb-12">
                         <div className="w-16 h-16 bg-brand-black rounded-2xl flex items-center justify-center font-display text-3xl font-bold border border-white/10 shrink-0">
-                            <span className="text-white">G</span>
+                            <span className="text-brand-white">G</span>
                         </div>
                         <div>
                             <h2 className="font-display text-4xl">{cms?.gymHeading ?? "Das"} <span className="text-brand-green">{cms?.gymHeadingHighlight ?? "Gym"}</span></h2>
@@ -94,7 +94,7 @@ export default async function PricingPage() {
                                     {plan.pricePrefix && (
                                         <span className="text-brand-gray text-sm mr-1">{plan.pricePrefix}</span>
                                     )}
-                                    <span className="text-3xl font-bold text-white">€{plan.price}</span>
+                                    <span className="text-3xl font-bold text-brand-white">€{plan.price}</span>
                                     <span className="text-brand-gray text-sm">{plan.interval}</span>
                                 </div>
                                 <ul className="space-y-3 mb-8 flex-grow">
@@ -132,7 +132,7 @@ export default async function PricingPage() {
                                         {gymHighlight.pricePrefix && (
                                             <span className="block text-brand-gray text-sm">{gymHighlight.pricePrefix}</span>
                                         )}
-                                        <span className="block text-4xl md:text-5xl font-bold text-white">€{gymHighlight.price}</span>
+                                        <span className="block text-4xl md:text-5xl font-bold text-brand-white">€{gymHighlight.price}</span>
                                         <span className="text-brand-gray text-sm">{gymHighlight.interval}</span>
                                     </div>
                                     <Link href="/kontakt" className="px-8 py-3 bg-brand-green text-brand-black font-bold rounded-lg hover:bg-white transition-colors">
@@ -149,7 +149,7 @@ export default async function PricingPage() {
                     <div className="container mx-auto px-4">
                         <div className="flex items-center gap-4 mb-12">
                             <div className="w-16 h-16 bg-brand-black rounded-2xl flex items-center justify-center font-display text-3xl font-bold border border-white/10 shrink-0">
-                                <span className="text-white">B</span>
+                                <span className="text-brand-white">B</span>
                             </div>
                             <div>
                                 <h2 className="font-display text-4xl">{cms?.boxHeading ?? "The"} <span className="text-brand-green">{cms?.boxHeadingHighlight ?? "Box"}</span></h2>
@@ -165,7 +165,7 @@ export default async function PricingPage() {
                                         {plan.pricePrefix && (
                                             <span className="text-brand-gray text-sm mr-1">{plan.pricePrefix}</span>
                                         )}
-                                        <span className="text-3xl font-bold text-white">€{plan.price}</span>
+                                        <span className="text-3xl font-bold text-brand-white">€{plan.price}</span>
                                         <span className="text-brand-gray text-sm"> {plan.interval}</span>
                                     </div>
                                     <ul className="space-y-3 mb-8">
@@ -190,7 +190,7 @@ export default async function PricingPage() {
                                             {boxHighlight.pricePrefix && (
                                                 <span className="text-brand-gray text-sm mr-1">{boxHighlight.pricePrefix}</span>
                                             )}
-                                            <span className="text-3xl font-bold text-white">€{boxHighlight.price}</span>
+                                            <span className="text-3xl font-bold text-brand-white">€{boxHighlight.price}</span>
                                             <span className="text-brand-gray text-sm"> {boxHighlight.interval}</span>
                                         </div>
                                         {boxHighlight.description && (

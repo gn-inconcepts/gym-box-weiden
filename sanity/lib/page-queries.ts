@@ -27,6 +27,7 @@ export const homePageQuery = groq`*[_type == "homePage"][0] {
   philosophyDetailItems,
   servicesHeading,
   servicesItems,
+  reviewsImage,
   ctaHeading,
   ctaHeadingHighlight,
   ctaDescription,
@@ -86,6 +87,7 @@ export const boxPageQuery = groq`*[_type == "boxPage"][0] {
   valuesHeadingHighlight,
   valuesItems,
   classLabel,
+  classImage,
   classHeading,
   classHeadingHighlight,
   classPhases,
@@ -117,6 +119,7 @@ export const teamPageQuery = groq`*[_type == "teamPage"][0] {
   whyHeadingHighlight,
   whyParagraph,
   whyFeatures,
+  certImage,
   certHeading,
   certParagraph
 }`;
@@ -128,7 +131,8 @@ export const kontaktPageQuery = groq`*[_type == "kontaktPage"][0] {
   contactOptions,
   formLabel,
   formHeading,
-  formHeadingHighlight
+  formHeadingHighlight,
+  formImage
 }`;
 
 export const leistungenPageQuery = groq`*[_type == "leistungenPage"][0] {
@@ -140,6 +144,7 @@ export const leistungenPageQuery = groq`*[_type == "leistungenPage"][0] {
   introHeadingHighlight,
   introDescription,
   featuredCategories,
+  benefitsImage,
   benefitsHeading,
   benefitsDescription,
   benefitsCta

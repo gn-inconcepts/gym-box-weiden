@@ -138,6 +138,14 @@ export default defineType({
             group: 'classStructure',
         }),
         defineField({
+            name: 'classImage',
+            title: 'Bild über "So funktioniert eine Session"',
+            description: 'Optionales Foto, das oberhalb der Session-Sektion angezeigt wird.',
+            type: 'image',
+            options: { hotspot: true },
+            group: 'classStructure',
+        }),
+        defineField({
             name: 'classHeading',
             title: 'Heading',
             type: 'string',

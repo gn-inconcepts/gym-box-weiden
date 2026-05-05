@@ -67,6 +67,10 @@ export default async function BoxPage() {
         ? urlFor(cms.crossfitImage)?.width(1200).quality(80).format('webp').url() ?? "https://images.unsplash.com/photo-1534367507873-d2d7e24c797f?q=80&w=2670&auto=format&fit=crop"
         : "https://images.unsplash.com/photo-1534367507873-d2d7e24c797f?q=80&w=2670&auto=format&fit=crop";
 
+    const classImageUrl = cms?.classImage
+        ? urlFor(cms.classImage)?.width(1600).quality(80).format('webp').url() ?? null
+        : null;
+
     // Build trainer data from CMS or defaults
     const trainerData = cms?.trainerSpotlight?.trainer
         ? { name: cms.trainerSpotlight.trainer.name, role: cms.trainerSpotlight.trainer.role, image: typeof cms.trainerSpotlight.trainer.image === 'string' ? cms.trainerSpotlight.trainer.image : urlFor(cms.trainerSpotlight.trainer.image)?.width(800).url() ?? defaultBoxTrainer.image, bio: cms.trainerSpotlight.trainer.specs ?? defaultBoxTrainer.bio, specialties: defaultBoxTrainer.specialties }
@@ -184,6 +188,11 @@ export default async function BoxPage() {
                 {/* CLASS STRUCTURE */}
                 <section className="py-12 md:py-24 bg-brand-dark">
                     <div className="container mx-auto px-4">
+                        {classImageUrl && (
+                            <div className="relative aspect-[16/7] max-w-5xl mx-auto rounded-2xl overflow-hidden mb-12 border border-white/5">
+                                <Image src={classImageUrl} alt="Training Session" fill sizes="(max-width: 1024px) 100vw, 1024px" className="object-cover" />
+                            </div>
+                        )}
                         <div className="text-center mb-16">
                             <span className="text-brand-green text-sm font-bold uppercase tracking-widest">{cms?.classLabel ?? "Training"}</span>
                             <h2 className="font-display text-4xl md:text-5xl mt-2">{cms?.classHeading ?? "So funktioniert eine"} <span className="text-brand-green">{cms?.classHeadingHighlight ?? "Session"}</span></h2>

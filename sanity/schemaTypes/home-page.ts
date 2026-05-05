@@ -10,6 +10,7 @@ export default defineType({
         { name: 'philosophy', title: 'Philosophie' },
         { name: 'philosophyDetail', title: 'Philosophie Detail' },
         { name: 'servicesShowcase', title: 'Services Showcase' },
+        { name: 'reviewsSection', title: 'Reviews Section' },
         { name: 'cta', title: 'CTA Section' },
     ],
     fields: [
@@ -90,6 +91,16 @@ export default defineType({
             type: 'image',
             options: { hotspot: true },
             group: 'brandCards',
+        }),
+
+        // ── Reviews Section ──
+        defineField({
+            name: 'reviewsImage',
+            title: 'Bild über "Was unsere Mitglieder sagen"',
+            description: 'Optionales Foto, das oberhalb der Reviews-Sektion angezeigt wird.',
+            type: 'image',
+            options: { hotspot: true },
+            group: 'reviewsSection',
         }),
 
         // ── Philosophy ──
