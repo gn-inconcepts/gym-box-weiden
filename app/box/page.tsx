@@ -11,6 +11,8 @@ import { InstagramFeed } from "@/components/home/instagram-feed";
 import { Dumbbell, Users, Activity, Layers } from "lucide-react";
 import { client } from "@/sanity/lib/client";
 import { boxPageQuery } from "@/sanity/lib/page-queries";
+import { trainersQuery } from "@/sanity/lib/queries";
+import { Trainer } from "@/types/sanity";
 import { BoxPageData } from "@/types/page-content";
 import { urlFor } from "@/sanity/lib/image";
 
@@ -46,14 +48,31 @@ const defaultValues = [
 
 export default async function BoxPage() {
     let cms: BoxPageData | null = null;
+    let allTrainers: Trainer[] = [];
 
     try {
         if (process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
-            cms = await client.fetch<BoxPageData>(boxPageQuery);
+            [cms, allTrainers] = await Promise.all([
+                client.fetch<BoxPageData>(boxPageQuery),
+                client.fetch<Trainer[]>(trainersQuery),
+            ]);
         }
     } catch (error) {
         console.error("Failed to fetch box page data:", error);
     }
+
+    // Pool of box-category trainers for the spotlight (random pick on mount)
+    const boxTrainers = allTrainers
+        .filter((t) => t.category === "box")
+        .map((t) => ({
+            name: t.name,
+            role: t.role,
+            image: typeof t.image === "string"
+                ? t.image
+                : urlFor(t.image)?.width(800).url() ?? defaultBoxTrainer.image,
+            bio: t.specs ?? defaultBoxTrainer.bio,
+            specialties: t.tags ?? defaultBoxTrainer.specialties,
+        }));
 
     const headerImageUrl = cms?.headerImage
         ? urlFor(cms.headerImage)?.width(2670).quality(80).format('webp').url() ?? "https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?q=80&w=2669&auto=format&fit=crop"
@@ -219,7 +238,9 @@ export default async function BoxPage() {
                     </div>
                 </section>
 
-                <TrainerSpotlight trainer={trainerData} />
+                {boxTrainers.length > 0
+                    ? <TrainerSpotlight trainers={boxTrainers} />
+                    : <TrainerSpotlight trainer={trainerData} />}
 
                 <InstagramFeed
                     category="box"
