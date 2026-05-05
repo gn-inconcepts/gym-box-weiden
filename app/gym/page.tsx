@@ -145,7 +145,7 @@ export default async function GymPage() {
                                 alt="Gym Philosophy"
                                 fill
                                 sizes="(max-width: 1024px) 100vw, 50vw"
-                                className="object-cover opacity-60"
+                                className="object-cover"
                             />
                         </div>
                     </div>
@@ -161,7 +161,7 @@ export default async function GymPage() {
                                     alt="Coaches"
                                     fill
                                     sizes="(max-width: 1024px) 100vw, 50vw"
-                                    className="object-cover opacity-60"
+                                    className="object-cover"
                                 />
                             </div>
 

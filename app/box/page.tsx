@@ -128,7 +128,7 @@ export default async function BoxPage() {
                                 alt="The Box Origin"
                                 fill
                                 sizes="(max-width: 1024px) 100vw, 50vw"
-                                className="object-cover opacity-60"
+                                className="object-cover"
                             />
                         </div>
 
@@ -180,7 +180,7 @@ export default async function BoxPage() {
                                     alt="CrossFit Action"
                                     fill
                                     sizes="(max-width: 1024px) 100vw, 50vw"
-                                    className="object-cover opacity-60"
+                                    className="object-cover"
                                 />
                             </div>
                         </div>
