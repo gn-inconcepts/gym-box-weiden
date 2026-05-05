@@ -35,6 +35,8 @@ export function PageHeader({ title, subtitle, image, logo }: PageHeaderProps) {
             >
                 <div className="absolute inset-0 bg-black/60 z-10 light:hidden" />
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-black/40 z-10 light:hidden" />
+                {/* Light-mode-only flat overlay — keeps text readable on bright photos without the dark-mode gradient look */}
+                <div className="absolute inset-0 bg-black/40 z-10 hidden light:block" />
                 <Image
                     src={image}
                     alt={title}
