@@ -33,8 +33,8 @@ export function PageHeader({ title, subtitle, image, logo }: PageHeaderProps) {
                 style={{ transform: `translateY(${offsetY}px)` }}
                 className="absolute inset-0 z-0 will-change-transform"
             >
-                <div className="absolute inset-0 bg-black/60 z-10" />
-                <div className="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-black/40 z-10" />
+                <div className="absolute inset-0 bg-black/60 z-10 light:hidden" />
+                <div className="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-black/40 z-10 light:hidden" />
                 <Image
                     src={image}
                     alt={title}

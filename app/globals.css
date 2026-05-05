@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* Custom variant: applies when :root has the .light class.
+   Usage: <div className="bg-gradient ... light:hidden" /> */
+@custom-variant light (&:where(:root.light *, :root.light));
+
 :root {
   /* Default (Dark) Colors */
   --c-brand-green: #96C11F;

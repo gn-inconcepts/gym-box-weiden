@@ -32,8 +32,8 @@ export function Hero({ cms }: { cms?: HomePageData }) {
         <section className="relative h-screen min-h-[800px] flex items-center justify-center overflow-hidden">
             {/* Background Video */}
             <div className="absolute inset-0 z-0">
-                <div className="absolute inset-0 bg-brand-black/60 z-10" /> {/* Overlay for readability */}
-                <div className="absolute inset-0 bg-gradient-to-b from-brand-black/30 via-transparent to-brand-black z-10" />
+                <div className="absolute inset-0 bg-brand-black/60 z-10 light:hidden" /> {/* Overlay for readability */}
+                <div className="absolute inset-0 bg-gradient-to-b from-brand-black/30 via-transparent to-brand-black z-10 light:hidden" />
                 <OptimizedVideo
                     src={cms?.heroVideoUrl ?? "https://videos.pexels.com/video-files/855828/855828-hd_1920_1080_30fps.mp4"}
                     autoPlay={true}
