@@ -211,23 +211,61 @@ export default async function PricingPage() {
                     </div>
                 </section>
 
-                {/* INFO SECTION */}
-                <section className="py-12 md:py-24 container mx-auto px-4">
-                    <div className="bg-brand-dark/50 border border-white/10 p-8 rounded-2xl flex items-start gap-6 max-w-4xl mx-auto">
-                        <div className="w-12 h-12 rounded-full bg-brand-green/20 flex items-center justify-center text-brand-green shrink-0">
-                            <Info className="w-6 h-6" />
+                {/* STARTPAKETE SECTION */}
+                {(cms?.startPackages?.length ?? 0) > 0 && (
+                    <section className="py-12 md:py-24 container mx-auto px-4">
+                        <div className="text-center mb-12 max-w-3xl mx-auto">
+                            <div className="inline-flex items-center gap-2 px-4 py-2 bg-brand-green/10 text-brand-green rounded-full mb-4">
+                                <Info className="w-4 h-4" />
+                                <span className="text-xs font-bold uppercase tracking-wider">Startpaket</span>
+                            </div>
+                            <h2 className="font-display text-3xl md:text-4xl">
+                                {cms?.infoHeading ?? "Wähle dein persönliches Startpaket"}
+                            </h2>
                         </div>
-                        <div>
-                            <h2 className="font-display text-xl mb-2">{cms?.infoHeading ?? "Startpaket Small & Inklusivleistungen"}</h2>
-                            <p className="text-brand-gray-light leading-relaxed whitespace-pre-line">
-                                {cms?.infoDescription ?? "Startpaket Small einmalig €57. \nInkludiert sind: Körperzusammensetzungsanalyse mit Software-Auswertung, persönliche Zugangskarte und eine Personal Training Session mit Trainingsplanung und Orientierung."}
-                            </p>
-                            <p className="mt-4 font-bold text-brand-green">
-                                {cms?.infoHighlight ?? "Bei 12-Monats-Vorauszahlung entfällt das Startpaket Small komplett."}
-                            </p>
+
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            {cms!.startPackages!.map((pkg, i) => (
+                                <div
+                                    key={i}
+                                    className={`flex flex-col p-8 bg-brand-dark rounded-2xl border transition-colors ${pkg.recommended ? 'border-brand-green/40 hover:border-brand-green' : 'border-white/5 hover:border-brand-green/30'}`}
+                                >
+                                    <h3 className="font-display text-2xl">{pkg.name}</h3>
+                                    {pkg.subtitle ? (
+                                        <p className="text-sm text-brand-gray mt-1 mb-5">{pkg.subtitle}</p>
+                                    ) : (
+                                        <div className="mb-5" />
+                                    )}
+                                    <div className="mb-6">
+                                        <span className="text-3xl font-bold text-brand-white">€{pkg.price}</span>
+                                    </div>
+                                    {pkg.features && pkg.features.length > 0 && (
+                                        <ul className="space-y-3 mb-6 flex-grow">
+                                            {pkg.features.map((f, idx) => (
+                                                <li key={idx} className="flex gap-3 text-sm text-brand-gray-light">
+                                                    <Check className="w-4 h-4 text-brand-green shrink-0 mt-0.5" />
+                                                    <span>{f}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
+                                    {pkg.durationNote && (
+                                        <p className="text-xs text-brand-gray italic mb-6">{pkg.durationNote}</p>
+                                    )}
+                                    <Link href="/kontakt" className="w-full py-3 rounded-lg border border-white/10 text-center font-bold hover:bg-white hover:text-black transition-colors mt-auto">
+                                        Anfragen
+                                    </Link>
+                                </div>
+                            ))}
                         </div>
-                    </div>
-                </section>
+
+                        {cms?.infoHighlight && (
+                            <p className="mt-10 text-center font-bold text-brand-green text-lg">
+                                {cms.infoHighlight}
+                            </p>
+                        )}
+                    </section>
+                )}
 
             </main>
             <Footer />

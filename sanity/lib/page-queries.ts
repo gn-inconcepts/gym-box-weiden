@@ -163,7 +163,14 @@ export const preisePageQuery = groq`*[_type == "preisePage"][0] {
   boxDescription,
   boxHighlightLabel,
   infoHeading,
-  infoDescription,
+  startPackages[]{
+    name,
+    subtitle,
+    features,
+    durationNote,
+    price,
+    recommended
+  },
   infoHighlight
 }`;
 

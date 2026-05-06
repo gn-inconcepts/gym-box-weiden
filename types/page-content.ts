@@ -245,8 +245,17 @@ export interface PreisePageData {
     boxHeadingHighlight?: string
     boxDescription?: string
     boxHighlightLabel?: string
-    // Info Section
+    // Startpakete Section
     infoHeading?: string
-    infoDescription?: string
+    startPackages?: StartPackage[]
     infoHighlight?: string
+}
+
+export interface StartPackage {
+    name: string
+    subtitle?: string
+    features?: string[]
+    durationNote?: string
+    price: number
+    recommended?: boolean
 }

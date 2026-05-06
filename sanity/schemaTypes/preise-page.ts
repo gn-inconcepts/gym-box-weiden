@@ -86,22 +86,82 @@ export default defineType({
             description: 'e.g., "Best Value"',
         }),
 
-        // ── Info Section ──
+        // ── Startpakete Section ──
         defineField({
             name: 'infoHeading',
-            title: 'Info Heading',
+            title: 'Überschrift',
+            description: 'z. B. "Wähle dein persönliches Startpaket"',
             type: 'string',
             group: 'infoSection',
         }),
         defineField({
-            name: 'infoDescription',
-            title: 'Info Description',
-            type: 'text',
+            name: 'startPackages',
+            title: 'Startpakete',
+            description: 'Liste der wählbaren Startpakete (z. B. Small, Standard Premium, Premium All In). Jedes Paket wird als eigene Karte angezeigt.',
+            type: 'array',
             group: 'infoSection',
+            of: [
+                {
+                    type: 'object',
+                    name: 'startPackage',
+                    fields: [
+                        {
+                            name: 'name',
+                            title: 'Name',
+                            type: 'string',
+                            description: 'z. B. "SMALL", "STANDARD PREMIUM"',
+                            validation: (rule) => rule.required(),
+                        },
+                        {
+                            name: 'subtitle',
+                            title: 'Untertitel (optional)',
+                            type: 'string',
+                            description: 'z. B. "2 Termine"',
+                        },
+                        {
+                            name: 'features',
+                            title: 'Inklusivleistungen',
+                            type: 'array',
+                            of: [{ type: 'string' }],
+                        },
+                        {
+                            name: 'durationNote',
+                            title: 'Dauer-Hinweis (optional)',
+                            type: 'string',
+                            description: 'z. B. "Dauer Termin 1 ca. 1 Stunde, Termin 2 ca. 1-1,5 Std"',
+                        },
+                        {
+                            name: 'price',
+                            title: 'Preis (€)',
+                            type: 'number',
+                            validation: (rule) => rule.required().min(0),
+                        },
+                        {
+                            name: 'recommended',
+                            title: 'Hervorgehoben?',
+                            description: 'Aktivieren, um dieses Paket als Highlight darzustellen.',
+                            type: 'boolean',
+                            initialValue: false,
+                        },
+                    ],
+                    preview: {
+                        select: { name: 'name', subtitle: 'subtitle', price: 'price', recommended: 'recommended' },
+                        prepare({ name, subtitle, price, recommended }) {
+                            const star = recommended ? ' ⭐' : ''
+                            const sub = subtitle ? `${subtitle} — ` : ''
+                            return {
+                                title: `${name}${star}`,
+                                subtitle: `${sub}€${price}`,
+                            }
+                        },
+                    },
+                },
+            ],
         }),
         defineField({
             name: 'infoHighlight',
-            title: 'Info Highlight Text',
+            title: 'Hervorgehobener Text (unter den Paketen)',
+            description: 'z. B. "Sichere dir deinen individuellen Einstieg zu mehr Wohlbefinden"',
             type: 'string',
             group: 'infoSection',
         }),
