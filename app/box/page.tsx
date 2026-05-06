@@ -10,10 +10,11 @@ import { DisciplinesLevels } from "@/components/box/disciplines-levels";
 import { InstagramFeed } from "@/components/home/instagram-feed";
 import { Dumbbell, Users, Activity, Layers } from "lucide-react";
 import { client } from "@/sanity/lib/client";
-import { boxPageQuery } from "@/sanity/lib/page-queries";
+import { boxPageQuery, expandedSiteSettingsQuery } from "@/sanity/lib/page-queries";
 import { trainersQuery } from "@/sanity/lib/queries";
-import { Trainer } from "@/types/sanity";
+import { Trainer, SiteSettings } from "@/types/sanity";
 import { BoxPageData } from "@/types/page-content";
+import { PartnerLogos } from "@/components/ui/partner-logos";
 import { urlFor } from "@/sanity/lib/image";
 
 export const revalidate = 300;
@@ -49,12 +50,14 @@ const defaultValues = [
 export default async function BoxPage() {
     let cms: BoxPageData | null = null;
     let allTrainers: Trainer[] = [];
+    let siteSettings: SiteSettings | null = null;
 
     try {
         if (process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
-            [cms, allTrainers] = await Promise.all([
+            [cms, allTrainers, siteSettings] = await Promise.all([
                 client.fetch<BoxPageData>(boxPageQuery),
                 client.fetch<Trainer[]>(trainersQuery),
+                client.fetch<SiteSettings>(expandedSiteSettingsQuery),
             ]);
         }
     } catch (error) {
@@ -246,6 +249,12 @@ export default async function BoxPage() {
                     category="box"
                     username="crossfit_lakefront"
                     instagramUrl="https://www.instagram.com/crossfit_lakefront/"
+                />
+
+                <PartnerLogos
+                    partners={siteSettings?.partners}
+                    subheading="Equipment"
+                    heading="Unsere Partner & Marken"
                 />
             </main>
             <Footer />

@@ -66,6 +66,7 @@ export interface SiteSettings {
         hours: string;
     }[];
     equipmentBrands?: string[];
+    partners?: Partner[];
     ogImage?: {
         asset: {
             url: string;
@@ -84,4 +85,13 @@ export interface SiteSettings {
         unit?: string;
         label: string;
     }[];
+}
+
+export interface Partner {
+    _key?: string;
+    name: string;
+    logo?: SanityImage;
+    /** Optional fallback when no Sanity logo is uploaded — local /public path. */
+    fallbackSrc?: string;
+    url?: string;
 }

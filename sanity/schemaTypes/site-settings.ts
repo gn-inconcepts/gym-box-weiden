@@ -71,6 +71,42 @@ export default defineType({
             description: 'List of equipment brands (e.g., Eleiko, Gym80)',
         }),
         defineField({
+            name: 'partners',
+            title: 'Partner / Equipment-Marken (mit Logos)',
+            description: 'Wird unten auf den Seiten "Das Gym" und "The Box" als Logo-Reihe angezeigt. Reihenfolge im Array = Reihenfolge auf der Seite.',
+            type: 'array',
+            of: [
+                {
+                    type: 'object',
+                    name: 'partner',
+                    fields: [
+                        {
+                            name: 'name',
+                            title: 'Name',
+                            type: 'string',
+                            description: 'z. B. "Eleiko", "Hammer Strength"',
+                            validation: (rule) => rule.required(),
+                        },
+                        {
+                            name: 'logo',
+                            title: 'Logo',
+                            description: 'PNG (mit transparentem Hintergrund) oder SVG funktionieren am besten.',
+                            type: 'image',
+                        },
+                        {
+                            name: 'url',
+                            title: 'Website (optional)',
+                            description: 'Wenn gesetzt, wird das Logo zu einem klickbaren Link.',
+                            type: 'url',
+                        },
+                    ],
+                    preview: {
+                        select: { title: 'name', media: 'logo' },
+                    },
+                },
+            ],
+        }),
+        defineField({
             name: 'ogImage',
             title: 'Open Graph Image (Social Media Preview)',
             type: 'image',

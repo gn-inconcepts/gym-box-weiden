@@ -185,6 +185,12 @@ export const expandedSiteSettingsQuery = groq`*[_type == "siteSettings"][0] {
   social,
   openingHours,
   equipmentBrands,
+  partners[]{
+    _key,
+    name,
+    logo,
+    url
+  },
   ogImage { asset-> { url } },
   navigation,
   footerTagline,

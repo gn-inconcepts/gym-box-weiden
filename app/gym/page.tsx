@@ -7,9 +7,11 @@ import { ParallaxStrip } from "@/components/ui/parallax-strip";
 import { TrainerSpotlight } from "@/components/home/trainer-spotlight";
 import { Activity, Apple, Brain, Check, Clock, Dumbbell, HeartPulse, Moon } from "lucide-react";
 import { client } from "@/sanity/lib/client";
-import { gymPageQuery } from "@/sanity/lib/page-queries";
+import { gymPageQuery, expandedSiteSettingsQuery } from "@/sanity/lib/page-queries";
 import { GymPageData } from "@/types/page-content";
+import { SiteSettings } from "@/types/sanity";
 import { urlFor } from "@/sanity/lib/image";
+import { PartnerLogos } from "@/components/ui/partner-logos";
 
 export const revalidate = 300;
 
@@ -52,10 +54,14 @@ const defaultPillars = [
 
 export default async function GymPage() {
     let cms: GymPageData | null = null;
+    let siteSettings: SiteSettings | null = null;
 
     try {
         if (process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
-            cms = await client.fetch<GymPageData>(gymPageQuery);
+            [cms, siteSettings] = await Promise.all([
+                client.fetch<GymPageData>(gymPageQuery),
+                client.fetch<SiteSettings>(expandedSiteSettingsQuery),
+            ]);
         }
     } catch (error) {
         console.error("Failed to fetch gym page data:", error);
@@ -236,6 +242,12 @@ export default async function GymPage() {
                 </section>
 
                 <TrainerSpotlight trainer={trainerData} />
+
+                <PartnerLogos
+                    partners={siteSettings?.partners}
+                    subheading="Equipment"
+                    heading="Unsere Partner & Marken"
+                />
             </main>
             <Footer />
         </div>
