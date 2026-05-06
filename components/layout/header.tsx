@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
@@ -30,9 +29,6 @@ export function Header({ navLinks: cmsNavLinks }: HeaderProps) {
     const pathname = usePathname();
     const sentinelRef = useRef<HTMLDivElement>(null);
     const mobileMenuRef = useRef<HTMLDivElement>(null);
-
-    const isGym = pathname === "/gym";
-    const isBox = pathname === "/box";
 
     // IntersectionObserver for scroll detection instead of scroll event listener
     useEffect(() => {
@@ -118,31 +114,11 @@ export function Header({ navLinks: cmsNavLinks }: HeaderProps) {
             >
                 <div className="max-w-7xl mx-auto flex items-center justify-between">
                     <Link href="/" className="flex items-center gap-2 group">
-                        {isGym ? (
-                            <Image
-                                src="/images/Bernhard_2022_SW_300ppi.png"
-                                alt="Bernhard Trainiert"
-                                width={160}
-                                height={40}
-                                className="h-8 md:h-10 w-auto invert dark:invert-0"
-                                priority
-                            />
-                        ) : isBox ? (
-                            <Image
-                                src="/images/CF-LF_2022_SW_300ppi.png"
-                                alt="CrossFit Lakefront"
-                                width={160}
-                                height={40}
-                                className="h-8 md:h-10 w-auto invert dark:invert-0"
-                                priority
-                            />
-                        ) : (
-                            <div className="font-display text-2xl md:text-3xl tracking-wider flex items-center gap-1 text-brand-white">
-                                <span>GYM</span>
-                                <span className="text-brand-green">&</span>
-                                <span>BOX</span>
-                            </div>
-                        )}
+                        <div className="font-display text-2xl md:text-3xl tracking-wider flex items-center gap-1 text-brand-white">
+                            <span>GYM</span>
+                            <span className="text-brand-green">&</span>
+                            <span>BOX</span>
+                        </div>
                     </Link>
 
                     {/* Desktop Nav */}
