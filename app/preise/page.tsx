@@ -213,57 +213,73 @@ export default async function PricingPage() {
 
                 {/* STARTPAKETE SECTION */}
                 {(cms?.startPackages?.length ?? 0) > 0 && (
-                    <section className="py-12 md:py-24 container mx-auto px-4">
-                        <div className="text-center mb-12 max-w-3xl mx-auto">
-                            <div className="inline-flex items-center gap-2 px-4 py-2 bg-brand-green/10 text-brand-green rounded-full mb-4">
-                                <Info className="w-4 h-4" />
-                                <span className="text-xs font-bold uppercase tracking-wider">Startpaket</span>
-                            </div>
-                            <h2 className="font-display text-3xl md:text-4xl">
-                                {cms?.infoHeading ?? "Wähle dein persönliches Startpaket"}
-                            </h2>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            {cms!.startPackages!.map((pkg, i) => (
-                                <div
-                                    key={i}
-                                    className={`flex flex-col p-8 bg-brand-dark rounded-2xl border transition-colors ${pkg.recommended ? 'border-brand-green/40 hover:border-brand-green' : 'border-white/5 hover:border-brand-green/30'}`}
-                                >
-                                    <h3 className="font-display text-2xl">{pkg.name}</h3>
-                                    {pkg.subtitle ? (
-                                        <p className="text-sm text-brand-gray mt-1 mb-5">{pkg.subtitle}</p>
-                                    ) : (
-                                        <div className="mb-5" />
-                                    )}
-                                    <div className="mb-6">
-                                        <span className="text-3xl font-bold text-brand-white">€{pkg.price}</span>
-                                    </div>
-                                    {pkg.features && pkg.features.length > 0 && (
-                                        <ul className="space-y-3 mb-6 flex-grow">
-                                            {pkg.features.map((f, idx) => (
-                                                <li key={idx} className="flex gap-3 text-sm text-brand-gray-light">
-                                                    <Check className="w-4 h-4 text-brand-green shrink-0 mt-0.5" />
-                                                    <span>{f}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    )}
-                                    {pkg.durationNote && (
-                                        <p className="text-xs text-brand-gray italic mb-6">{pkg.durationNote}</p>
-                                    )}
-                                    <Link href="/kontakt" className="w-full py-3 rounded-lg border border-white/10 text-center font-bold hover:bg-white hover:text-black transition-colors mt-auto">
-                                        Anfragen
-                                    </Link>
+                    <section className="py-12 md:py-24 bg-brand-dark/30">
+                        <div className="container mx-auto px-4">
+                            <div className="text-center mb-16 max-w-3xl mx-auto">
+                                <div className="inline-flex items-center gap-2 px-4 py-2 bg-brand-green/10 text-brand-green rounded-full mb-4">
+                                    <Info className="w-4 h-4" />
+                                    <span className="text-xs font-bold uppercase tracking-wider">Startpaket</span>
                                 </div>
-                            ))}
-                        </div>
+                                <h2 className="font-display text-3xl md:text-4xl">
+                                    {cms?.infoHeading ?? "Wähle dein persönliches Startpaket"}
+                                </h2>
+                            </div>
 
-                        {cms?.infoHighlight && (
-                            <p className="mt-10 text-center font-bold text-brand-green text-lg">
-                                {cms.infoHighlight}
-                            </p>
-                        )}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-stretch">
+                                {cms!.startPackages!.map((pkg, i) => {
+                                    const isRecommended = !!pkg.recommended
+                                    return (
+                                        <div
+                                            key={i}
+                                            className={`relative ${isRecommended ? 'p-[2px] rounded-2xl bg-gradient-to-br from-brand-green via-white to-brand-green md:-my-2' : ''}`}
+                                        >
+                                            {isRecommended && (
+                                                <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10 px-3 py-1 bg-brand-green text-brand-black text-[10px] font-bold uppercase tracking-widest rounded-full whitespace-nowrap shadow-lg">
+                                                    Empfohlen
+                                                </div>
+                                            )}
+                                            <div className={`flex flex-col h-full p-8 bg-brand-dark rounded-2xl transition-colors ${isRecommended ? '' : 'border border-white/5 hover:border-brand-green/30'}`}>
+                                                <h3 className={`font-display text-2xl ${isRecommended ? 'text-brand-green' : ''}`}>{pkg.name}</h3>
+                                                <p className="text-sm text-brand-gray mt-1 mb-6 min-h-[1.25rem]">{pkg.subtitle ?? ' '}</p>
+
+                                                <div className="mb-8 pb-6 border-b border-white/5">
+                                                    <span className="text-4xl font-bold text-brand-white">€{pkg.price}</span>
+                                                    <span className="text-brand-gray text-sm ml-1">einmalig</span>
+                                                </div>
+
+                                                {pkg.features && pkg.features.length > 0 && (
+                                                    <ul className="space-y-3 mb-6 flex-grow">
+                                                        {pkg.features.map((f, idx) => (
+                                                            <li key={idx} className="flex gap-3 text-sm text-brand-gray-light leading-snug">
+                                                                <Check className="w-4 h-4 text-brand-green shrink-0 mt-0.5" />
+                                                                <span>{f}</span>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                )}
+
+                                                {pkg.durationNote && (
+                                                    <p className="text-xs text-brand-gray italic mb-6">{pkg.durationNote}</p>
+                                                )}
+
+                                                <Link
+                                                    href="/kontakt"
+                                                    className={`w-full py-3 rounded-lg text-center font-bold transition-colors ${isRecommended ? 'bg-brand-green text-brand-black hover:bg-white' : 'border border-white/10 hover:bg-white hover:text-black'}`}
+                                                >
+                                                    {isRecommended ? 'Jetzt starten' : 'Anfragen'}
+                                                </Link>
+                                            </div>
+                                        </div>
+                                    )
+                                })}
+                            </div>
+
+                            {cms?.infoHighlight && (
+                                <p className="mt-12 text-center font-bold text-brand-green text-lg">
+                                    {cms.infoHighlight}
+                                </p>
+                            )}
+                        </div>
                     </section>
                 )}
 
